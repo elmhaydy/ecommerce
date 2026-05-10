@@ -1,0 +1,119 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Commande" "Order" %} #{{ order.id }}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Commande" "Order" %} #{{ order.id }}{% endblock %}
+{% block nav_orders %}active{% endblock %}
+
+{% block portal_extra_css %}
+<link rel="stylesheet" href="{% static 'css/orders/detail.css' %}?v=2" />
+{% endblock %}
+
+{% block portal_content %}
+<section class="order-detail-page">
+  <header class="order-detail-hero">
+    <div>
+      <p class="order-detail-kicker">{% tr "Suivi de commande" "Order tracking" %}</p>
+      <h1>{% tr "Commande" "Order" %} #{{ order.id }}</h1>
+      <p class="order-detail-intro">
+        {% tr "Consultez le statut, les produits commandes, la livraison et les actions disponibles." "Check the status, ordered products, delivery and available actions." %}
+      </p>
+    </div>
+    <div class="order-detail-summary">
+      <span class="detail-summary-label">{% tr "Total" "Total" %}</span>
+      <strong>{{ order.total_amount }} DH</strong>
+      <span class="detail-status status-{{ order.status|lower }}">
+        {{ order.get_status_display }}
+      </span>
+    </div>
+  </header>
+
+  <div class="order-detail-grid">
+    <section class="order-detail-panel">
+      <h2>{% tr "Resume" "Summary" %}</h2>
+      <div class="detail-facts">
+        <div class="detail-fact">
+          <span>{% tr "Date" "Date" %}</span>
+          <strong>{{ order.created_at|date:"d/m/Y" }}</strong>
+        </div>
+        <div class="detail-fact">
+          <span>{% tr "Paiement" "Payment" %}</span>
+          <strong>{{ order.get_payment_method_display }}</strong>
+        </div>
+        <div class="detail-fact">
+          <span>{% tr "Statut paiement" "Payment status" %}</span>
+          <strong>{% if order.is_paid %}{% tr "Payee" "Paid" %}{% else %}{% tr "Non payee" "Unpaid" %}{% endif %}</strong>
+        </div>
+        <div class="detail-fact">
+          <span>{% tr "Frais livraison" "Shipping fee" %}</span>
+          <strong>{{ order.shipping_fee }} DH</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="order-detail-panel">
+      <h2>{% tr "Livraison" "Delivery" %}</h2>
+      <div class="detail-address-card">
+        <strong>{{ order.first_name }} {{ order.last_name }}</strong>
+        <p>{{ order.address }}</p>
+        <p>{{ order.city }}{% if order.postal_code %}, {{ order.postal_code }}{% endif %}</p>
+        <p>{{ order.shipping_city }}</p>
+        <p>{{ order.phone }}</p>
+        <p>{{ order.email }}</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="order-detail-panel">
+    <div class="panel-head">
+      <h2>{% tr "Produits" "Products" %}</h2>
+      <span>{{ order.items.count }} {% tr "article" "item" %}{{ order.items.count|pluralize }}</span>
+    </div>
+
+    <div class="order-items-list">
+      {% for item in order.items.all %}
+      <article class="order-item-card">
+        <div>
+          <h3>
+            {% if item.product %}
+            {{ item.product.name_fr }}
+            {% else %}
+            {% tr "Produit supprime" "Deleted product" %}
+            {% endif %}
+          </h3>
+          <p>{% tr "Prix unitaire" "Unit price" %} : {{ item.price }} DH</p>
+        </div>
+        <div class="order-item-side">
+          <span>{% tr "Quantite" "Quantity" %} : {{ item.quantity }}</span>
+          <strong>{{ item.get_subtotal }} DH</strong>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="order-detail-panel">
+    <div class="panel-head">
+      <h2>{% tr "Actions" "Actions" %}</h2>
+    </div>
+
+    <div class="order-detail-actions">
+      <a href="{% url 'orders:order_history' %}" class="detail-action secondary">
+        {% tr "Retour aux commandes" "Back to orders" %}
+      </a>
+
+      {% if order.payment_method == "CARD" and not order.is_paid %}
+      <a href="{% url 'orders:payment_page' order.id %}" class="detail-action">
+        {% tr "Payer maintenant" "Pay now" %}
+      </a>
+      {% endif %}
+
+      {% if order.status == "PENDING" or order.status == "PAID" %}
+      <a href="{% url 'orders:cancel_order' order.id %}" class="detail-action danger">
+        {% tr "Annuler la commande" "Cancel order" %}
+      </a>
+      {% endif %}
+    </div>
+  </section>
+</section>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}{% if category %}Modifier une catégorie{% else %}Créer une catégorie{% endif %}{% endblock %}
+{% block page_title %}Catégories{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/category/form.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/category/form.js' %}?v=1.1" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="form-container">
+    <div class="form-grid">
+        <div class="form-main">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-header-icon">
+                        <i class="fas fa-{% if category %}edit{% else %}folder-plus{% endif %}"></i>
+                    </div>
+                    <div>
+                        <h2 class="form-title">{% if category %}Modifier la catégorie{% else %}Nouvelle catégorie{% endif %}</h2>
+                        <p class="form-subtitle">
+                            {% if category %}
+                            Mettez à jour les informations de la catégorie "{{ category.name_fr }}".
+                            {% else %}
+                            Créez une catégorie simple et propre pour organiser vos produits.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <form method="post" id="categoryForm" class="category-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-error">
+                        {% for error in form.non_field_errors %}
+                        <p><i class="fas fa-exclamation-circle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>Informations</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.name_fr.id_for_label }}" class="form-label required">Nom (Français)</label>
+                                {{ form.name_fr }}
+                                {% if form.name_fr.errors %}<div class="field-error">{{ form.name_fr.errors }}</div>{% endif %}
+                                <div class="char-counter"><span id="nameFrCount">0</span> caractères</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.name_en.id_for_label }}" class="form-label">Nom (Anglais)</label>
+                                {{ form.name_en }}
+                                {% if form.name_en.errors %}<div class="field-error">{{ form.name_en.errors }}</div>{% endif %}
+                                <div class="char-counter"><span id="nameEnCount">0</span> caractères</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.slug.id_for_label }}" class="form-label">Slug</label>
+                            <div class="slug-input-wrapper">
+                                <div class="slug-prefix">{{ request.get_host }}/category/</div>
+                                {{ form.slug }}
+                                <button type="button" class="btn-generate-slug" id="generateSlugBtn" title="Générer automatiquement">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                            {% if form.slug.errors %}<div class="field-error">{{ form.slug.errors }}</div>{% endif %}
+                            <small class="form-hint">Laissez vide pour le générer automatiquement à partir du nom français.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Visibilité</label>
+                            <div class="toggle-switch">
+                                {{ form.is_active }}
+                                <label for="{{ form.is_active.id_for_label }}" class="toggle-label">
+                                    <span class="toggle-text">Active</span>
+                                    <span class="toggle-text-inactive">Inactive</span>
+                                </label>
+                            </div>
+                            {% if form.is_active.errors %}<div class="field-error">{{ form.is_active.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+
+                    {% if category %}
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>Statistiques</h3>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-mini">
+                                <div class="stat-mini-icon"><i class="fas fa-box"></i></div>
+                                <div class="stat-mini-info">
+                                    <span class="stat-mini-value">{{ category.products_count }}</span>
+                                    <span class="stat-mini-label">Produits associés</span>
+                                </div>
+                            </div>
+                            <div class="stat-mini">
+                                <div class="stat-mini-icon"><i class="fas fa-calendar"></i></div>
+                                <div class="stat-mini-info">
+                                    <span class="stat-mini-value">{{ category.created_at|date:"d/m/Y" }}</span>
+                                    <span class="stat-mini-label">Date de création</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i>
+                            <span>{% if category %}Mettre à jour{% else %}Créer la catégorie{% endif %}</span>
+                        </button>
+                        <a href="{% url 'admin_panel:category_list' %}" class="btn-secondary">
+                            <i class="fas fa-times"></i>
+                            <span>Annuler</span>
+                        </a>
+                        {% if category %}
+                        <button
+                            type="button"
+                            class="btn-danger-outline"
+                            id="deleteCategoryBtn"
+                            data-name="{{ category.name_fr }}"
+                            data-products="{{ category.products_count }}"
+                            data-delete-url="{% url 'admin_panel:category_delete' category.id %}">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Supprimer</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="form-sidebar">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>Conseils</h4>
+                </div>
+                <ul class="info-list">
+                    <li><i class="fas fa-check-circle"></i><span>Utilisez un nom court et clair.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Le slug doit rester simple et lisible.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Désactivez une catégorie au lieu de la supprimer si elle a déjà servi.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if category %}
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header delete-modal">
+            <i class="fas fa-trash-alt modal-icon"></i>
+            <h3>Confirmer la suppression</h3>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer la catégorie <strong id="modalCategoryName"></strong> ?</p>
+            <div id="modalProductsWarning" class="warning-message" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <div>
+                    <strong>Attention</strong>
+                    <p>Cette catégorie contient <span id="modalProductsCount"></span> produit(s).</p>
+                    <p>Les produits associés perdront simplement leur catégorie.</p>
+                </div>
+            </div>
+            <p class="text-warning mt-3">Cette action est irréversible.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="cancelDelete">Annuler</button>
+            <form method="post" id="deleteForm" action="{% url 'admin_panel:category_delete' category.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">Supprimer définitivement</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

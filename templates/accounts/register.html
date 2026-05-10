@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static site_i18n %}
+
+{% block title %}Inscription | M&Y Shop{% endblock %}
+{% block body_class %}auth-page register-page{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/register.css' %}?v=2">
+{% endblock %}
+
+{% block content %}
+<section class="register-wrapper">
+  <div class="register-title">
+    <h1>{% tr "Creez votre compte M&Y" "Create your M&Y account" %}</h1>
+  </div>
+
+  <div class="bonus-box">
+    {% tr "Inscrivez-vous et profitez d'une meilleure experience boutique." "Sign up and enjoy a better store experience." %}
+  </div>
+
+  <form method="post" class="register-form-card">
+    {% csrf_token %}
+
+    <h2>{% tr "Informations personnelles" "Personal information" %}</h2>
+
+    <div class="register-grid">
+      {% for field in form %}
+      <div class="auth-group {% if 'password' in field.name %}password-field{% endif %}">
+        <label for="{{ field.id_for_label }}">
+          {% if field.name == "username" %}
+            {% tr "Nom d'utilisateur" "Username" %}
+          {% elif field.name == "password1" %}
+            {% tr "Mot de passe" "Password" %}
+          {% elif field.name == "password2" %}
+            {% tr "Confirmation du mot de passe" "Password confirmation" %}
+          {% else %}
+            {{ field.label }}
+          {% endif %}
+        </label>
+
+        <div class="auth-input-wrap {% if 'password' in field.name %}password-wrap{% endif %}">
+          {{ field }}
+
+          {% if 'password' in field.name %}
+          <button type="button" class="toggle-password">{% tr "Voir" "Show" %}</button>
+          {% endif %}
+        </div>
+
+        {% if field.errors %}
+        <small class="field-error">{{ field.errors.0 }}</small>
+        {% endif %}
+
+        {% if field.help_text %}
+        <small class="field-help">
+          {% if field.name == "username" %}
+            {% tr "150 caracteres maximum. Lettres, chiffres et @/./+/-/_ uniquement." "150 characters or fewer. Letters, digits and @/./+/-/_ only." %}
+          {% elif field.name == "password1" %}
+            {% if site_language == "en" %}
+              <ul>
+                <li>Your password can’t be too similar to your other personal information.</li>
+                <li>Your password must contain at least 8 characters.</li>
+                <li>Your password can’t be a commonly used password.</li>
+                <li>Your password can’t be entirely numeric.</li>
+              </ul>
+            {% else %}
+              <ul>
+                <li>Votre mot de passe ne peut pas trop ressembler a vos autres informations personnelles.</li>
+                <li>Votre mot de passe doit contenir au moins 8 caracteres.</li>
+                <li>Votre mot de passe ne peut pas etre un mot de passe couramment utilise.</li>
+                <li>Votre mot de passe ne peut pas etre entierement numerique.</li>
+              </ul>
+            {% endif %}
+          {% elif field.name == "password2" %}
+            {% tr "Entrez le meme mot de passe que precedemment, pour verification." "Enter the same password as before, for verification." %}
+          {% else %}
+            {{ field.help_text|safe }}
+          {% endif %}
+        </small>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <label class="terms-line">
+      <input type="checkbox" required>
+      <span>{% tr "J'accepte les conditions d'utilisation et la politique de confidentialite." "I accept the terms of use and the privacy policy." %}</span>
+    </label>
+
+    <button type="submit" class="auth-submit register-submit">
+      {% tr "Creer un compte" "Create account" %}
+    </button>
+
+    <div class="auth-bottom">
+      <p>{% tr "Vous avez deja un compte ?" "Already have an account?" %}</p>
+      <a href="{% url 'accounts:login' %}">{% tr "Se connecter" "Sign in" %}</a>
+    </div>
+
+    <a href="{% url 'core:home' %}" class="back-home">{% tr "Retour a la boutique" "Back to the store" %}</a>
+  </form>
+</section>
+{% endblock %}
+
+{% block page_js %}
+<script src="{% static 'js/accounts/register.js' %}"></script>
+{% endblock %}

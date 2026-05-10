@@ -1,0 +1,305 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}{% if product %}Modifier{% else %}Ajouter{% endif %} un produit{% endblock %}
+{% block page_title %}{% if product %}Modifier le produit{% else %}Nouveau produit{% endif %}{% endblock %}
+
+{% block admin_content %}
+<link rel="stylesheet" href="{% static 'css/admin/product/form.css' %}?v=1.1">
+<script src="{% static 'js/admin/product/form.js' %}?v=1.1" defer></script>
+
+<div class="form-container">
+    <div class="form-grid">
+        <div class="form-main">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-header-icon">
+                        <i class="fas fa-{% if product %}edit{% else %}plus-circle{% endif %}"></i>
+                    </div>
+                    <div>
+                        <h2 class="form-title">{% if product %}Modifier le produit{% else %}Créer un nouveau produit{% endif %}</h2>
+                        <p class="form-subtitle">Renseignez les informations visibles sur la fiche produit, y compris galerie, points forts et couleurs.</p>
+                    </div>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" id="productForm" class="product-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-error">
+                        {% for error in form.non_field_errors %}
+                        <p><i class="fas fa-exclamation-circle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>Informations générales</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.name_fr.id_for_label }}" class="form-label required">Nom du produit</label>
+                                {{ form.name_fr }}
+                                {% if form.name_fr.errors %}<div class="field-error">{{ form.name_fr.errors }}</div>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.name_en.id_for_label }}" class="form-label">Nom secondaire</label>
+                                {{ form.name_en }}
+                                {% if form.name_en.errors %}<div class="field-error">{{ form.name_en.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.slug.id_for_label }}" class="form-label">Slug</label>
+                            {{ form.slug }}
+                            {% if form.slug.errors %}<div class="field-error">{{ form.slug.errors }}</div>{% endif %}
+                            <small class="form-hint">Utilisé dans l'URL de la fiche produit.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.description_fr.id_for_label }}" class="form-label required">Description principale</label>
+                            {{ form.description_fr }}
+                            {% if form.description_fr.errors %}<div class="field-error">{{ form.description_fr.errors }}</div>{% endif %}
+                            <div class="char-counter" id="descFrCounter"><span id="descFrCount">0</span> caractères</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.description_en.id_for_label }}" class="form-label">Description secondaire</label>
+                            {{ form.description_en }}
+                            {% if form.description_en.errors %}<div class="field-error">{{ form.description_en.errors }}</div>{% endif %}
+                            <div class="char-counter" id="descEnCounter"><span id="descEnCount">0</span> caractères</div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Prix et stock</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.price.id_for_label }}" class="form-label required">Prix</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    {{ form.price }}
+                                </div>
+                                {% if form.price.errors %}<div class="field-error">{{ form.price.errors }}</div>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.old_price.id_for_label }}" class="form-label">Prix barré</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-tag"></i>
+                                    {{ form.old_price }}
+                                </div>
+                                {% if form.old_price.errors %}<div class="field-error">{{ form.old_price.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stock.id_for_label }}" class="form-label required">Quantité en stock</label>
+                                {{ form.stock }}
+                                {% if form.stock.errors %}<div class="field-error">{{ form.stock.errors }}</div>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.low_stock_threshold.id_for_label }}" class="form-label">Seuil d'alerte</label>
+                                {{ form.low_stock_threshold }}
+                                {% if form.low_stock_threshold.errors %}<div class="field-error">{{ form.low_stock_threshold.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Statut du stock</label>
+                            <div class="stock-indicator" id="stockIndicator">
+                                <div class="stock-status">
+                                    <i class="fas fa-chart-simple"></i>
+                                    <span id="stockStatusText">En attente</span>
+                                </div>
+                                <div class="stock-progress">
+                                    <div class="stock-progress-bar" id="stockProgressBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-tags"></i>
+                            <h3>Catalogue et visibilité</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.category.id_for_label }}" class="form-label">Catégorie</label>
+                                {{ form.category }}
+                                {% if form.category.errors %}<div class="field-error">{{ form.category.errors }}</div>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.colors.id_for_label }}" class="form-label">Couleurs</label>
+                                {{ form.colors }}
+                                {% if form.colors.errors %}<div class="field-error">{{ form.colors.errors }}</div>{% endif %}
+                                <small class="form-hint">Séparez les couleurs par des virgules.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Produit actif</label>
+                                <div class="toggle-switch">
+                                    {{ form.is_active }}
+                                    <label for="{{ form.is_active.id_for_label }}" class="toggle-label">
+                                        <span class="toggle-text">Actif</span>
+                                        <span class="toggle-text-inactive">Inactif</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Produit mis en avant</label>
+                                <div class="toggle-switch">
+                                    {{ form.is_featured }}
+                                    <label for="{{ form.is_featured.id_for_label }}" class="toggle-label">
+                                        <span class="toggle-text">Oui</span>
+                                        <span class="toggle-text-inactive">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-bolt"></i>
+                            <h3>Points forts</h3>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.feature_1.id_for_label }}" class="form-label">Point fort 1</label>
+                                {{ form.feature_1 }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.feature_2.id_for_label }}" class="form-label">Point fort 2</label>
+                                {{ form.feature_2 }}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.feature_3.id_for_label }}" class="form-label">Point fort 3</label>
+                                {{ form.feature_3 }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.feature_4.id_for_label }}" class="form-label">Point fort 4</label>
+                                {{ form.feature_4 }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-image"></i>
+                            <h3>Images produit</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.image.id_for_label }}" class="form-label">Image principale</label>
+                            {{ form.image }}
+                            {% if form.image.errors %}<div class="field-error">{{ form.image.errors }}</div>{% endif %}
+                            {% if product and product.image %}
+                            <div class="current-image">
+                                <label>Image actuelle :</label>
+                                <img src="{{ product.image.url }}" alt="{{ product.name_fr }}" class="current-img">
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.gallery_image_1.id_for_label }}" class="form-label">Galerie 1</label>
+                                {{ form.gallery_image_1 }}
+                                {% if product and product.gallery_image_1 %}<div class="current-image"><img src="{{ product.gallery_image_1.url }}" alt="" class="current-img"></div>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.gallery_image_2.id_for_label }}" class="form-label">Galerie 2</label>
+                                {{ form.gallery_image_2 }}
+                                {% if product and product.gallery_image_2 %}<div class="current-image"><img src="{{ product.gallery_image_2.url }}" alt="" class="current-img"></div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.gallery_image_3.id_for_label }}" class="form-label">Galerie 3</label>
+                                {{ form.gallery_image_3 }}
+                                {% if product and product.gallery_image_3 %}<div class="current-image"><img src="{{ product.gallery_image_3.url }}" alt="" class="current-img"></div>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.gallery_image_4.id_for_label }}" class="form-label">Galerie 4</label>
+                                {{ form.gallery_image_4 }}
+                                {% if product and product.gallery_image_4 %}<div class="current-image"><img src="{{ product.gallery_image_4.url }}" alt="" class="current-img"></div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i>
+                            <span>{% if product %}Mettre à jour{% else %}Créer le produit{% endif %}</span>
+                        </button>
+                        <a href="{% url 'admin_panel:product_list' %}" class="btn-secondary">
+                            <i class="fas fa-times"></i>
+                            <span>Annuler</span>
+                        </a>
+                        {% if product %}
+                        <button type="button" class="btn-danger-outline" id="deleteProductBtn" data-id="{{ product.id }}" data-name="{{ product.name_fr }}">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Supprimer</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="form-sidebar">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>Infos visibles en fiche</h4>
+                </div>
+                <ul class="info-list">
+                    <li><i class="fas fa-check-circle"></i><span>Nom + prix + prix barré</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Galerie d'images</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Points forts du produit</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Couleurs disponibles</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if product %}
+<div id="deleteProductModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-trash-alt modal-icon"></i>
+            <h3>Confirmer la suppression</h3>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer le produit <strong id="modalProductName"></strong> ?</p>
+            <p class="text-warning">Cette action est irréversible.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="cancelDeleteModal">Annuler</button>
+            <form method="post" action="{% url 'admin_panel:product_delete' product.id %}" id="deleteProductForm" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">Supprimer définitivement</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

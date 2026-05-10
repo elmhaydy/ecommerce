@@ -1,0 +1,150 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Livraison | Admin Panel{% endblock %}
+{% block page_title %}Zones de livraison{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/shipping/list.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/shipping/list.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page entity-stack">
+    <div class="entity-stats">
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini"><i class="fas fa-truck"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini">{{ zones|length }}</span>
+                <span class="stat-label-mini">Zones</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini success"><i class="fas fa-location-dot"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="activeZonesCount">0</span>
+                <span class="stat-label-mini">Actives</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini warning"><i class="fas fa-gift"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="freeZonesCount">0</span>
+                <span class="stat-label-mini">Avec franco</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini primary"><i class="fas fa-coins"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="avgFeeCount">0.00</span>
+                <span class="stat-label-mini">Moyenne frais</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="entity-toolbar">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher une ville ou zone...">
+            <button type="button" id="clearSearch" class="search-clear" style="display:none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="filters-wrapper">
+            <select class="filter-select" data-filter-key="status">
+                <option value="all">Tous les statuts</option>
+                <option value="active">Actives</option>
+                <option value="inactive">Inactives</option>
+            </select>
+            <select class="filter-select" data-filter-key="freeEligible">
+                <option value="all">Tous les seuils</option>
+                <option value="yes">Avec franco</option>
+                <option value="no">Sans franco</option>
+            </select>
+            <button type="button" id="resetFilters" class="btn-reset">
+                <i class="fas fa-rotate-left"></i> Reinitialiser
+            </button>
+        </div>
+        <a href="{% url 'admin_panel:shipping_create' %}" class="btn-primary">
+            <i class="fas fa-plus"></i> Ajouter zone
+        </a>
+    </div>
+
+    <div class="entity-table-wrapper">
+        <table class="entity-table">
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Frais</th>
+                    <th>Franco</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="shippingTableBody">
+                {% for zone in zones %}
+                <tr
+                    data-search="{{ zone.city|lower }}"
+                    data-status="{% if zone.is_active %}active{% else %}inactive{% endif %}"
+                    data-free-eligible="{% if zone.free_shipping_threshold %}yes{% else %}no{% endif %}"
+                    data-fee="{{ zone.fee }}"
+                >
+                    <td>
+                        <div class="entity-title-cell">
+                            <div class="entity-icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <div class="entity-title">{{ zone.city }}</div>
+                                <div class="entity-subtitle">Zone de livraison</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><strong>{{ zone.fee }} DH</strong></td>
+                    <td>{{ zone.free_shipping_threshold|default:"-" }}{% if zone.free_shipping_threshold %} DH{% endif %}</td>
+                    <td>
+                        <span class="entity-badge {% if zone.is_active %}success{% else %}danger{% endif %}">
+                            <i class="fas {% if zone.is_active %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                            {{ zone.is_active|yesno:"Active,Inactive" }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="entity-actions">
+                            <a href="{% url 'admin_panel:shipping_update' zone.id %}" class="action-btn edit-btn" title="Modifier">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'admin_panel:shipping_delete' zone.id %}" class="action-btn delete-btn delete-link" data-name="{{ zone.city }}" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="emptyState" class="entity-empty" {% if zones %}style="display:none;"{% endif %}>
+        <i class="fas fa-truck"></i>
+        <h3>Aucune zone trouvee</h3>
+        <p>Ajoutez vos premieres zones de livraison pour demarrer.</p>
+        <a href="{% url 'admin_panel:shipping_create' %}" class="btn-primary">
+            <i class="fas fa-plus"></i> Nouvelle zone
+        </a>
+    </div>
+
+    <div class="pagination-container">
+        <button type="button" class="pagination-btn" id="prevPage" disabled>
+            <i class="fas fa-chevron-left"></i> Precedent
+        </button>
+        <div class="pagination-info">
+            Affichage de <span id="startIndex">0</span> a <span id="endIndex">0</span> sur <span id="totalCount">0</span> zones
+        </div>
+        <button type="button" class="pagination-btn" id="nextPage">
+            Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}

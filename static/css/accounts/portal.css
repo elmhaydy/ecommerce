@@ -1,0 +1,96 @@
+.account-portal-page {
+  background: #fff;
+}
+
+.orders-page-shell {
+  max-width: 1760px;
+  margin: 0 auto;
+  padding: 28px 26px 72px;
+  color: #111;
+}
+
+.orders-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 0 18px;
+  border-bottom: 1px solid #d7d7d7;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.orders-breadcrumb a {
+  color: #111;
+  text-decoration: none;
+}
+
+.orders-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  min-height: 720px;
+}
+
+.orders-sidebar {
+  border-right: 1px solid #d7d7d7;
+}
+
+.orders-sidebar-group {
+  padding: 26px 0 22px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.orders-sidebar-group h2 {
+  margin: 0 0 20px;
+  padding: 0 40px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.orders-side-link {
+  display: block;
+  padding: 10px 40px;
+  color: #404040;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.orders-side-link:hover,
+.orders-side-link.active {
+  color: #2b6cb0;
+  font-weight: 800;
+}
+
+.orders-main {
+  padding: 0 0 0 42px;
+}
+
+@media (max-width: 1180px) {
+  .orders-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .orders-sidebar {
+    border-right: none;
+    border-bottom: 1px solid #d7d7d7;
+  }
+
+  .orders-main {
+    padding: 24px 0 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .orders-page-shell {
+    padding: 18px 16px 50px;
+  }
+}
+
+@media (max-width: 640px) {
+  .orders-sidebar-group h2,
+  .orders-side-link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

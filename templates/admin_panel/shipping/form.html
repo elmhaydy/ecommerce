@@ -1,0 +1,71 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Zone livraison{% endblock %}
+{% block page_title %}{% if zone %}Modifier zone{% else %}Nouvelle zone{% endif %}{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/shipping/form.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/shipping/form.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page">
+    <div class="entity-form-layout">
+        <div class="entity-form-card">
+            <div class="entity-form-header">
+                <div class="entity-icon-box"><i class="fas fa-truck-fast"></i></div>
+                <div>
+                    <h2>{% if zone %}Modifier la zone{% else %}Ajouter une zone{% endif %}</h2>
+                    <p>Definissez les frais, le seuil de franco et l'activation de la zone.</p>
+                </div>
+            </div>
+            <form method="post" id="shippingForm" class="entity-form">
+                {% csrf_token %}
+                <div class="entity-form-grid">
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.field.widget.input_type == "checkbox" %}
+                        <div class="checkbox-row">
+                            {{ field }}
+                            <span>{{ field.help_text|default:"Zone active dans le checkout." }}</span>
+                        </div>
+                        {% else %}
+                        {{ field }}
+                        {% endif %}
+                        {% if field.errors %}
+                        <div class="field-errors">{{ field.errors }}</div>
+                        {% endif %}
+                        {% if field.help_text and field.field.widget.input_type != "checkbox" %}
+                        <small class="field-help">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="entity-form-actions">
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i>
+                        <span>Enregistrer</span>
+                    </button>
+                    <a href="{% url 'admin_panel:shipping_list' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Retour liste
+                    </a>
+                </div>
+            </form>
+        </div>
+        <aside class="entity-side-card">
+            <h3>Conseils</h3>
+            <ul class="side-list">
+                <li><i class="fas fa-check-circle"></i><span>Gardez des frais simples et lisibles pour le client.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Utilisez un seuil de franco pour augmenter le panier moyen.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Desactivez temporairement les zones non desservies.</span></li>
+            </ul>
+        </aside>
+    </div>
+</div>
+{% endblock %}

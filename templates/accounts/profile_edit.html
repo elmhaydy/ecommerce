@@ -1,0 +1,62 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Modifier le profil" "Edit profile" %}{% endblock %}
+{% block page_title %}{% tr "Parametres du compte" "Account settings" %}{% endblock %}
+{% block user_role_label %}{% tr "Mon compte" "My account" %}{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/admin_account.css' %}?v=1.0" />
+{% endblock %}
+
+{% block sidebar_content %}
+<nav class="sidebar-nav">
+    <div class="nav-section">
+        <span class="nav-label">{% tr "Compte" "Account" %}</span>
+        <a href="{% url 'accounts:profile' %}" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>{% tr "Profil" "Profile" %}</span>
+        </a>
+        <a href="{% url 'accounts:profile_edit' %}" class="nav-item active">
+            <i class="fas fa-cog"></i>
+            <span>{% tr "Parametres" "Settings" %}</span>
+        </a>
+        <a href="{% url 'accounts:password_change' %}" class="nav-item">
+            <i class="fas fa-key"></i>
+            <span>{% tr "Mot de passe" "Password" %}</span>
+        </a>
+    </div>
+    <div class="nav-section">
+        <span class="nav-label">{% tr "Commandes" "Orders" %}</span>
+        <a href="{% url 'orders:order_history' %}" class="nav-item">
+            <i class="fas fa-box"></i>
+            <span>{% tr "Mes commandes" "My orders" %}</span>
+        </a>
+        <a href="{% url 'wishlist:wishlist_detail' %}" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>{% tr "Favoris" "Wishlist" %}</span>
+        </a>
+    </div>
+</nav>
+<div class="sidebar-footer">
+    <a href="{% url 'core:home' %}" class="nav-item shop-link" target="_blank">
+        <i class="fas fa-store"></i>
+        <span>{% tr "Boutique" "Store" %}</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block admin_content %}
+<div class="account-admin-shell">
+    <section class="account-form-card">
+        <h2>{% tr "Modifier mon profil" "Edit my profile" %}</h2>
+        <p class="account-subtitle">{% tr "Mettez a jour vos informations personnelles pour garder votre compte a jour." "Update your personal information to keep your account up to date." %}</p>
+
+        <form method="post" class="account-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="account-submit">{% tr "Enregistrer" "Save" %}</button>
+        </form>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+.delete-box {
+    background: var(--bg-surface);
+    padding: 2rem;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    max-width: 500px;
+    box-shadow: var(--shadow-sm);
+}
+
+.delete-box h1 {
+    margin-bottom: 1rem;
+}
+
+.delete-box p {
+    color: var(--text-muted);
+}
+
+/* ACTIONS */
+.delete-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* BUTTONS */
+.btn-danger {
+    background: var(--danger);
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+}
+
+.btn-secondary {
+    background: var(--bg-surface-hover);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+}

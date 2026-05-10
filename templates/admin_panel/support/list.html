@@ -1,0 +1,516 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block title %}Support Chat{% endblock %}
+{% block page_title %}Support Chat{% endblock %}
+
+{% block admin_content %}
+<section class="support-admin-grid">
+    <aside class="support-admin-sidebar">
+        <div class="support-admin-sidebar-head">
+            <h2>Conversations</h2>
+            <span id="supportAdminCount">{{ conversations|length }}</span>
+        </div>
+
+        <div
+            class="support-admin-list"
+            id="supportAdminList"
+            data-list-url="{% url 'admin_panel:support_conversation_list_data' %}"
+            data-selected-id="{% if selected_conversation %}{{ selected_conversation.id }}{% endif %}"
+        >
+            {% for conversation in conversations %}
+            <a
+                href="{% url 'admin_panel:support_conversation_detail' conversation.id %}"
+                class="support-admin-conversation {% if selected_conversation and selected_conversation.id == conversation.id %}is-active{% endif %}"
+            >
+                <div class="support-admin-conversation-top">
+                    <strong>{{ conversation.user.username }}</strong>
+                    {% if conversation.unread_for_support %}
+                    <span class="support-admin-unread">{{ conversation.unread_for_support }}</span>
+                    {% endif %}
+                </div>
+                <p>{{ conversation.user.email|default:"Sans email" }}</p>
+                <small>
+                    {% if conversation.messages.last %}
+                    {{ conversation.messages.last.body|truncatechars:70 }}
+                    {% else %}
+                    Aucun message
+                    {% endif %}
+                </small>
+            </a>
+            {% empty %}
+            <div class="support-admin-empty">
+                <p>Aucune conversation client pour le moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </aside>
+
+    <div class="support-admin-main">
+        {% if selected_conversation %}
+        <div class="support-admin-main-head">
+            <div>
+                <h2>{{ selected_conversation.user.username }}</h2>
+                <p>{{ selected_conversation.user.email|default:"Sans email" }}</p>
+            </div>
+            <div class="support-admin-head-actions">
+                {% if selected_conversation.is_closed %}
+                <span class="support-admin-status is-closed" id="supportAdminStatus">Fermee</span>
+                {% else %}
+                <span class="support-admin-status is-open" id="supportAdminStatus">Ouverte</span>
+                {% endif %}
+                <form method="post" action="{% url 'admin_panel:support_conversation_close' selected_conversation.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="support-admin-close-btn">Fermer</button>
+                </form>
+            </div>
+        </div>
+
+        <div
+            class="support-admin-messages"
+            id="supportAdminMessages"
+            data-messages-url="{% url 'admin_panel:support_conversation_messages' selected_conversation.id %}"
+        >
+            {% for message in selected_conversation.messages.all %}
+            <article class="support-admin-message {% if message.is_staff %}is-staff{% else %}is-client{% endif %}">
+                <div class="support-admin-message-bubble">
+                    <p>{{ message.body|linebreaksbr }}</p>
+                    <div class="support-admin-message-meta">
+                        <small class="support-admin-message-time">{{ message.created_at|date:"H:i" }}</small>
+                        {% if message.is_staff %}
+                        <small class="support-admin-message-status {% if message.read_at %}is-read{% elif message.delivered_at %}is-delivered{% else %}is-sent{% endif %}">
+                            {% if message.read_at or message.delivered_at %}✓✓{% else %}✓{% endif %}
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="support-admin-empty">
+                <p>Cette conversation est vide.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <form method="post" action="{% url 'admin_panel:support_conversation_reply' selected_conversation.id %}" class="support-admin-form">
+            {% csrf_token %}
+            <textarea name="body" rows="4" placeholder="Ecrire une reponse au client..." required></textarea>
+            <button type="submit">Envoyer la reponse</button>
+        </form>
+        {% else %}
+        <div class="support-admin-empty support-admin-empty-main">
+            <p>Selectionnez une conversation a gauche.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block admin_css %}
+<style>
+    .support-admin-grid {
+        display: grid;
+        grid-template-columns: 340px minmax(0, 1fr);
+        gap: 24px;
+        min-height: calc(100vh - 180px);
+    }
+
+    .support-admin-sidebar,
+    .support-admin-main {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .support-admin-sidebar-head,
+    .support-admin-main-head {
+        padding: 20px 22px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+    }
+
+    .support-admin-sidebar-head h2,
+    .support-admin-main-head h2 {
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .support-admin-sidebar-head span {
+        min-width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: rgba(43, 108, 176, 0.12);
+        color: #2b6cb0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+    }
+
+    .support-admin-list {
+        display: grid;
+        gap: 8px;
+        padding: 14px;
+        max-height: calc(100vh - 280px);
+        overflow-y: auto;
+    }
+
+    .support-admin-conversation {
+        display: grid;
+        gap: 8px;
+        padding: 14px;
+        border-radius: 14px;
+        background: var(--bg-tertiary);
+        border: 1px solid transparent;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .support-admin-conversation.is-active {
+        border-color: #2b6cb0;
+        background: rgba(43, 108, 176, 0.1);
+    }
+
+    .support-admin-conversation-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .support-admin-unread {
+        min-width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: #2b6cb0;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 900;
+    }
+
+    .support-admin-conversation p,
+    .support-admin-conversation small,
+    .support-admin-main-head p {
+        color: var(--text-secondary);
+    }
+
+    .support-admin-head-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .support-admin-status {
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+    }
+
+    .support-admin-status.is-open {
+        background: rgba(16, 185, 129, 0.14);
+        color: #10b981;
+    }
+
+    .support-admin-status.is-closed {
+        background: rgba(239, 68, 68, 0.14);
+        color: #ef4444;
+    }
+
+    .support-admin-close-btn,
+    .support-admin-form button {
+        border: 0;
+        border-radius: 12px;
+        background: #2b6cb0;
+        color: #fff;
+        font: inherit;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .support-admin-close-btn {
+        padding: 10px 14px;
+    }
+
+    .support-admin-messages {
+        display: grid;
+        gap: 14px;
+        padding: 22px;
+        max-height: calc(100vh - 420px);
+        overflow-y: auto;
+        background: var(--bg-primary);
+    }
+
+    .support-admin-message {
+        display: flex;
+    }
+
+    .support-admin-message.is-staff {
+        justify-content: flex-end;
+    }
+
+    .support-admin-message-bubble {
+        max-width: 76%;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        display: grid;
+        gap: 8px;
+    }
+
+    .support-admin-message.is-staff .support-admin-message-bubble {
+        background: rgba(43, 108, 176, 0.14);
+        border-color: rgba(43, 108, 176, 0.32);
+    }
+
+    .support-admin-message-bubble p {
+        white-space: pre-wrap;
+        line-height: 1.55;
+    }
+
+    .support-admin-message-meta {
+        display: inline-flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .support-admin-message-time {
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .support-admin-message-status {
+        min-width: 18px;
+        color: #dbe7f5;
+        font-size: 12px;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -1px;
+        text-align: right;
+    }
+
+    .support-admin-message.is-staff .support-admin-message-time,
+    .support-admin-message.is-staff .support-admin-message-status.is-sent,
+    .support-admin-message.is-staff .support-admin-message-status.is-delivered {
+        color: rgba(255, 255, 255, 0.92);
+    }
+
+    .support-admin-message-status.is-read {
+        color: #7fd0ff;
+    }
+
+    .support-admin-form {
+        padding: 18px 22px 22px;
+        border-top: 1px solid var(--border-color);
+        display: grid;
+        gap: 12px;
+    }
+
+    .support-admin-form textarea {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        padding: 14px 16px;
+        resize: vertical;
+        font: inherit;
+    }
+
+    .support-admin-form button {
+        min-height: 48px;
+    }
+
+    .support-admin-empty {
+        padding: 26px;
+        color: var(--text-secondary);
+    }
+
+    .support-admin-empty-main {
+        min-height: 420px;
+        display: grid;
+        place-items: center;
+    }
+
+    @media (max-width: 1100px) {
+        .support-admin-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block admin_js %}
+<script>
+    (() => {
+        const listContainer = document.getElementById("supportAdminList");
+        const countBadge = document.getElementById("supportAdminCount");
+        if (!listContainer) return;
+
+        const listUrl = listContainer.dataset.listUrl;
+        const selectedId = Number(listContainer.dataset.selectedId || 0);
+        let lastListSignature = "";
+
+        const escapeHtml = (value) => String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+
+        const buildListSignature = (items) => items
+            .map((item) => `${item.id}:${item.unread_for_support}:${item.last_message}:${item.is_closed}`)
+            .join("|");
+
+        const renderList = (items) => {
+            if (countBadge) {
+                countBadge.textContent = String(items.length);
+            }
+
+            if (!items.length) {
+                listContainer.innerHTML = '<div class="support-admin-empty"><p>Aucune conversation client pour le moment.</p></div>';
+                return;
+            }
+
+            listContainer.innerHTML = items.map((item) => `
+                <a
+                    href="${escapeHtml(item.url)}"
+                    class="support-admin-conversation ${item.id === selectedId ? "is-active" : ""}"
+                >
+                    <div class="support-admin-conversation-top">
+                        <strong>${escapeHtml(item.username)}</strong>
+                        ${item.unread_for_support ? `<span class="support-admin-unread">${item.unread_for_support}</span>` : ""}
+                    </div>
+                    <p>${escapeHtml(item.email)}</p>
+                    <small>${escapeHtml(item.last_message)}</small>
+                </a>
+            `).join("");
+        };
+
+        const refreshList = async () => {
+            try {
+                const response = await fetch(listUrl, {
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    credentials: "same-origin"
+                });
+                if (!response.ok) return;
+
+                const payload = await response.json();
+                const items = payload.conversations || [];
+                const nextSignature = buildListSignature(items);
+
+                if (nextSignature !== lastListSignature) {
+                    lastListSignature = nextSignature;
+                    renderList(items);
+                } else if (countBadge) {
+                    countBadge.textContent = String(payload.count ?? items.length);
+                }
+            } catch (error) {
+            }
+        };
+
+        refreshList();
+        window.setInterval(refreshList, 5000);
+    })();
+</script>
+{% if selected_conversation %}
+<script>
+    (() => {
+        const messagesContainer = document.getElementById("supportAdminMessages");
+        const statusBadge = document.getElementById("supportAdminStatus");
+        const replyForm = document.querySelector(".support-admin-form");
+        const replyTextarea = replyForm?.querySelector("textarea[name='body']");
+        if (!messagesContainer) return;
+
+        const messagesUrl = messagesContainer.dataset.messagesUrl;
+        let lastSignature = "";
+
+        const escapeHtml = (value) => String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+
+        const buildSignature = (messages) => messages.map((message) => `${message.id}:${message.created_at}`).join("|");
+
+        const renderMessages = (messages) => {
+            if (!messages.length) {
+                messagesContainer.innerHTML = '<div class="support-admin-empty"><p>Cette conversation est vide.</p></div>';
+                return;
+            }
+
+            messagesContainer.innerHTML = messages.map((message) => `
+                <article class="support-admin-message ${message.is_staff ? "is-staff" : "is-client"}">
+                    <div class="support-admin-message-bubble">
+                        <p>${escapeHtml(message.body).replaceAll("\n", "<br>")}</p>
+                        <div class="support-admin-message-meta">
+                            <small class="support-admin-message-time">${escapeHtml((message.created_at || "").slice(-5))}</small>
+                            ${message.is_staff ? `<small class="support-admin-message-status ${message.status === "read" ? "is-read" : (message.status === "delivered" ? "is-delivered" : "is-sent")}">${message.status === "read" || message.status === "delivered" ? "✓✓" : "✓"}</small>` : ""}
+                        </div>
+                    </div>
+                </article>
+            `).join("");
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
+
+        const refreshMessages = async () => {
+            try {
+                const response = await fetch(messagesUrl, {
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    credentials: "same-origin"
+                });
+                if (!response.ok) return;
+
+                const payload = await response.json();
+                const messages = payload.messages || [];
+                const signature = buildSignature(messages);
+
+                if (signature !== lastSignature) {
+                    lastSignature = signature;
+                    renderMessages(messages);
+                }
+
+                if (statusBadge) {
+                    statusBadge.textContent = payload.is_closed ? "Fermee" : "Ouverte";
+                    statusBadge.classList.toggle("is-open", !payload.is_closed);
+                    statusBadge.classList.toggle("is-closed", payload.is_closed);
+                }
+            } catch (error) {
+            }
+        };
+
+        refreshMessages();
+        window.setInterval(refreshMessages, 5000);
+
+        if (replyForm && replyTextarea) {
+            replyTextarea.addEventListener("keydown", (event) => {
+                if (event.key !== "Enter" || event.shiftKey) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                if (typeof replyForm.requestSubmit === "function") {
+                    replyForm.requestSubmit();
+                    return;
+                }
+
+                replyForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+            });
+        }
+    })();
+</script>
+{% endif %}
+{% endblock %}

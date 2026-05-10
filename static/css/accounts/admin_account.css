@@ -1,0 +1,288 @@
+.account-admin-shell {
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+.account-admin-content {
+    display: grid;
+    gap: 24px;
+}
+
+.account-admin-grid {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 24px;
+}
+
+.account-panel,
+.account-summary,
+.account-order-card,
+.account-form-card,
+.account-password-card,
+.account-success-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.account-summary {
+    padding: 24px;
+    display: grid;
+    gap: 18px;
+}
+
+.account-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.account-summary h2,
+.account-panel h2,
+.account-form-card h2,
+.account-password-card h2,
+.account-success-card h2 {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.account-subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.account-meta {
+    display: grid;
+    gap: 14px;
+}
+
+.account-meta-item {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.account-meta-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.account-meta-item span {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.account-meta-item strong {
+    font-size: 15px;
+}
+
+.account-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.account-btn,
+.account-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.account-btn {
+    background: var(--gradient-primary);
+    color: #fff;
+    border: 0;
+}
+
+.account-btn-secondary {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.account-btn:hover,
+.account-btn-secondary:hover {
+    transform: translateY(-1px);
+}
+
+.account-panel {
+    padding: 24px;
+}
+
+.account-orders-list {
+    display: grid;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.account-order-card {
+    padding: 18px;
+    background: var(--bg-tertiary);
+}
+
+.account-order-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.account-order-top strong {
+    font-size: 16px;
+}
+
+.account-order-meta {
+    display: grid;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.account-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.account-status.pending {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--accent-warning);
+}
+
+.account-status.done {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-success);
+}
+
+.account-status.other {
+    background: rgba(124, 58, 237, 0.12);
+    color: var(--accent-primary);
+}
+
+.account-empty {
+    padding: 34px 18px;
+    text-align: center;
+    color: var(--text-secondary);
+    border-radius: var(--border-radius);
+    background: var(--bg-tertiary);
+    margin-top: 18px;
+}
+
+.account-empty i {
+    display: block;
+    font-size: 34px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.account-form-card,
+.account-password-card,
+.account-success-card {
+    max-width: 860px;
+    padding: 28px;
+}
+
+.account-form,
+.account-password-form {
+    display: grid;
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.account-form p,
+.account-password-form p {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+}
+
+.account-form input,
+.account-form textarea,
+.account-form select,
+.account-password-form input {
+    min-height: 46px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font: inherit;
+}
+
+.account-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.account-form input:focus,
+.account-form textarea:focus,
+.account-form select:focus,
+.account-password-form input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.account-submit {
+    min-height: 46px;
+    border: 0;
+    border-radius: var(--border-radius);
+    background: var(--gradient-primary);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.account-password-form ul.errorlist {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--accent-danger);
+}
+
+.account-success-card {
+    text-align: center;
+}
+
+.account-success-badge {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 18px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--accent-success);
+    font-size: 28px;
+}
+
+@media (max-width: 900px) {
+    .account-admin-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-order-top,
+    .account-actions {
+        flex-direction: column;
+    }
+}

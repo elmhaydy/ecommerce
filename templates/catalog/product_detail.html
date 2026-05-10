@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/catalog/detail.css' %}?v=4" />
+{% endblock %}
+
+{% block content %}
+<div class="product-detail-page">
+  <div class="product-breadcrumb">
+    <a href="{% url 'core:home' %}">{% tr "Accueil" "Home" %}</a>
+    <span>&raquo;</span>
+    <a href="{% url 'catalog:product_list' %}">{% tr "Produits" "Products" %}</a>
+    <span>&raquo;</span>
+    <strong>{% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}</strong>
+  </div>
+
+  <section class="product-main">
+    <div class="product-gallery">
+      <div class="thumbs">
+        {% if product.image %}
+        <button class="thumb active" data-img="{{ product.image.url }}">
+          <img src="{{ product.image.url }}" alt="{% if site_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}" />
+        </button>
+        {% endif %}
+      </div>
+
+      <div class="main-image-box">
+        {% if product.is_featured %}
+        <span class="product-badge">{% tr "Nouveau, prix special" "New Arrival, Special Price" %}</span>
+        {% endif %}
+        {% if product.image %}
+        <img id="mainProductImage" src="{{ product.image.url }}" alt="{% if site_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}" />
+        {% else %}
+        <div class="image-placeholder">{% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="product-summary">
+      <h1>{% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}</h1>
+
+      <div class="rating-row">
+        <strong>{{ average_rating|default:"4.8" }}</strong>
+        <span>&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <em>({{ reviews.count }} {% tr "avis" "reviews" %})</em>
+      </div>
+
+      <div class="price-box">
+        <strong>{{ product.price }} Dhs</strong>
+        {% if product.old_price %}
+        <del>{{ product.old_price }} Dhs</del>
+        {% endif %}
+      </div>
+
+      <div class="stock-box">
+        {% if product.stock == 0 %}
+        <span class="stock out">{% tr "Rupture de stock" "Out of stock" %}</span>
+        {% elif product.is_low_stock %}
+        <span class="stock low">{% tr "Stock faible" "Low stock" %}</span>
+        {% else %}
+        <span class="stock in">{% tr "Disponible" "Available" %}</span>
+        {% endif %}
+      </div>
+
+      <div class="short-desc">
+        <p>{% if site_language == "en" and product.description_en %}{{ product.description_en }}{% else %}{{ product.description_fr }}{% endif %}</p>
+      </div>
+
+      <div class="product-services">
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 7h11v8H3z"></path>
+              <path d="M14 10h3l2 2v3h-5z"></path>
+              <circle cx="7" cy="18" r="2"></circle>
+              <circle cx="17" cy="18" r="2"></circle>
+            </svg>
+          </span>
+          <div>
+            <strong>{% tr "Livraison rapide" "Fast delivery" %}</strong>
+            <p>{% tr "Livraison offerte a partir de 100 DHS selon la zone." "Free delivery from 100 DHS depending on the area." %}</p>
+          </div>
+        </div>
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3l7 3v5c0 4.6-2.8 8-7 10-4.2-2-7-5.4-7-10V6z"></path>
+              <path d="M9.5 12l1.7 1.7 3.3-3.7"></path>
+            </svg>
+          </span>
+          <div>
+            <strong>{% tr "Garantie fiable" "Reliable warranty" %}</strong>
+            <p>{% tr "Couverture claire selon la disponibilite et la reference du produit." "Clear coverage depending on product availability and reference." %}</p>
+          </div>
+        </div>
+        <div class="service-card">
+          <span class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3v18"></path>
+              <path d="M8 7.5c0-1.7 1.8-3 4-3s4 1.3 4 3-1.8 3-4 3-4 1.3-4 3 1.8 3 4 3 4-1.3 4-3"></path>
+            </svg>
+          </span>
+          <div>
+            <strong>{% tr "Paiement a la livraison" "Cash on delivery" %}</strong>
+            <p>{% tr "Une commande plus simple avec validation au bon moment." "A simpler order flow with confirmation at the right time." %}</p>
+          </div>
+        </div>
+      </div>
+
+      {% if product.stock > 0 %}
+      <div class="buy-zone">
+        <div class="quantity-box">
+          <button type="button" class="qty-btn" data-action="minus">-</button>
+          <input type="number" id="qtyInput" name="quantity" value="1" min="1" max="{{ product.stock }}" />
+          <button type="button" class="qty-btn" data-action="plus">+</button>
+        </div>
+
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'cart:add_to_cart' product.id %}" class="add-cart-form" id="addCartForm">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" id="qtyHiddenInput" value="1">
+          <button type="submit" class="add-cart-btn">{% tr "Ajouter au panier" "Add to cart" %}</button>
+        </form>
+        {% else %}
+        <a href="{% url 'accounts:login' %}" class="add-cart-btn">
+          {% tr "Connectez-vous pour acheter" "Sign in to buy" %}
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="wishlist-row">
+        {% if user.is_authenticated %}
+        <a href="{% url 'wishlist:toggle_wishlist' product.id %}" class="wishlist-btn">
+          {% if is_in_wishlist %}
+          &#9829; {% tr "Retirer des favoris" "Remove from wishlist" %}
+          {% else %}
+          &#9825; {% tr "Ajouter aux favoris" "Add to wishlist" %}
+          {% endif %}
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="details-tabs">
+    <div class="tab-buttons">
+      <button class="tab-btn active" data-tab="description">{% tr "Description" "Description" %}</button>
+      <button class="tab-btn" data-tab="reviews">{% tr "Avis clients" "Customer reviews" %}</button>
+      <button class="tab-btn" data-tab="shipping">{% tr "Livraison" "Shipping" %}</button>
+    </div>
+
+    <div class="tab-panel active" id="description">
+      <h2>{% tr "Description du produit" "Product description" %}</h2>
+      <p>{% if site_language == "en" and product.description_en %}{{ product.description_en }}{% else %}{{ product.description_fr }}{% endif %}</p>
+    </div>
+
+    <div class="tab-panel" id="reviews">
+      <h2>{% tr "Avis clients" "Customer reviews" %}</h2>
+
+      {% for review in reviews %}
+      <div class="review-card">
+        <div>
+          <strong>{{ review.user.username }}</strong>
+          <span>{{ review.rating }}/5 &#9733;</span>
+        </div>
+        <p>{{ review.comment }}</p>
+
+        {% if review.is_verified_purchase %}
+          <small>{% tr "Achat verifie" "Verified purchase" %} &#10003;</small>
+        {% endif %}
+      </div>
+      {% empty %}
+      <p>{% tr "Aucun avis pour ce produit." "No reviews for this product." %}</p>
+      {% endfor %}
+
+      {% if user.is_authenticated %}
+      <form method="post" action="{% url 'reviews:add_review' product.id %}" class="review-form">
+        {% csrf_token %}
+        <h3>{% tr "Ajouter un avis" "Add a review" %}</h3>
+
+        <label>{% tr "Note" "Rating" %}</label>
+        <select name="rating">
+          <option value="5">{% tr "5 etoiles" "5 stars" %}</option>
+          <option value="4">{% tr "4 etoiles" "4 stars" %}</option>
+          <option value="3">{% tr "3 etoiles" "3 stars" %}</option>
+          <option value="2">{% tr "2 etoiles" "2 stars" %}</option>
+          <option value="1">{% tr "1 etoile" "1 star" %}</option>
+        </select>
+
+        <label>{% tr "Votre avis" "Your review" %}</label>
+        <textarea name="comment" placeholder="{% tr 'Ecrire votre avis...' 'Write your review...' %}" required></textarea>
+
+        <button type="submit">{% tr "Envoyer avis" "Submit review" %}</button>
+      </form>
+      {% else %}
+      <p>{% tr "Connectez-vous pour laisser un avis." "Sign in to leave a review." %}</p>
+      {% endif %}
+    </div>
+
+    <div class="tab-panel shipping-panel" id="shipping">
+      <div class="shipping-intro">
+        <h2>{% tr "Livraison et garantie" "Shipping and warranty" %}</h2>
+        <p>
+          {% tr "Une experience plus rassurante avec expedition rapide, paiement a la livraison et couverture claire sur les produits eligibles." "A more reassuring experience with fast shipping, cash on delivery, and clear coverage on eligible products." %}
+        </p>
+      </div>
+
+      <div class="shipping-grid">
+        <article class="shipping-card">
+          <span class="shipping-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 7h11v8H3z"></path>
+              <path d="M14 10h3l2 2v3h-5z"></path>
+              <circle cx="7" cy="18" r="2"></circle>
+              <circle cx="17" cy="18" r="2"></circle>
+            </svg>
+          </span>
+          <h3>{% tr "Expedition rapide" "Fast shipping" %}</h3>
+          <p>{% tr "Preparation soignee de la commande et envoi rapide selon le stock disponible." "Careful order preparation and fast shipping depending on available stock." %}</p>
+        </article>
+
+        <article class="shipping-card">
+          <span class="shipping-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3v18"></path>
+              <path d="M8 7.5c0-1.7 1.8-3 4-3s4 1.3 4 3-1.8 3-4 3-4 1.3-4 3 1.8 3 4 3 4-1.3 4-3"></path>
+            </svg>
+          </span>
+          <h3>{% tr "Paiement flexible" "Flexible payment" %}</h3>
+          <p>{% tr "Paiement a la livraison disponible pour garder un parcours plus simple et plus rassurant." "Cash on delivery available for a simpler and more reassuring experience." %}</p>
+        </article>
+
+        <article class="shipping-card">
+          <span class="shipping-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3l7 3v5c0 4.6-2.8 8-7 10-4.2-2-7-5.4-7-10V6z"></path>
+              <path d="M9.5 12l1.7 1.7 3.3-3.7"></path>
+            </svg>
+          </span>
+          <h3>{% tr "Garantie transparente" "Transparent warranty" %}</h3>
+          <p>{% tr "Conditions de garantie communiquees clairement selon la reference et la disponibilite du produit." "Warranty terms are clearly communicated depending on the product reference and availability." %}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="related-section">
+    <h2>{% tr "Produits lies" "Related products" %}</h2>
+
+    <div class="related-grid">
+      {% for related in related_products %}
+      <article class="related-card">
+        <a href="{% url 'catalog:product_detail' related.slug %}">
+          {% if related.image %}
+          <img src="{{ related.image.url }}" alt="{% if site_language == 'en' and related.name_en %}{{ related.name_en }}{% else %}{{ related.name_fr }}{% endif %}" />
+          {% endif %}
+          <h3>{% if site_language == "en" and related.name_en %}{{ related.name_en }}{% else %}{{ related.name_fr }}{% endif %}</h3>
+          <strong>{{ related.price }} Dhs</strong>
+        </a>
+      </article>
+      {% empty %}
+      <p>{% tr "Aucun produit lie." "No related products." %}</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script src="{% static 'js/catalog/detail.js' %}?v=2"></script>
+{% endblock %}

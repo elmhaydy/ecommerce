@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mon panier" "My cart" %}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/cart/cart.css' %}?v=4">
+{% endblock %}
+
+{% block content %}
+
+<div class="cart-page">
+
+  <div class="checkout-steps">
+    <strong>{% tr "Panier" "Cart" %}</strong>
+    <span>&rsaquo;</span>
+    <span>{% tr "Paiement securise" "Secure checkout" %}</span>
+    <span>&rsaquo;</span>
+    <span>{% tr "Commande terminee" "Order completed" %}</span>
+  </div>
+
+  <div class="cart-wrapper">
+
+    <section class="cart-left">
+      <h1>{% tr "Panier" "Shopping Cart" %}</h1>
+
+      {% if cart.items.all %}
+        <div class="cart-items">
+          {% for item in cart.items.all %}
+          <article class="cart-item">
+
+            <div class="cart-check">&#10003;</div>
+
+            <div class="cart-img">
+              {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name_fr }}">
+              {% endif %}
+            </div>
+
+            <div class="cart-info">
+              <h3>{% if site_language == "en" and item.product.name_en %}{{ item.product.name_en }}{% else %}{{ item.product.name_fr }}{% endif %}</h3>
+              <p>{% if item.product.category %}{% if site_language == "en" and item.product.category.name_en %}{{ item.product.category.name_en }}{% else %}{{ item.product.category.name_fr }}{% endif %}{% else %}{% tr "Produit" "Product" %}{% endif %}</p>
+              <strong>{{ item.product.price }} Dhs</strong>
+            </div>
+
+            <div class="cart-actions">
+              <a class="cart-icon" href="{% url 'wishlist:toggle_wishlist' item.product.id %}">&#9825;</a>
+              <a class="cart-icon" href="{% url 'cart:remove_from_cart' item.id %}">&#128465;</a>
+            </div>
+
+            <form method="post" action="{% url 'cart:update_cart_item' item.id %}" class="qty-form">
+              {% csrf_token %}
+              <button type="submit" name="action" value="decrease">-</button>
+              <span>{{ item.quantity }}</span>
+              <button type="submit" name="action" value="increase">+</button>
+            </form>
+
+          </article>
+          {% endfor %}
+        </div>
+
+        <section class="coupon-box">
+          <h3>{% tr "Code promo" "Promo code" %}</h3>
+
+          <form method="post" action="{% url 'cart:apply_coupon' %}">
+            {% csrf_token %}
+            <input type="text" name="code" placeholder="{% tr 'Entrer votre code promo' 'Enter your promo code' %}">
+            <button type="submit">{% tr "Appliquer" "Apply" %}</button>
+          </form>
+
+          {% if cart.coupon %}
+          <div class="coupon-applied">
+            <p>{% tr "Coupon applique :" "Applied coupon:" %} <strong>{{ cart.coupon.code }}</strong></p>
+            <p>{% tr "Remise :" "Discount:" %} <strong>{{ cart.get_discount_amount }} Dhs</strong></p>
+            <a href="{% url 'cart:remove_coupon' %}">{% tr "Retirer coupon" "Remove coupon" %}</a>
+          </div>
+          {% endif %}
+        </section>
+
+      {% else %}
+        <div class="cart-empty">
+          <h2>{% tr "Votre panier est vide" "Your cart is empty" %}</h2>
+          <a href="{% url 'catalog:product_list' %}">{% tr "Continuer mes achats" "Continue shopping" %}</a>
+        </div>
+      {% endif %}
+
+      {% if related_products %}
+      <section class="cart-suggestions">
+        <div class="suggestions-header">
+          <h2>{% tr "Vous pourrez aussi aimer" "You may also like" %}</h2>
+          <div class="suggestions-controls">
+            <button class="suggestions-nav suggestions-prev" id="suggestionsPrev" type="button" aria-label="{% tr 'Produits precedents' 'Previous products' %}">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 6l-6 6 6 6"></path>
+              </svg>
+            </button>
+            <button class="suggestions-nav suggestions-next" id="suggestionsNext" type="button" aria-label="{% tr 'Produits suivants' 'Next products' %}">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 6l6 6-6 6"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="suggestions-carousel">
+          <div class="suggestions-viewport">
+            <div class="suggestion-grid" id="suggestionsTrack">
+              {% for product in related_products %}
+              <article class="suggestion-card">
+                <a href="{% url 'catalog:product_detail' product.slug %}">
+                  {% if product.image %}
+                  <img src="{{ product.image.url }}" alt="{% if site_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}">
+                  {% endif %}
+                  <div class="rating">4.9 &#9733; <span>({{ product.stock|default:99 }})</span></div>
+                  <h3>{% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}</h3>
+                  <strong>{{ product.price }} Dhs</strong>
+                </a>
+              </article>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+    </section>
+
+    {% if cart.items.all %}
+    <aside class="cart-summary">
+      <h2>{% tr "Resume de la commande" "Order summary" %}</h2>
+
+      <div class="summary-line">
+        <span>{% tr "Sous-total du panier" "Cart subtotal" %}</span>
+        <strong>{{ cart.get_total }} Dhs</strong>
+      </div>
+
+      {% if cart.coupon %}
+      <div class="summary-line discount">
+        <span>{% tr "Remise" "Discount" %}</span>
+        <strong>-{{ cart.get_discount_amount }} Dhs</strong>
+      </div>
+      {% endif %}
+
+      <div class="summary-total">
+        <span>{% tr "Total estimatif" "Estimated total" %}</span>
+        <strong>{{ cart.get_final_total }} Dhs</strong>
+      </div>
+
+      <a href="{% url 'orders:checkout' %}" class="checkout-btn">{% tr "Verification" "Checkout" %}</a>
+      <a href="{% url 'catalog:product_list' %}" class="continue-btn">{% tr "Continuer les achats" "Continue shopping" %}</a>
+    </aside>
+    {% endif %}
+
+  </div>
+</div>
+
+<button class="support-btn" aria-label="{% tr 'Assistance' 'Support' %}">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 12a8 8 0 0 1 8-8h.2A8 8 0 0 1 20 12v4a2 2 0 0 1-2 2h-2.2a2 2 0 0 1-2-2v-2.2a2 2 0 0 1 2-2H18"></path>
+    <path d="M4 12H6a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H4"></path>
+    <path d="M12 20a3 3 0 0 0 3-3"></path>
+  </svg>
+</button>
+
+{% endblock %}
+
+{% block page_js %}
+<script src="{% static 'js/cart/cart.js' %}?v=2"></script>
+{% endblock %}

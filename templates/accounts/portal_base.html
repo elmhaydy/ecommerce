@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static site_i18n %}
+
+{% block body_class %}account-portal-page{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/portal.css' %}?v=2" />
+{% block portal_extra_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<section class="orders-page-shell">
+  <div class="orders-breadcrumb">
+    <a href="{% url 'core:home' %}">Accueil</a>
+    <span>&raquo;</span>
+    <strong>{% block portal_breadcrumb_title %}{% tr "Mon compte" "My account" %}{% endblock %}</strong>
+  </div>
+
+  <div class="orders-layout">
+    <aside class="orders-sidebar">
+      <div class="orders-sidebar-group">
+        <h2>{% tr "Gestion des transactions" "Transaction management" %}</h2>
+        <a href="{% url 'orders:order_history' %}" class="orders-side-link {% block nav_orders %}{% endblock %}">
+          {% tr "Ma commande" "My orders" %}
+        </a>
+      </div>
+
+      <div class="orders-sidebar-group">
+        <h2>{% tr "Compte" "Account" %}</h2>
+        <a href="{% url 'accounts:profile' %}" class="orders-side-link {% block nav_profile %}{% endblock %}">
+          {% tr "Informations personnelles" "Personal information" %}
+        </a>
+        <a href="{% url 'wishlist:wishlist_detail' %}" class="orders-side-link {% block nav_wishlist %}{% endblock %}">
+          {% tr "My Souhait" "My wishlist" %}
+        </a>
+        <a href="{% url 'accounts:activity' %}" class="orders-side-link {% block nav_activity %}{% endblock %}">
+          {% tr "Mon point d'exploration" "My activity hub" %}
+        </a>
+        <a href="{% url 'accounts:coupons' %}" class="orders-side-link {% block nav_coupons %}{% endblock %}">
+          {% tr "Centre de coupons" "Coupons center" %}
+        </a>
+        <a href="{% url 'accounts:addresses' %}" class="orders-side-link {% block nav_addresses %}{% endblock %}">
+          {% tr "Gestion des adresses" "Address management" %}
+        </a>
+        <a href="{% url 'accounts:reviews' %}" class="orders-side-link {% block nav_reviews %}{% endblock %}">
+          {% tr "Commentaires sur les produits" "Product reviews" %}
+        </a>
+        <a href="{% url 'accounts:profile_edit' %}" class="orders-side-link {% block nav_settings %}{% endblock %}">
+          {% tr "Modifier le profil" "Edit profile" %}
+        </a>
+        <a href="{% url 'accounts:password_change' %}" class="orders-side-link {% block nav_password %}{% endblock %}">
+          {% tr "Mot de passe" "Password" %}
+        </a>
+      </div>
+    </aside>
+
+    <div class="orders-main">
+      {% block portal_content %}{% endblock %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block page_js %}
+{% block portal_extra_js %}{% endblock %}
+{% endblock %}

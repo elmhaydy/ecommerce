@@ -1,0 +1,19 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block title %}Supprimer avis{% endblock %}
+
+{% block admin_content %}
+<h1>Supprimer avis</h1>
+
+<p>Produit : <strong>{{ review.product.name_fr }}</strong></p>
+<p>Utilisateur : <strong>{{ review.user.username }}</strong></p>
+<p>Note : {{ review.rating }}/5</p>
+<p>Commentaire : {{ review.comment }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmer suppression</button>
+</form>
+
+<a href="{% url 'admin_panel:review_list' %}">Annuler</a>
+{% endblock %}

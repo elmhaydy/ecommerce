@@ -1,0 +1,275 @@
+.account-hub-page {
+  background: #f3f6fb;
+}
+
+.hub-page {
+  display: grid;
+  gap: 24px;
+}
+
+.hub-header {
+  padding: 28px;
+  border: 1px solid #dbe4f0;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.hub-kicker {
+  margin: 0 0 10px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hub-header h1 {
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.02;
+}
+
+.hub-header p {
+  margin: 0;
+  max-width: 720px;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.hub-stats-grid,
+.hub-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.hub-stat-card,
+.hub-address-card,
+.hub-empty-card,
+.hub-panel {
+  padding: 22px;
+  border: 1px solid #dbe4f0;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.hub-stat-card span,
+.hub-address-card small {
+  color: #64748b;
+}
+
+.hub-stat-card strong {
+  display: block;
+  margin-top: 12px;
+  font-size: 2rem;
+}
+
+.hub-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.hub-panel-head h2,
+.hub-address-card h2,
+.hub-empty-card h2 {
+  margin: 0;
+}
+
+.hub-panel-head a,
+.review-card a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.hub-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hub-action-btn,
+.hub-submit-btn {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #2b6cb0;
+  background: #2b6cb0;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.hub-action-btn.secondary {
+  background: #fff;
+  color: #2b6cb0;
+}
+
+.form-panel {
+  max-width: 760px;
+}
+
+.hub-form {
+  display: grid;
+  gap: 16px;
+}
+
+.hub-form p {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.hub-form label {
+  font-weight: 700;
+  color: #111827;
+}
+
+.hub-form input,
+.hub-form select,
+.hub-form textarea {
+  min-height: 46px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.hub-form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.hub-form ul.errorlist {
+  margin: 0;
+  padding-left: 18px;
+  color: #b91c1c;
+}
+
+.hub-list {
+  display: grid;
+  gap: 14px;
+}
+
+.hub-list-card {
+  padding: 18px 20px;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  background: #fff;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hub-list-main {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hub-list-thumb {
+  flex: 0 0 86px;
+  width: 86px;
+  height: 86px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #f5f9ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.hub-list-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hub-list-card strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.hub-list-card a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.hub-list-card p,
+.hub-address-card p,
+.hub-empty-card p,
+.hub-empty {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.hub-list-side {
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+  text-align: right;
+}
+
+.hub-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.hub-badge.success {
+  background: #ecfdf5;
+  color: #15803d;
+}
+
+.coupon-card,
+.review-card {
+  align-items: center;
+}
+
+.hub-address-card p {
+  margin-bottom: 6px;
+}
+
+.hub-success-card {
+  max-width: 720px;
+}
+
+@media (max-width: 920px) {
+  .hub-stats-grid,
+  .hub-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hub-list-card {
+    flex-direction: column;
+  }
+
+  .hub-list-side {
+    justify-items: start;
+    text-align: left;
+  }
+}

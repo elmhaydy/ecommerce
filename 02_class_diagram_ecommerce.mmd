@@ -1,0 +1,184 @@
+classDiagram
+    direction LR
+
+    class User {
+        +int id
+        +string username
+        +string email
+        +bool is_staff
+        +bool is_active
+        +datetime date_joined
+        +login()
+        +logout()
+        +get_orders()
+    }
+
+    class Group {
+        +int id
+        +string name
+    }
+
+    class Category {
+        +int id
+        +string name_fr
+        +string name_en
+        +string slug
+        +bool is_active
+        +get_products()
+    }
+
+    class Product {
+        +int id
+        +string name_fr
+        +string name_en
+        +string slug
+        +decimal price
+        +decimal old_price
+        +int stock
+        +int low_stock_threshold
+        +bool is_active
+        +bool is_featured
+        +string description_fr
+        +string description_en
+        +update_stock()
+        +is_available()
+        +get_average_rating()
+    }
+
+    class ProductImage {
+        +int id
+        +image image
+        +bool is_main
+        +int sort_order
+    }
+
+    class ProductFeature {
+        +int id
+        +string label_fr
+        +string label_en
+        +string value_fr
+        +string value_en
+    }
+
+    class ProductColor {
+        +int id
+        +string name
+        +string hex_code
+    }
+
+    class Cart {
+        +int id
+        +datetime created_at
+        +get_total()
+        +clear()
+    }
+
+    class CartItem {
+        +int id
+        +int quantity
+        +get_subtotal()
+        +update_quantity()
+    }
+
+    class Coupon {
+        +int id
+        +string code
+        +string discount_type
+        +decimal value
+        +decimal minimum_amount
+        +date valid_from
+        +date valid_to
+        +int usage_limit
+        +int used_count
+        +bool is_active
+        +is_valid()
+        +calculate_discount()
+    }
+
+    class ShippingZone {
+        +int id
+        +string city
+        +decimal fee
+        +decimal free_shipping_threshold
+        +bool is_active
+        +calculate_fee()
+    }
+
+    class Order {
+        +int id
+        +string order_number
+        +string status
+        +decimal subtotal
+        +decimal discount
+        +decimal shipping_fee
+        +decimal total_amount
+        +string payment_method
+        +bool is_paid
+        +datetime created_at
+        +confirm()
+        +cancel()
+        +update_status()
+    }
+
+    class OrderItem {
+        +int id
+        +int quantity
+        +decimal unit_price
+        +get_subtotal()
+    }
+
+    class WishlistItem {
+        +int id
+        +datetime created_at
+    }
+
+    class Review {
+        +int id
+        +int rating
+        +text comment
+        +bool is_verified_purchase
+        +bool is_approved
+        +datetime created_at
+        +approve()
+        +reject()
+    }
+
+    class SupportConversation {
+        +int id
+        +string status
+        +datetime created_at
+        +datetime client_visible_from
+        +close()
+        +mark_read()
+    }
+
+    class SupportMessage {
+        +int id
+        +text body
+        +string sender_type
+        +string status
+        +datetime created_at
+        +mark_delivered()
+        +mark_read()
+    }
+
+    User "many" -- "many" Group : appartient à
+    Category "1" --> "0..*" Product : contient
+    Product "1" --> "0..*" ProductImage : possède
+    Product "1" --> "0..*" ProductFeature : possède
+    Product "1" --> "0..*" ProductColor : propose
+    User "1" --> "0..1" Cart : possède
+    Cart "1" --> "1..*" CartItem : contient
+    CartItem "*" --> "1" Product : concerne
+    User "1" --> "0..*" Order : passe
+    Order "1" --> "1..*" OrderItem : contient
+    OrderItem "*" --> "1" Product : concerne
+    Order "0..*" --> "0..1" Coupon : utilise
+    Order "0..*" --> "1" ShippingZone : livraison
+    User "1" --> "0..*" WishlistItem : sauvegarde
+    WishlistItem "*" --> "1" Product : favori
+    User "1" --> "0..*" Review : rédige
+    Product "1" --> "0..*" Review : reçoit
+    User "1" --> "0..*" SupportConversation : ouvre
+    SupportConversation "1" --> "1..*" SupportMessage : contient
+    User "1" --> "0..*" SupportMessage : envoie/reçoit

@@ -1,0 +1,259 @@
+.auth-page input {
+  font-family: inherit;
+}
+
+.auth-layout {
+  position: relative;
+  min-height: calc(100vh - 110px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+  overflow: hidden;
+  background: #111;
+}
+
+.auth-background {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.45)),
+    url("../../img/category-home.png") center/cover no-repeat;
+}
+
+.auth-card {
+  position: relative;
+  z-index: 2;
+  width: min(760px, 100%);
+  background: #fff;
+  border-radius: 36px;
+  padding: 65px 105px;
+  box-shadow: 0 30px 90px rgba(0,0,0,.35);
+}
+
+.auth-card h1 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 900;
+  margin-bottom: 55px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 26px;
+}
+
+.auth-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 11px;
+}
+
+.auth-input-wrap {
+  position: relative;
+}
+
+.auth-input-wrap input {
+  width: 100%;
+  height: 56px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 0 16px;
+  outline: none;
+  background: #fafafa;
+  font-size: 15px;
+  transition: .25s;
+}
+
+.login-card .auth-input-wrap input {
+  border: 0;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  background: transparent;
+}
+
+.auth-input-wrap input:focus {
+  border-color: #2b6cb0;
+  box-shadow: 0 0 0 4px rgba(43,108,176,.18);
+}
+
+.login-card .auth-input-wrap input:focus {
+  box-shadow: none;
+  border-bottom-color: #2b6cb0;
+}
+
+.password-wrap input {
+  padding-right: 55px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.auth-links-row {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  margin-top: -8px;
+}
+
+.auth-links-row a {
+  color: #111;
+  font-weight: 900;
+}
+
+.auth-submit {
+  width: 100%;
+  height: 56px;
+  border: 0;
+  border-radius: 35px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.auth-submit:hover {
+  background: #2b6cb0;
+  color: #fff;
+}
+
+.auth-bottom {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.auth-bottom a {
+  font-weight: 900;
+}
+
+.back-home {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+  font-weight: 700;
+}
+
+.field-error {
+  display: block;
+  margin-top: 8px;
+  color: #d30000;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.field-help {
+  display: block;
+  margin-top: 7px;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.auth-alert {
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.auth-alert.error {
+  background: #ffecec;
+  color: #c40000;
+}
+
+/* REGISTER */
+.register-wrapper {
+  min-height: calc(100vh - 110px);
+  background: #fff;
+  padding: 55px 20px 90px;
+}
+
+.register-title {
+  text-align: center;
+  padding: 25px 0 45px;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.register-title h1 {
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.bonus-box {
+  max-width: 860px;
+  margin: 28px auto 45px;
+  padding: 15px 20px;
+  border: 1px dashed #2b6cb0;
+  color: #111;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.register-form-card {
+  max-width: 860px;
+  margin: auto;
+}
+
+.register-form-card h2 {
+  margin-bottom: 28px;
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.register-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 30px;
+}
+
+.terms-line {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 26px 0 42px;
+  font-size: 14px;
+  color: #444;
+}
+
+.terms-line input {
+  width: 17px;
+  height: 17px;
+  accent-color: #2b6cb0;
+}
+
+.register-submit {
+  max-width: 430px;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 800px) {
+  .auth-card {
+    padding: 45px 28px;
+  }
+
+  .auth-card h1 {
+    font-size: 24px;
+  }
+
+  .register-grid {
+    grid-template-columns: 1fr;
+  }
+}

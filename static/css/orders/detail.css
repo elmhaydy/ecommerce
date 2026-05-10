@@ -1,0 +1,252 @@
+.order-detail-page {
+  display: grid;
+  gap: 22px;
+  padding-top: 6px;
+}
+
+.order-detail-hero,
+.order-detail-panel {
+  padding: 26px;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.05);
+}
+
+.order-detail-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.order-detail-kicker {
+  margin: 0 0 10px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.order-detail-hero h1,
+.order-detail-panel h2,
+.order-item-card h3 {
+  margin: 0;
+}
+
+.order-detail-hero h1 {
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  line-height: 1;
+}
+
+.order-detail-intro {
+  max-width: 700px;
+  margin: 12px 0 0;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+.order-detail-summary {
+  min-width: 240px;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: #2b6cb0;
+  color: #fff;
+}
+
+.detail-summary-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.order-detail-summary strong {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.detail-status {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: #fff4d9;
+  color: #9a6700;
+}
+
+.status-paid {
+  background: #eef5ff;
+  color: #2b6cb0;
+}
+
+.status-shipped {
+  background: #f2ecff;
+  color: #5e39cb;
+}
+
+.status-delivered {
+  background: #e9f8ec;
+  color: #1d7d45;
+}
+
+.status-cancelled {
+  background: #ffe9e7;
+  color: #b04739;
+}
+
+.order-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.detail-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.detail-fact,
+.detail-address-card,
+.order-item-card {
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.detail-fact span,
+.panel-head span {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-fact strong,
+.detail-address-card strong,
+.order-item-side strong {
+  color: #111827;
+}
+
+.detail-address-card {
+  margin-top: 18px;
+}
+
+.detail-address-card p {
+  margin: 8px 0 0;
+  color: #475569;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.order-items-list {
+  display: grid;
+  gap: 14px;
+}
+
+.order-item-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.order-item-card p {
+  margin: 8px 0 0;
+  color: #64748b;
+}
+
+.order-item-side {
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+  text-align: right;
+}
+
+.order-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.detail-action {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #2b6cb0;
+  background: #2b6cb0;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.detail-action.secondary {
+  background: #fff;
+  color: #2b6cb0;
+  border-color: #2b6cb0;
+}
+
+.detail-action.danger {
+  border-color: #b42318;
+  background: #b42318;
+}
+
+@media (max-width: 980px) {
+  .order-detail-hero,
+  .order-item-card {
+    flex-direction: column;
+  }
+
+  .order-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .order-detail-hero,
+  .order-detail-panel {
+    padding: 20px;
+  }
+
+  .detail-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .order-item-side {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .detail-action {
+    width: 100%;
+  }
+}

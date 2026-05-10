@@ -1,0 +1,82 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}{% if page_title_override %}{{ page_title_override }}{% else %}Modifier utilisateur{% endif %}{% endblock %}
+{% block page_title %}{% if page_title_override %}{{ page_title_override }}{% else %}Modifier utilisateur{% endif %}{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/user/form.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/user/form.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page">
+    <div class="entity-form-layout">
+        <div class="entity-form-card">
+            <div class="entity-form-header">
+                <div class="entity-icon-box"><i class="fas fa-user-pen"></i></div>
+                <div>
+                    <h2>{% if form_title_override %}{{ form_title_override }}{% else %}Modifier {{ form.instance.username|default:"l'utilisateur" }}{% endif %}</h2>
+                    <p>{% if form_description_override %}{{ form_description_override }}{% else %}Mettez a jour les informations de compte et le role affecte.{% endif %}</p>
+                </div>
+            </div>
+            <form method="post" id="userForm" class="entity-form">
+                {% csrf_token %}
+                <div class="entity-form-grid">
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.field.widget.input_type == "checkbox" %}
+                        <div class="checkbox-row">{{ field }}<span>{{ field.help_text }}</span></div>
+                        {% else %}
+                        {{ field }}
+                        {% endif %}
+                        {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                    {% if roles %}
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select name="role" id="role">
+                            {% for role in roles %}
+                            <option value="{{ role.name }}" {% if current_role and current_role.name == role.name %}selected{% endif %}>{{ role.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="entity-form-actions">
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                    {% if return_url %}
+                    <a href="{% url return_url %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </a>
+                    {% else %}
+                    <a href="{% url 'admin_panel:user_list' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        <aside class="entity-side-card">
+            <h3>Point d'attention</h3>
+            <ul class="side-list">
+                {% if is_self_profile %}
+                <li><i class="fas fa-check-circle"></i><span>Gardez vos informations de contact a jour.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Utilisez un mot de passe fort et unique.</span></li>
+                {% else %}
+                <li><i class="fas fa-check-circle"></i><span>Verifier l'impact avant d'accorder un acces staff.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Conservez un historique coherent des comptes actifs.</span></li>
+                {% endif %}
+            </ul>
+        </aside>
+    </div>
+</div>
+{% endblock %}

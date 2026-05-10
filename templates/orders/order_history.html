@@ -1,0 +1,125 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mes commandes" "My orders" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Ma commande" "My orders" %}{% endblock %}
+{% block nav_orders %}active{% endblock %}
+
+{% block portal_extra_css %}
+<link rel="stylesheet" href="{% static 'css/orders/history.css' %}?v=3" />
+{% endblock %}
+
+{% block portal_content %}
+<div class="orders-tabs" id="ordersTabs">
+  <button type="button" class="orders-tab active" data-filter="all">
+    {% tr "Toutes les commandes" "All orders" %}
+  </button>
+  <button type="button" class="orders-tab" data-filter="prepayment">
+    {% tr "prepaiement" "Prepayment" %}
+  </button>
+  <button type="button" class="orders-tab" data-filter="receiving">
+    {% tr "A Recevoir" "To receive" %}
+  </button>
+  <button type="button" class="orders-tab" data-filter="completed">
+    {% tr "Termine" "Completed" %}
+  </button>
+  <button type="button" class="orders-tab" data-filter="cancelled">
+    {% tr "Annule" "Cancelled" %}
+  </button>
+</div>
+
+{% if orders %}
+<div class="orders-results" id="ordersResults">
+  {% for order in orders %}
+  <article
+    class="order-row-card"
+    data-order-card
+    data-status="{{ order.status }}"
+    data-group="{% if order.status == 'PENDING' or order.status == 'PAID' %}prepayment{% elif order.status == 'SHIPPED' %}receiving{% elif order.status == 'DELIVERED' %}completed{% elif order.status == 'CANCELLED' %}cancelled{% else %}all{% endif %}"
+  >
+    <div class="order-row-head">
+      <div>
+        <p class="order-row-label">{% tr "Commande" "Order" %}</p>
+        <h3>#{{ order.id }}</h3>
+      </div>
+      <span class="order-status-chip status-{{ order.status|lower }}">
+        {{ order.get_status_display }}
+      </span>
+    </div>
+
+    <div class="order-row-meta">
+      <div class="order-meta-item">
+        <span>{% tr "Date" "Date" %}</span>
+        <strong>{{ order.created_at|date:"d/m/Y" }}</strong>
+      </div>
+      <div class="order-meta-item">
+        <span>{% tr "Produits" "Products" %}</span>
+        <strong>{{ order.items.count }}</strong>
+      </div>
+      <div class="order-meta-item">
+        <span>{% tr "Total" "Total" %}</span>
+        <strong>{{ order.total_amount }} DH</strong>
+      </div>
+      <div class="order-meta-item">
+        <span>{% tr "Paiement" "Payment" %}</span>
+        <strong>{{ order.get_payment_method_display }}</strong>
+      </div>
+    </div>
+
+    <div class="order-row-footer">
+      <p>
+        {% tr "Livraison vers" "Delivery to" %}
+        <strong>{{ order.shipping_city|default:order.city }}</strong>
+      </p>
+      <a href="{% url 'orders:order_detail' order.id %}" class="order-row-link">
+        {% tr "Voir detail" "View details" %}
+      </a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+<div class="orders-empty-state is-hidden" id="ordersFilteredEmpty">
+  <div class="orders-empty-visual" aria-hidden="true">
+    <span class="blob blob-one"></span>
+    <span class="blob blob-two"></span>
+    <div class="orders-empty-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 4.5h7l4 4V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-13a1.5 1.5 0 0 1 1-1.5Z"></path>
+        <path d="M14 4v5h5"></path>
+        <path d="M9 10h6"></path>
+        <path d="M9 14h3"></path>
+        <path d="M8 8l8 8"></path>
+      </svg>
+    </div>
+  </div>
+  <h2>OOPS</h2>
+  <p>{% tr "Aucune commande dans cette categorie." "No orders in this category." %}</p>
+</div>
+{% else %}
+<div class="orders-empty-state">
+  <div class="orders-empty-visual" aria-hidden="true">
+    <span class="blob blob-one"></span>
+    <span class="blob blob-two"></span>
+    <div class="orders-empty-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 4.5h7l4 4V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-13a1.5 1.5 0 0 1 1-1.5Z"></path>
+        <path d="M14 4v5h5"></path>
+        <path d="M9 10h6"></path>
+        <path d="M9 14h3"></path>
+        <path d="M8 8l8 8"></path>
+      </svg>
+    </div>
+  </div>
+  <h2>OOPS</h2>
+  <p>{% tr "Aucun resultat trouve" "No Result Found" %}</p>
+  <a href="{% url 'catalog:product_list' %}" class="orders-shop-link">
+    {% tr "Decouvrir les produits" "Discover products" %}
+  </a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block portal_extra_js %}
+<script src="{% static 'js/orders/history.js' %}?v=1"></script>
+{% endblock %}

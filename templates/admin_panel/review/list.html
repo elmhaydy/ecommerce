@@ -1,0 +1,149 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Avis | Admin Panel{% endblock %}
+{% block page_title %}Avis clients{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/review/list.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/review/list.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page entity-stack">
+    <div class="entity-stats">
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini"><i class="fas fa-star"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini">{{ reviews|length }}</span>
+                <span class="stat-label-mini">Avis</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini success"><i class="fas fa-check"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="approvedReviewsCount">0</span>
+                <span class="stat-label-mini">Approuves</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini warning"><i class="fas fa-bag-shopping"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="verifiedReviewsCount">0</span>
+                <span class="stat-label-mini">Achats verifies</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini primary"><i class="fas fa-chart-simple"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="averageRatingCount">0.0</span>
+                <span class="stat-label-mini">Note moyenne</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="entity-toolbar">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un produit, utilisateur ou commentaire...">
+            <button type="button" id="clearSearch" class="search-clear" style="display:none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="filters-wrapper">
+            <select class="filter-select" data-filter-key="status">
+                <option value="all">Tous les statuts</option>
+                <option value="approved">Approuves</option>
+                <option value="rejected">Refuses</option>
+            </select>
+            <select class="filter-select" data-filter-key="verified">
+                <option value="all">Tous les achats</option>
+                <option value="yes">Verifies</option>
+                <option value="no">Non verifies</option>
+            </select>
+            <button type="button" id="resetFilters" class="btn-reset">
+                <i class="fas fa-rotate-left"></i> Reinitialiser
+            </button>
+        </div>
+    </div>
+
+    <div class="entity-table-wrapper">
+        <table class="entity-table">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Client</th>
+                    <th>Note</th>
+                    <th>Commentaire</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reviewsTableBody">
+                {% for review in reviews %}
+                <tr
+                    data-search="{{ review.product.name_fr|lower }} {{ review.user.username|lower }} {{ review.comment|default:''|lower }}"
+                    data-status="{% if review.is_approved %}approved{% else %}rejected{% endif %}"
+                    data-verified="{% if review.is_verified_purchase %}yes{% else %}no{% endif %}"
+                    data-rating="{{ review.rating }}"
+                >
+                    <td>
+                        <div class="entity-title">{{ review.product.name_fr }}</div>
+                        <div class="entity-subtitle">Avis produit</div>
+                    </td>
+                    <td>{{ review.user.username }}</td>
+                    <td><strong>{{ review.rating }}/5</strong></td>
+                    <td>{{ review.comment|truncatechars:90 }}</td>
+                    <td>
+                        <div class="entity-actions">
+                            <span class="entity-badge {% if review.is_approved %}success{% else %}warning{% endif %}">
+                                {{ review.is_approved|yesno:"Approuve,En attente" }}
+                            </span>
+                            {% if review.is_verified_purchase %}
+                            <span class="entity-badge primary"><i class="fas fa-check-double"></i> Verifie</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="entity-actions">
+                            <form method="post" action="{% url 'admin_panel:review_toggle_approval' review.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-outline">
+                                    <i class="fas {% if review.is_approved %}fa-ban{% else %}fa-check{% endif %}"></i>
+                                    {% if review.is_approved %}Refuser{% else %}Approuver{% endif %}
+                                </button>
+                            </form>
+                            <a href="{% url 'admin_panel:review_delete' review.id %}" class="action-btn delete-btn delete-link" data-name="{{ review.user.username }}" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="emptyState" class="entity-empty" {% if reviews %}style="display:none;"{% endif %}>
+        <i class="fas fa-star"></i>
+        <h3>Aucun avis</h3>
+        <p>Les avis clients seront centralises ici.</p>
+    </div>
+
+    <div class="pagination-container">
+        <button type="button" class="pagination-btn" id="prevPage" disabled>
+            <i class="fas fa-chevron-left"></i> Precedent
+        </button>
+        <div class="pagination-info">
+            Affichage de <span id="startIndex">0</span> a <span id="endIndex">0</span> sur <span id="totalCount">0</span> avis
+        </div>
+        <button type="button" class="pagination-btn" id="nextPage">
+            Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}

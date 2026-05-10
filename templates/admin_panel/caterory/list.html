@@ -1,0 +1,202 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Gestion des catégories{% endblock %}
+
+{% block page_title %}Catégories{% endblock %}
+
+{% block admin_content %}
+<link rel="stylesheet" href="{% static 'css/admin/category/list.css' %}?v=1.0">
+<script src="{% static 'js/admin/category/list.js' %}?v=1.1" defer></script>
+
+<div class="categories-container">
+    <!-- Statistiques -->
+    <div class="categories-stats">
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini">
+                <i class="fas fa-folder"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value-mini">{{ categories|length }}</span>
+                <span class="stat-label-mini">Total catégories</span>
+            </div>
+        </div>
+        
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="activeCount">0</span>
+                <span class="stat-label-mini">Actives</span>
+            </div>
+        </div>
+        
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini warning">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="totalProducts">0</span>
+                <span class="stat-label-mini">Produits associés</span>
+            </div>
+        </div>
+        
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini primary">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="avgProducts">0</span>
+                <span class="stat-label-mini">Moy. par catégorie</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barre d'outils -->
+    <div class="categories-toolbar">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher une catégorie...">
+            <button class="search-clear" id="clearSearch" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="filters-wrapper">
+            <select id="statusFilter" class="filter-select">
+                <option value="all">Tous les statuts</option>
+                <option value="active">Actives</option>
+                <option value="inactive">Inactives</option>
+            </select>
+            
+            <button id="resetFilters" class="btn-reset">
+                <i class="fas fa-undo-alt"></i> Réinitialiser
+            </button>
+        </div>
+        
+        <a href="{% url 'admin_panel:category_create' %}" class="btn-primary">
+            <i class="fas fa-plus"></i> Nouvelle catégorie
+        </a>
+    </div>
+
+    <!-- Grille des catégories -->
+    <div class="categories-grid" id="categoriesGrid">
+        {% for category in categories %}
+        <div class="category-card" data-category-id="{{ category.id }}" data-name="{{ category.name_fr|lower }}" data-status="{{ category.is_active|lower }}" data-products="{{ category.products_count|default:0 }}">
+            <div class="category-header">
+                <div class="category-icon">
+                    <i class="fas {% if category.is_active %}fa-folder-open{% else %}fa-folder{% endif %}"></i>
+                </div>
+                <div class="category-status">
+                    <span class="status-badge {% if category.is_active %}status-active{% else %}status-inactive{% endif %}">
+                        <i class="fas {% if category.is_active %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                        {{ category.is_active|yesno:"Active,Inactive" }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="category-body">
+                <h3 class="category-name">{{ category.name_fr }}</h3>
+                {% if category.name_en %}
+                <p class="category-name-en">{{ category.name_en }}</p>
+                {% endif %}
+                
+                <div class="category-slug">
+                    <i class="fas fa-link"></i>
+                    <span>{{ category.slug }}</span>
+                </div>
+                
+                {% if category.description %}
+                <p class="category-description">{{ category.description|truncatechars:80 }}</p>
+                {% endif %}
+                
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-box"></i>
+                        <span>{{ category.products_count|default:0 }} produit{% if category.products_count != 1 %}s{% endif %}</span>
+                    </div>
+                    {% if category.parent %}
+                    <div class="stat-item">
+                        <i class="fas fa-level-up-alt"></i>
+                        <span>Sous-catégorie de {{ category.parent.name_fr }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="category-footer">
+                <div class="category-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>{{ category.created_at|date:"d/m/Y" }}</span>
+                </div>
+                <div class="category-actions">
+                    <a href="{% url 'admin_panel:category_update' category.id %}" class="action-btn edit-btn" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button class="action-btn delete-btn" data-id="{{ category.id }}" data-name="{{ category.name_fr }}" data-products="{{ category.products_count|default:0 }}" data-delete-url="{% url 'admin_panel:category_delete' category.id %}" title="Supprimer">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-folder-open"></i>
+            <h3>Aucune catégorie</h3>
+            <p>Commencez par créer votre première catégorie</p>
+            <a href="{% url 'admin_panel:category_create' %}" class="btn-primary">
+                <i class="fas fa-plus"></i> Créer une catégorie
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if categories|length > 12 %}
+    <div class="pagination-container" id="pagination">
+        <button class="pagination-btn" id="prevPage" disabled>
+            <i class="fas fa-chevron-left"></i> Précédent
+        </button>
+        <div class="pagination-info">
+            Affichage de <span id="startIndex">0</span> à <span id="endIndex">0</span> sur <span id="totalCount">0</span> catégories
+        </div>
+        <button class="pagination-btn" id="nextPage">
+            Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal de suppression -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header delete-modal">
+            <i class="fas fa-exclamation-triangle modal-icon"></i>
+            <h3>Confirmer la suppression</h3>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer la catégorie <strong id="deleteCategoryName"></strong> ?</p>
+            
+            <div id="productsWarning" class="warning-message" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <div>
+                    <strong>Attention !</strong>
+                    <p>Cette catégorie contient <span id="productsCount"></span> produit(s).</p>
+                    <p>La suppression de cette catégorie affectera ces produits.</p>
+                </div>
+            </div>
+            
+            <p class="text-warning mt-3">⚠️ Cette action est irréversible.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="cancelDelete">Annuler</button>
+            <form method="post" id="deleteForm" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">Supprimer définitivement</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

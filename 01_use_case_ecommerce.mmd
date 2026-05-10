@@ -1,0 +1,110 @@
+flowchart LR
+    ClientNA["Client non authentifié"]
+    Client["Client authentifié"]
+    Admin["Administrateur"]
+    Support["Agent support"]
+    Systeme["Système"]
+
+    subgraph Front["Front-office e-commerce"]
+        UC1["Consulter catalogue"]
+        UC2["Rechercher / filtrer produits"]
+        UC3["Consulter fiche produit"]
+        UC4["Créer compte / se connecter"]
+        UC5["Changer langue FR/EN"]
+        UC6["Gérer panier"]
+        UC7["Appliquer coupon"]
+        UC8["Passer commande"]
+        UC9["Choisir livraison"]
+        UC10["Paiement COD ou carte simulée"]
+        UC11["Consulter historique commandes"]
+        UC12["Annuler commande"]
+        UC13["Gérer profil"]
+        UC14["Ajouter aux favoris"]
+        UC15["Laisser avis produit"]
+        UC16["Contacter support chat"]
+    end
+
+    subgraph Back["Back-office admin"]
+        A1["Consulter dashboard KPI"]
+        A2["Gérer produits"]
+        A3["Gérer catégories"]
+        A4["Gérer stock / alertes"]
+        A5["Gérer commandes"]
+        A6["Changer statut commande"]
+        A7["Générer facture PDF"]
+        A8["Gérer coupons"]
+        A9["Gérer zones livraison"]
+        A10["Gérer utilisateurs"]
+        A11["Gérer avis"]
+        A12["Gérer support client"]
+        A13["Gérer rôles et permissions"]
+    end
+
+    subgraph Auto["Traitements automatiques"]
+        S1["Authentifier utilisateur"]
+        S2["Calculer total panier"]
+        S3["Vérifier coupon"]
+        S4["Calculer frais livraison"]
+        S5["Créer commande"]
+        S6["Décrémenter stock"]
+        S7["Restituer stock si annulation"]
+        S8["Marquer achat vérifié"]
+        S9["Notifier / afficher statuts"]
+    end
+
+    ClientNA --> UC1
+    ClientNA --> UC2
+    ClientNA --> UC3
+    ClientNA --> UC4
+    ClientNA --> UC5
+
+    Client --> UC1
+    Client --> UC2
+    Client --> UC3
+    Client --> UC5
+    Client --> UC6
+    Client --> UC7
+    Client --> UC8
+    Client --> UC9
+    Client --> UC10
+    Client --> UC11
+    Client --> UC12
+    Client --> UC13
+    Client --> UC14
+    Client --> UC15
+    Client --> UC16
+
+    Admin --> A1
+    Admin --> A2
+    Admin --> A3
+    Admin --> A4
+    Admin --> A5
+    Admin --> A6
+    Admin --> A7
+    Admin --> A8
+    Admin --> A9
+    Admin --> A10
+    Admin --> A11
+    Admin --> A13
+
+    Support --> A12
+
+    UC4 --> S1
+    UC7 --> S3
+    UC8 --> S2
+    UC8 --> S4
+    UC8 --> S5
+    UC8 --> S6
+    UC12 --> S7
+    UC15 --> S8
+    UC16 --> S9
+
+    Systeme --> S1
+    Systeme --> S2
+    Systeme --> S3
+    Systeme --> S4
+    Systeme --> S5
+    Systeme --> S6
+    Systeme --> S7
+    Systeme --> S8
+    Systeme --> S9

@@ -1,0 +1,89 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Commande #{{ order.id }} | Admin Panel{% endblock %}
+{% block page_title %}Commande #{{ order.id }}{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/order/detail.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/order/detail.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page entity-stack">
+    <div class="entity-detail-grid">
+        <section class="entity-panel">
+            <h3>Informations client</h3>
+            <div class="detail-list">
+                <div class="detail-item"><span class="detail-label">Utilisateur</span><span class="detail-value">{{ order.user }}</span></div>
+                <div class="detail-item"><span class="detail-label">Nom</span><span class="detail-value">{{ order.first_name }} {{ order.last_name }}</span></div>
+                <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">{{ order.email }}</span></div>
+                <div class="detail-item"><span class="detail-label">Telephone</span><span class="detail-value">{{ order.phone }}</span></div>
+                <div class="detail-item"><span class="detail-label">Adresse</span><span class="detail-value">{{ order.address }}, {{ order.city }}, {{ order.postal_code }}</span></div>
+            </div>
+        </section>
+
+        <section class="entity-panel">
+            <h3>Suivi commande</h3>
+            <div class="detail-list">
+                <div class="detail-item"><span class="detail-label">Total</span><span class="detail-value">{{ order.total_amount }} DH</span></div>
+                <div class="detail-item">
+                    <span class="detail-label">Statut actuel</span>
+                    <span class="detail-value">
+                        <span class="entity-badge {% if order.status == 'DELIVERED' %}success{% elif order.status == 'CANCELLED' %}danger{% elif order.status == 'PENDING' %}warning{% else %}primary{% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </span>
+                </div>
+                <div class="detail-item"><span class="detail-label">Date</span><span class="detail-value">{{ order.created_at|date:"d/m/Y H:i" }}</span></div>
+            </div>
+            <form method="post" action="{% url 'admin_panel:update_order_status' order.id %}" id="orderStatusForm" class="status-form-inline" style="margin-top:20px;">
+                {% csrf_token %}
+                <select name="status" class="status-select">
+                    <option value="PENDING" {% if order.status == "PENDING" %}selected{% endif %}>En attente</option>
+                    <option value="PAID" {% if order.status == "PAID" %}selected{% endif %}>Payee</option>
+                    <option value="SHIPPED" {% if order.status == "SHIPPED" %}selected{% endif %}>Expediee</option>
+                    <option value="DELIVERED" {% if order.status == "DELIVERED" %}selected{% endif %}>Livree</option>
+                    <option value="CANCELLED" {% if order.status == "CANCELLED" %}selected{% endif %}>Annulee</option>
+                </select>
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    <i class="fas fa-arrows-rotate"></i> Modifier statut
+                </button>
+                <a href="{% url 'admin_panel:order_invoice_pdf' order.id %}" class="btn-secondary">
+                    <i class="fas fa-file-pdf"></i> Facture PDF
+                </a>
+            </form>
+        </section>
+    </div>
+
+    <section class="entity-panel">
+        <h3>Produits commandes</h3>
+        <div class="order-snippets">
+            {% for item in order.items.all %}
+            <div class="snippet-card">
+                <h4>{{ item.product.name_fr }}</h4>
+                <p>Prix: {{ item.price }} DH</p>
+                <p>Quantite: {{ item.quantity }}</p>
+                <p>Sous-total: {{ item.get_subtotal }} DH</p>
+            </div>
+            {% empty %}
+            <div class="entity-empty">
+                <i class="fas fa-box-open"></i>
+                <h3>Aucun produit</h3>
+                <p>Cette commande ne contient aucun article.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div>
+        <a href="{% url 'admin_panel:order_list' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour commandes
+        </a>
+    </div>
+</div>
+{% endblock %}

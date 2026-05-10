@@ -1,0 +1,124 @@
+{% load static site_i18n %}
+<!doctype html>
+<html lang="{{ site_language|default:'fr' }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{% tr "Commande confirmee" "Order confirmed" %}</title>
+
+    <link rel="icon" type="image/png" href="{% static 'img/MYdark.png' %}" />
+
+    <link rel="stylesheet" href="{% static 'css/orders/success.css' %}?v=3" />
+  </head>
+
+  <body>
+    <div class="success-page">
+      <!-- TOPBAR -->
+      <header class="success-topbar">
+        <a href="{% url 'core:home' %}" class="success-brand">
+          <img src="{% static 'img/MYblanc.png' %}" alt="M&Y" />
+        </a>
+      </header>
+
+      <!-- STEPS -->
+      <nav class="success-steps">
+        <span>{% tr "Panier" "Cart" %}</span>
+
+        <span>&rsaquo;</span>
+
+        <span>{% tr "Paiement securise" "Secure checkout" %}</span>
+
+        <span>&rsaquo;</span>
+
+        <strong>{% tr "Commande terminee" "Order completed" %}</strong>
+      </nav>
+
+      <!-- CONTENT -->
+      <section class="success-wrapper">
+        <div class="success-card">
+          <!-- ICON -->
+          <div class="success-icon">✓</div>
+
+          <!-- TITLE -->
+          <h1>{% tr "Commande confirmee" "Order confirmed" %}</h1>
+
+          <p class="success-subtitle">
+            {% tr "Merci pour votre achat. Votre commande a ete enregistree avec
+            succes." "Thank you for your purchase. Your order has been
+            successfully placed." %}
+          </p>
+
+          <!-- ORDER INFOS -->
+          <div class="success-order-box">
+            <div class="success-order-row">
+              <span> {% tr "Numero commande" "Order number" %} </span>
+
+              <strong> #{{ order.id }} </strong>
+            </div>
+
+            <div class="success-order-row">
+              <span> {% tr "Statut" "Status" %} </span>
+
+              <strong class="status-badge">
+                {{ order.get_status_display }}
+              </strong>
+            </div>
+
+            <div class="success-order-row">
+              <span> {% tr "Montant total" "Total amount" %} </span>
+
+              <strong class="price"> {{ order.total_amount }} DH </strong>
+            </div>
+          </div>
+
+          <!-- PRODUCTS -->
+          {% if order.items.all %}
+
+          <div class="success-products">
+            {% for item in order.items.all %}
+
+            <div class="success-product">
+              <div class="success-product-img">
+                {% if item.product.image %}
+                <img
+                  src="{{ item.product.image.url }}"
+                  alt="{% if site_language == 'en' and item.product.name_en %}{{ item.product.name_en }}{% else %}{{ item.product.name_fr }}{% endif %}"
+                />
+                {% endif %}
+              </div>
+
+              <div class="success-product-info">
+                <h3>{% if site_language == "en" and item.product.name_en %}{{ item.product.name_en }}{% else %}{{ item.product.name_fr }}{% endif %}</h3>
+
+                <p>{% tr "Qte :" "Qty:" %} {{ item.quantity }}</p>
+              </div>
+
+              <strong> {{ item.product.price }} DH </strong>
+            </div>
+
+            {% endfor %}
+          </div>
+
+          {% endif %}
+
+          <!-- ACTIONS -->
+          <div class="success-actions">
+            <a
+              href="{% url 'orders:order_detail' order.id %}"
+              class="success-btn primary"
+            >
+              {% tr "Voir la commande" "View order" %}
+            </a>
+
+            <a href="{% url 'core:home' %}" class="success-btn secondary">
+              {% tr "Continuer achats" "Continue shopping" %}
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="{% static 'js/orders/success.js' %}"></script>
+  </body>
+</html>

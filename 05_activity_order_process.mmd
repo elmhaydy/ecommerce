@@ -1,0 +1,38 @@
+flowchart TD
+    A([Début]) --> B[Client consulte catalogue]
+    B --> C[Client ajoute produit au panier]
+    C --> D{Utilisateur connecté ?}
+    D -- Non --> E[Redirection vers connexion / inscription]
+    E --> F[Authentification réussie]
+    D -- Oui --> G[Afficher panier]
+    F --> G
+
+    G --> H[Modifier quantités si besoin]
+    H --> I{Stock disponible ?}
+    I -- Non --> J[Afficher erreur stock]
+    J --> G
+    I -- Oui --> K[Appliquer coupon optionnel]
+
+    K --> L{Coupon valide ?}
+    L -- Non --> M[Ignorer coupon / afficher erreur]
+    L -- Oui --> N[Calculer remise]
+    M --> O[Choisir zone de livraison]
+    N --> O
+
+    O --> P[Calculer frais livraison]
+    P --> Q[Choisir mode paiement]
+    Q --> R{Mode de paiement}
+    R -- Paiement livraison --> S[Créer commande non payée]
+    R -- Carte simulée --> T[Simulation paiement]
+    T --> U{Paiement validé ?}
+    U -- Non --> V[Afficher échec paiement]
+    V --> Q
+    U -- Oui --> W[Créer commande payée]
+
+    S --> X[Créer lignes commande]
+    W --> X
+    X --> Y[Décrémenter stock]
+    Y --> Z[Vider panier]
+    Z --> AA[Incrémenter utilisation coupon si présent]
+    AA --> AB[Afficher page succès]
+    AB --> AC([Fin])

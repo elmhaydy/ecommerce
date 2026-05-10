@@ -1,0 +1,27 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block title %}Confirmation suppression{% endblock %}
+
+{% block admin_content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/admin/category/delete.css' %}">
+<div class="delete-box">
+    <h1>Supprimer {{ type }}</h1>
+
+    <p>Tu es sûr de vouloir supprimer :</p>
+    <strong>{{ object }}</strong>
+
+    <form method="post" class="delete-actions">
+        {% csrf_token %}
+        <button type="submit" class="btn-danger">
+            Confirmer
+        </button>
+
+        <a href="{% url 'admin_panel:category_list' %}" class="btn-secondary">
+            Annuler
+        </a>
+    </form>
+</div>
+
+{% endblock %}

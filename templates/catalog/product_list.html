@@ -1,0 +1,291 @@
+{% extends "base.html" %} {% load static site_i18n %} {% block title %}{% tr "Offres quotidiennes" "Daily Deals" %}{% endblock %} {% block main_class %}storefront-main{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/catalog/storefront.css' %}?v=4" />
+{% endblock %} {% block content %}
+
+<section class="shop-benefits">
+  <div class="benefit-item">
+    <span class="benefit-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 7h11v8H3z"></path>
+        <path d="M14 10h3l2 2v3h-5z"></path>
+        <circle cx="7" cy="18" r="2"></circle>
+        <circle cx="17" cy="18" r="2"></circle>
+      </svg>
+    </span>
+    <p>{% tr "Livraison gratuite a partir de 100 DHS" "Free shipping over 100 DHS" %}</p>
+  </div>
+  <div class="benefit-item">
+    <span class="benefit-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3l7 3v5c0 4.6-2.8 8-7 10-4.2-2-7-5.4-7-10V6z"></path>
+        <path d="M9.5 12l1.7 1.7 3.3-3.7"></path>
+      </svg>
+    </span>
+    <p>{% tr "Garantie sans tracas" "Hassle-free warranty" %}</p>
+  </div>
+  <div class="benefit-item">
+    <span class="benefit-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3v18"></path>
+        <path
+          d="M8 7.5c0-1.7 1.8-3 4-3s4 1.3 4 3-1.8 3-4 3-4 1.3-4 3 1.8 3 4 3 4-1.3 4-3"
+        ></path>
+      </svg>
+    </span>
+    <p>{% tr "Paiement a la livraison" "Cash on delivery" %}</p>
+  </div>
+</section>
+
+<div class="shop-page">
+  <div class="shop-topbar">
+    <div class="breadcrumb">
+      <a href="{% url 'core:home' %}">{% tr "Accueil" "Home" %}</a>
+      <span>&raquo;</span>
+      <strong>{% tr "Offres quotidiennes" "Daily Deals" %}</strong>
+    </div>
+
+    <form method="get" class="sort-form">
+      {% for key, value in active_filter_pairs %}
+      <input type="hidden" name="{{ key }}" value="{{ value }}" />
+      {% endfor %}
+
+      <label for="sort">{% tr "Trier par" "Sort by" %}</label>
+      <select name="sort" id="sort" onchange="this.form.submit()">
+        <option value="" {% if not sort %}selected{% endif %}>
+          {% tr "Recommandation" "Recommended" %}
+        </option>
+        <option value="newest" {% if sort == "newest" %}selected{% endif %}>
+          {% tr "Nouveautes" "Newest" %}
+        </option>
+        <option
+          value="price_asc"
+          {% if sort == "price_asc" %}selected{% endif %}
+        >
+          {% tr "Prix croissant" "Price: low to high" %}
+        </option>
+        <option
+          value="price_desc"
+          {% if sort == "price_desc" %}selected{% endif %}
+        >
+          {% tr "Prix decroissant" "Price: high to low" %}
+        </option>
+      </select>
+    </form>
+  </div>
+
+  <div class="shop-content">
+    <aside class="shop-sidebar">
+      <form method="get" id="filterForm">
+        {% if sort %}
+        <input type="hidden" name="sort" value="{{ sort }}" />
+        {% endif %}
+        <h3>{% tr "Options d'achat" "Shopping options" %} ({{ page_obj.paginator.count }} {% tr "resultats" "results" %})</h3>
+
+        <div class="filter-block">
+          <h4>{% tr "Acheter par categorie" "Shop by category" %}</h4>
+          {% for category in categories %}
+          <label class="check-line">
+            <input
+              type="checkbox"
+              name="category"
+              value="{{ category.slug }}"
+              {%
+              if
+              category.slug
+              in
+              selected_categories
+              %}checked{%
+              endif
+              %}
+            />
+            <span>{% if request.session.site_language == "en" and category.name_en %}{{ category.name_en }}{% else %}{{ category.name_fr }}{% endif %}</span>
+          </label>
+          {% endfor %}
+        </div>
+
+        <div class="filter-block">
+          <h4>{% tr "Acheter par couleur" "Shop by color" %}</h4>
+          {% for color in available_colors %}
+          <label class="check-line color-line">
+            <input
+              type="checkbox"
+              name="color"
+              value="{{ color.value }}"
+              {%
+              if
+              color.value
+              in
+              selected_colors
+              %}checked{%
+              endif
+              %}
+            />
+            <span>{{ color.label }}</span
+            ><i style="background:{{ color.swatch }}"></i>
+          </label>
+          {% empty %}
+          <p class="filter-empty">{% tr "Aucune couleur disponible." "No colors available." %}</p>
+          {% endfor %}
+        </div>
+
+        <div class="filter-block">
+          <h4>{% tr "Acheter par prix" "Shop by price" %}</h4>
+          <div class="price-inputs">
+            <input
+              type="number"
+              name="min_price"
+              placeholder="{% tr 'Min' 'Min' %}"
+              value="{{ min_price }}"
+            />
+            <input
+              type="number"
+              name="max_price"
+              placeholder="{% tr 'Max' 'Max' %}"
+              value="{{ max_price }}"
+            />
+          </div>
+        </div>
+
+        <div class="filter-block">
+          <h4>{% tr "Recherche" "Search" %}</h4>
+          <input
+            class="search-input"
+            type="text"
+            name="q"
+            placeholder="{% tr 'Rechercher...' 'Search...' %}"
+            value="{{ query }}"
+          />
+        </div>
+
+        <button type="submit" class="filter-btn">{% tr "Appliquer" "Apply" %}</button>
+        <a href="{% url 'catalog:product_list' %}" class="reset-btn"
+          >{% tr "Reinitialiser" "Reset" %}</a
+        >
+      </form>
+    </aside>
+
+    <main class="products-area">
+      {% if products %}
+      <div class="products-grid">
+        {% for product in products %}
+        <article class="product-card">
+          <div class="product-media">
+            <a
+              href="{% url 'catalog:product_detail' product.slug %}"
+              class="product-image-box"
+            >
+              {% if product.is_featured %}
+              <span class="badge-green">{% tr "Nouveau, prix special" "New Arrival, Special Price" %}</span>
+              {% else %}
+              <span class="badge-green">{% tr "Nouveau" "New" %}</span>
+              {% endif %} {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{% if request.session.site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}" />
+              {% else %}
+              <div class="product-placeholder">{% if request.session.site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}</div>
+              {% endif %}
+
+              <div class="rating-box">
+                <strong>4.8</strong>
+                <span>&#9733;</span>
+                <em>({{ product.stock|default:337 }})</em>
+              </div>
+            </a>
+
+          </div>
+
+          <div class="product-info">
+            <h3>
+              <a href="{% url 'catalog:product_detail' product.slug %}">
+                {% if request.session.site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}
+              </a>
+            </h3>
+
+            <ul class="features">
+              <li>&#9679; {% if request.session.site_language == "en" and product.description_en %}{{ product.description_en|truncatechars:45 }}{% else %}{{ product.description_fr|truncatechars:45 }}{% endif %}</li>
+              <li>&#9679; {% tr "Disponible en stock" "In stock" %}</li>
+            </ul>
+
+            <div class="product-card-footer">
+              <div class="price-row">
+                <strong>{{ product.price }} DH</strong>
+                {% if product.old_price %}
+                <del>{{ product.old_price }} DH</del>
+                {% endif %}
+              </div>
+
+              <div class="product-actions product-actions-inline">
+                <a
+                  href="{% url 'catalog:product_detail' product.slug %}"
+                  class="product-action action-discover"
+                >
+                  {% tr "Decouvrir" "Discover" %}
+                </a>
+                {% if product.stock > 0 %}
+                  {% if user.is_authenticated %}
+                  <form
+                    method="post"
+                    action="{% url 'cart:add_to_cart' product.id %}"
+                    class="product-action-form"
+                  >
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="product-action action-cart">
+                      {% tr "Ajouter au panier" "Add to cart" %}
+                    </button>
+                  </form>
+                  {% else %}
+                  <a
+                    href="{% url 'accounts:login' %}"
+                    class="product-action action-cart"
+                  >
+                    {% tr "Ajouter au panier" "Add to cart" %}
+                  </a>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-products">{% tr "Aucun produit trouve avec ces filtres." "No products found with these filters." %}</div>
+      {% endif %} {% if page_obj.paginator.num_pages > 1 %}
+      <nav class="pagination">
+        {% if page_obj.has_previous %}
+        <a
+          href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+          >{% tr "Precedent" "Previous" %}</a
+        >
+        {% endif %}
+
+        <span
+          >{% tr "Page" "Page" %} {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span
+        >
+
+        {% if page_obj.has_next %}
+        <a
+          href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+          >{% tr "Suivant" "Next" %}</a
+        >
+        {% endif %}
+      </nav>
+      {% endif %}
+    </main>
+  </div>
+</div>
+
+<button class="support-btn" aria-label="{% tr 'Assistance' 'Support' %}">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      d="M4 12a8 8 0 0 1 8-8h.2A8 8 0 0 1 20 12v4a2 2 0 0 1-2 2h-2.2a2 2 0 0 1-2-2v-2.2a2 2 0 0 1 2-2H18"
+    ></path>
+    <path d="M4 12H6a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H4"></path>
+    <path d="M12 20a3 3 0 0 0 3-3"></path>
+  </svg>
+</button>
+
+{% endblock %} {% block page_js %}
+<script src="{% static 'js/catalog/storefront.js' %}?v=2"></script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Modifier le profil" "Edit profile" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Modifier le profil" "Edit profile" %}{% endblock %}
+{% block nav_settings %}active{% endblock %}
+
+{% block portal_extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=2" />
+{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Compte" "Account" %}</p>
+    <h1>{% tr "Modifier le profil" "Edit profile" %}</h1>
+    <p>{% tr "Mettez a jour vos informations personnelles pour garder votre compte a jour." "Update your personal information to keep your account up to date." %}</p>
+  </header>
+
+  <section class="hub-panel form-panel">
+    <form method="post" class="hub-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="hub-submit-btn">{% tr "Enregistrer" "Save" %}</button>
+    </form>
+  </section>
+</section>
+{% endblock %}
+
+{% block portal_extra_js %}<script src="{% static 'js/accounts/profile_edit.js' %}"></script>{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Coupons | Admin Panel{% endblock %}
+{% block page_title %}Coupons{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/coupon/list.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/coupon/list.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page entity-stack">
+    <div class="entity-stats">
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini"><i class="fas fa-ticket-alt"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini">{{ coupons|length }}</span>
+                <span class="stat-label-mini">Total coupons</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini success"><i class="fas fa-bolt"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="activeCouponsCount">0</span>
+                <span class="stat-label-mini">Actifs</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini warning"><i class="fas fa-percent"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="percentCouponsCount">0</span>
+                <span class="stat-label-mini">Pourcentage</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini primary"><i class="fas fa-money-bill-wave"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="fixedCouponsCount">0</span>
+                <span class="stat-label-mini">Montant fixe</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="entity-toolbar">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un coupon...">
+            <button type="button" id="clearSearch" class="search-clear" style="display:none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="filters-wrapper">
+            <select class="filter-select" data-filter-key="status">
+                <option value="all">Tous les statuts</option>
+                <option value="active">Actifs</option>
+                <option value="inactive">Inactifs</option>
+            </select>
+            <select class="filter-select" data-filter-key="type">
+                <option value="all">Tous les types</option>
+                <option value="PERCENTAGE">Pourcentage</option>
+                <option value="FIXED">Montant fixe</option>
+            </select>
+            <button type="button" id="resetFilters" class="btn-reset">
+                <i class="fas fa-rotate-left"></i> Reinitialiser
+            </button>
+        </div>
+        <a href="{% url 'admin_panel:coupon_create' %}" class="btn-primary">
+            <i class="fas fa-plus"></i> Ajouter coupon
+        </a>
+    </div>
+
+    <div class="entity-table-wrapper">
+        <table class="entity-table">
+            <thead>
+                <tr>
+                    <th>Coupon</th>
+                    <th>Remise</th>
+                    <th>Minimum</th>
+                    <th>Utilisation</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="couponTableBody">
+                {% for coupon in coupons %}
+                <tr
+                    data-search="{{ coupon.code|lower }} {{ coupon.get_discount_type_display|lower }}"
+                    data-status="{% if coupon.is_active %}active{% else %}inactive{% endif %}"
+                    data-type="{{ coupon.discount_type }}"
+                >
+                    <td>
+                        <div class="entity-title-cell">
+                            <div class="entity-icon-box"><i class="fas fa-ticket-alt"></i></div>
+                            <div>
+                                <div class="entity-title">{{ coupon.code }}</div>
+                                <div class="entity-subtitle">{{ coupon.get_discount_type_display }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>{{ coupon.value }}</strong>
+                        {% if coupon.discount_type == "PERCENTAGE" %}%{% else %} DH{% endif %}
+                    </td>
+                    <td>{{ coupon.min_order_amount }} DH</td>
+                    <td>{{ coupon.used_count }} / {{ coupon.usage_limit|default_if_none:"Illimite" }}</td>
+                    <td>
+                        <span class="entity-badge {% if coupon.is_active %}success{% else %}danger{% endif %}">
+                            <i class="fas {% if coupon.is_active %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                            {{ coupon.is_active|yesno:"Actif,Inactif" }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="entity-actions">
+                            <a href="{% url 'admin_panel:coupon_update' coupon.id %}" class="action-btn edit-btn" title="Modifier">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'admin_panel:coupon_delete' coupon.id %}" class="action-btn delete-btn delete-link" data-name="{{ coupon.code }}" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="emptyState" class="entity-empty" {% if coupons %}style="display:none;"{% endif %}>
+        <i class="fas fa-ticket-alt"></i>
+        <h3>Aucun coupon trouve</h3>
+        <p>Essayez un autre filtre ou creez votre premiere campagne.</p>
+        <a href="{% url 'admin_panel:coupon_create' %}" class="btn-primary">
+            <i class="fas fa-plus"></i> Nouveau coupon
+        </a>
+    </div>
+
+    <div class="pagination-container">
+        <button type="button" class="pagination-btn" id="prevPage" disabled>
+            <i class="fas fa-chevron-left"></i> Precedent
+        </button>
+        <div class="pagination-info">
+            Affichage de <span id="startIndex">0</span> a <span id="endIndex">0</span> sur <span id="totalCount">0</span> coupons
+        </div>
+        <button type="button" class="pagination-btn" id="nextPage">
+            Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}

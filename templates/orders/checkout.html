@@ -1,0 +1,447 @@
+{% load static site_i18n %}
+<!doctype html>
+<html lang="{{ site_language|default:'fr' }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% tr "Paiement securise" "Secure checkout" %}</title>
+
+    <link rel="icon" type="image/png" href="{% static 'img/MYblanc.png' %}" />
+    <link rel="stylesheet" href="{% static 'css/orders/checkout.css' %}?v=34" />
+  </head>
+
+  <body>
+    <div class="checkout-page">
+      <header class="checkout-topbar">
+        <a href="{% url 'core:home' %}" class="checkout-brand">
+          <img src="{% static 'img/MYblanc.png' %}" alt="M&Y" />
+        </a>
+      </header>
+
+      <nav class="checkout-steps">
+        <a href="{% url 'cart:cart_detail' %}">{% tr "Panier" "Cart" %}</a>
+        <span>&rsaquo;</span>
+        <strong>{% tr "Paiement securise" "Secure checkout" %}</strong>
+        <span>&rsaquo;</span>
+        <span>{% tr "Commande terminee" "Order completed" %}</span>
+      </nav>
+
+      {% if messages %}
+      <div class="checkout-messages">
+        {% for message in messages %}
+        <div class="checkout-alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="post" class="checkout-wrapper" id="checkoutForm">
+        {% csrf_token %}
+
+        <section class="checkout-main">
+          <article class="checkout-panel">
+            <div class="panel-header">
+              <h2>{% tr "Adresse expedition" "Shipping address" %}</h2>
+
+              <button
+                type="button"
+                class="panel-action"
+                data-open-modal="addressModal"
+              >
+                {% tr "Ajouter une adresse livraison" "Add a delivery address" %}
+              </button>
+            </div>
+
+            <div class="address-summary-card">
+              <span class="summary-chip">{% tr "Par defaut" "Default" %}</span>
+
+              <button
+                type="button"
+                class="summary-edit"
+                data-open-modal="addressModal"
+                aria-label="{% tr 'Modifier l adresse' 'Edit address' %}"
+              >
+                &#9998;
+              </button>
+
+              <p>
+                <strong>{% tr "Adresse Email :" "Email address:" %}</strong>
+                <span id="summaryEmail">{{ request.user.email|default:"-" }}</span>
+              </p>
+
+              <p>
+                <strong>{% tr "Nom :" "Name:" %}</strong>
+                <span id="summaryName">
+                  {{ request.user.first_name }} {{ request.user.last_name }}
+                </span>
+              </p>
+
+              <p>
+                <strong>{% tr "Telephone :" "Phone:" %}</strong>
+                <span id="summaryPhone">-</span>
+              </p>
+
+              <p>
+                <strong>{% tr "Envoyer a :" "Ship to:" %}</strong>
+                <span id="summaryAddress">-</span>
+              </p>
+            </div>
+          </article>
+
+          <article class="checkout-panel">
+            <div class="panel-header">
+              <h2>{% tr "Methode expedition" "Shipping method" %}</h2>
+            </div>
+
+            <label class="shipping-card">
+              <div class="shipping-card-main">
+                <strong>{% tr "Expedition standard" "Standard shipping" %}</strong>
+                <span>{% tr "2 a 7 jours ouvrables." "2 to 7 business days." %}</span>
+              </div>
+
+              <div class="shipping-card-side">
+                <select
+                  name="shipping_zone"
+                  id="shippingZone"
+                  required
+                  class="shipping-zone-select"
+                >
+                  {% for zone in shipping_zones %}
+                  <option
+                    value="{{ zone.id }}"
+                    data-fee="{{ zone.fee }}"
+                    data-threshold="{{ zone.free_shipping_threshold }}"
+                  >
+                    {{ zone.city }} - {{ zone.fee }} DH
+                  </option>
+                  {% endfor %}
+                </select>
+
+                <strong id="shippingCardFee">{{ selected_shipping_fee }} DH</strong>
+              </div>
+            </label>
+          </article>
+
+          <article class="checkout-panel">
+            <div class="panel-header">
+              <h2>{% tr "Methode Paiement" "Payment method" %}</h2>
+            </div>
+
+            <div class="payment-methods">
+              <input type="hidden" name="payment_method" value="COD" />
+
+              <div class="payment-card payment-card-active">
+                <div class="payment-icon payment-icon-cod">COD</div>
+
+                <div class="payment-copy">
+                  <strong>{% tr "Paiement livraison" "Cash on delivery" %}</strong>
+                  <span>{% tr "Garantie livraison 100%" "100% delivery guarantee" %}</span>
+                </div>
+
+                <span class="payment-check"></span>
+              </div>
+            </div>
+
+            <p class="panel-note">
+              {% tr "Les commandes superieures a 1500 DHS peuvent exiger un prepaiement." "Orders above 1500 DHS may require prepayment." %}
+            </p>
+          </article>
+
+          <article class="checkout-panel compact-panel">
+            <button type="button" class="compact-row">
+              <span>{% tr "Points" "Points" %}</span>
+              <strong>{% tr "Jusqua 100 points disponibles" "Up to 100 points available" %}</strong>
+            </button>
+
+            <button
+              type="button"
+              class="compact-row"
+              data-open-modal="couponModal"
+            >
+              <span>{% tr "Reduction" "Discount" %}</span>
+              <strong>
+                {% if cart.coupon %}
+                  {{ cart.coupon.code }}
+                {% else %}
+                  {% tr "Aucun coupon disponible" "No coupon available" %}
+                {% endif %}
+              </strong>
+            </button>
+          </article>
+        </section>
+
+        <aside class="checkout-summary">
+          <div class="summary-head">
+            <h2>{% tr "Ma commande" "My order" %}</h2>
+            <a href="{% url 'cart:cart_detail' %}">{% tr "Modifier" "Edit" %}</a>
+          </div>
+
+          <div class="summary-products">
+            {% for item in cart.items.all %}
+            <div class="summary-product">
+              <div class="summary-img">
+                {% if item.product.image %}
+                <img
+                  src="{{ item.product.image.url }}"
+                  alt="{% if site_language == 'en' and item.product.name_en %}{{ item.product.name_en }}{% else %}{{ item.product.name_fr }}{% endif %}"
+                />
+                {% endif %}
+              </div>
+
+              <div>
+                <h3>{% if site_language == "en" and item.product.name_en %}{{ item.product.name_en }}{% else %}{{ item.product.name_fr }}{% endif %}</h3>
+                <p>{% tr "Qte :" "Qty:" %} {{ item.quantity }}</p>
+
+                {% if item.product.category %}
+                <span class="summary-meta">
+                  {% if site_language == "en" and item.product.category.name_en %}
+                    {{ item.product.category.name_en }}
+                  {% else %}
+                    {{ item.product.category.name_fr }}
+                  {% endif %}
+                </span>
+                {% endif %}
+
+                <strong>{{ item.get_subtotal }} DH</strong>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          {% if recommended_products %}
+          <div class="deal-box">
+            <div class="deal-head">
+              <strong>Grab &amp; Go Deals</strong>
+              <button type="button" class="deal-switch" data-deal-switch>
+                {% tr "Changer un autre" "Change another" %} ↻
+              </button>
+            </div>
+
+            <div class="deal-products">
+              {% for product in recommended_products %}
+              <div
+                class="deal-product {% if not forloop.first %}is-hidden{% endif %}"
+                data-deal-product
+              >
+                {% if product.image %}
+                <img
+                  src="{{ product.image.url }}"
+                  alt="{% if site_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}"
+                />
+                {% endif %}
+
+                <div>
+                  <h4>{% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}</h4>
+                  <p>
+                    {% if product.category %}
+                      {% if site_language == "en" and product.category.name_en %}
+                        {{ product.category.name_en }}
+                      {% else %}
+                        {{ product.category.name_fr }}
+                      {% endif %}
+                    {% else %}
+                      {% tr "Produit" "Product" %}
+                    {% endif %}
+                  </p>
+                  <strong>{{ product.price }} DH</strong>
+                </div>
+
+                <button
+                  type="submit"
+                  form="dealToggleForm{{ product.id }}"
+                  class="deal-add-toggle"
+                  aria-label="{% tr 'Ajouter ou retirer du panier' 'Add or remove from cart' %}"
+                ></button>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="summary-totals">
+            <div>
+              <span>{% tr "Sous-total panier" "Cart subtotal" %}</span>
+              <strong>{{ cart.get_total }} DH</strong>
+            </div>
+
+            {% if cart.coupon %}
+            <div class="discount-line">
+              <span>{% tr "Reduction coupon" "Coupon discount" %}</span>
+              <strong>-{{ cart.get_discount_amount }} DH</strong>
+            </div>
+            {% endif %}
+
+            <div>
+              <span>{% tr "Expedition" "Shipping" %}</span>
+              <strong id="shippingFee">{{ selected_shipping_fee }} DH</strong>
+            </div>
+
+            <div class="total-line">
+              <span>{% tr "Total" "Total" %}</span>
+              <strong id="checkoutTotal">{{ checkout_total }} DH</strong>
+            </div>
+          </div>
+
+          <button class="order-btn" type="submit">{% tr "Passer commande" "Place order" %}</button>
+
+          <input
+            type="hidden"
+            id="cartFinalTotalValue"
+            value="{{ cart.get_final_total }}"
+          />
+        </aside>
+      </form>
+
+      {% for product in recommended_products %}
+      <form
+        method="post"
+        action="{% url 'cart:toggle_cart_product' product.id %}"
+        id="dealToggleForm{{ product.id }}"
+      >
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+      </form>
+      {% endfor %}
+
+      <div class="modal-overlay is-hidden" id="addressModal">
+        <div class="modal-card modal-address-card">
+          <div class="modal-head">
+            <h3>{% tr "Ajouter adresse livraison" "Add delivery address" %}</h3>
+
+            <button
+              type="button"
+              class="modal-close"
+              data-close-modal="addressModal"
+            >
+              &times;
+            </button>
+          </div>
+
+          <div class="modal-body form-grid">
+            <div class="form-group full">
+              <label>{% tr "Adresse Email *" "Email address *" %}</label>
+
+              <input
+                id="checkoutEmail"
+                type="email"
+                name="email"
+                value="{{ request.user.email }}"
+                form="checkoutForm"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>{% tr "Nom *" "Last name *" %}</label>
+
+              <input
+                id="checkoutLastName"
+                type="text"
+                name="last_name"
+                value="{{ request.user.last_name }}"
+                form="checkoutForm"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>{% tr "Prenom *" "First name *" %}</label>
+
+              <input
+                id="checkoutFirstName"
+                type="text"
+                name="first_name"
+                value="{{ request.user.first_name }}"
+                form="checkoutForm"
+                required
+              />
+            </div>
+
+            <div class="form-group full">
+              <label>{% tr "Adresse *" "Address *" %}</label>
+
+              <input
+                id="checkoutAddress"
+                type="text"
+                name="address"
+                form="checkoutForm"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>{% tr "Telephone *" "Phone *" %}</label>
+
+              <input
+                id="checkoutPhone"
+                type="text"
+                name="phone"
+                form="checkoutForm"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>{% tr "Code postal *" "Postal code *" %}</label>
+
+              <input
+                id="checkoutPostal"
+                type="text"
+                name="postal_code"
+                form="checkoutForm"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="modal-foot">
+            <button type="button" class="modal-submit" data-save-address>
+              {% tr "Enregistrer" "Save" %}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay is-hidden" id="couponModal">
+        <div class="modal-card modal-coupon-card">
+          <div class="modal-head">
+            <h3>{% tr "Selectionnez le coupon" "Select coupon" %}</h3>
+
+            <button
+              type="button"
+              class="modal-close"
+              data-close-modal="couponModal"
+            >
+              &times;
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form
+              method="post"
+              action="{% url 'cart:apply_coupon' %}"
+              class="coupon-form"
+            >
+              {% csrf_token %}
+
+              <input
+                type="hidden"
+                name="next"
+                value="{{ request.get_full_path }}"
+              />
+
+              <input
+                type="text"
+                name="code"
+                placeholder="{% tr 'Entrez votre code' 'Enter your code' %}"
+              />
+
+              <button type="submit">{% tr "Appliquer" "Apply" %}</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/orders/checkout.js' %}?v=32"></script>
+  </body>
+</html>

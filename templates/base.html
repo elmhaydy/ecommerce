@@ -1,0 +1,617 @@
+{% load static site_i18n %}
+<!doctype html>
+<html lang="{{ site_language }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}M&Y Shop{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'img/MYblanc.png' %}" />
+    <link rel="apple-touch-icon" href="{% static 'img/MYblanc.png' %}" />
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=13" />
+    {% block page_css %}{% endblock %}
+  </head>
+
+  <body class="{% block body_class %}{% endblock %}">
+    {% tr "Commandes de plus de 600 DHS traitees automatiquement - Livraison rapide partout au Maroc" "Orders over 600 DHS are processed automatically - Fast delivery across Morocco" as strip_text %}
+    <div class="top-strip">
+      <p
+        class="top-strip-message"
+        id="topStripMessage"
+        data-text="{{ strip_text }}"
+      >
+        {{ strip_text }}
+      </p>
+      <div class="top-strip-actions">
+        <span>|</span>
+        <div class="language-menu" id="languageMenu">
+          <button
+            class="language-toggle"
+            id="languageToggle"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            {% if site_language == "en" %}English{% else %}Francais{% endif %}
+            <span class="language-caret">⌄</span>
+          </button>
+          <div class="language-dropdown" id="languageDropdown">
+            <form method="post" action="{% url 'core:set_language' %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <button type="submit" name="language" value="fr">Francais</button>
+              <button type="submit" name="language" value="en">English</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="{% url 'core:home' %}" class="brand">
+          <img src="{% static 'img/MYblanc.png' %}" alt="M&Y Shop" />
+        </a>
+
+        <nav class="nav-menu" id="navMenu">
+          <a href="{% url 'catalog:product_list' %}">{% tr "Offres quotidiennes" "Daily Deals" %}</a>
+          {% for item in header_mega_menu_items %}
+          <div class="nav-item-group">
+            <a
+              href="{% if item.slug %}{% url 'catalog:product_list' %}?category={{ item.slug }}{% else %}{% url 'catalog:product_list' %}{% endif %}"
+              class="nav-link"
+            >
+              {{ item.label }}
+            </a>
+            <div class="mega-menu">
+              <div class="mega-menu-head">
+                <strong>{{ item.label }}</strong>
+                <a href="{% if item.slug %}{% url 'catalog:product_list' %}?category={{ item.slug }}{% else %}{% url 'catalog:product_list' %}{% endif %}">
+                  {% tr "Voir toute la categorie" "View full category" %}
+                </a>
+              </div>
+              <div class="mega-menu-grid">
+                {% for product in item.products %}
+                <a href="{% url 'catalog:product_detail' product.slug %}" class="mega-product-card">
+                  <span class="mega-product-image">
+                    {% if product.image %}
+                    <img
+                      src="{{ product.image.url }}"
+                      alt="{% if header_mega_menu_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}"
+                    >
+                    {% endif %}
+                  </span>
+                  <strong>
+                    {% if header_mega_menu_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}
+                  </strong>
+                </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </nav>
+
+        <div class="header-actions">
+          <button
+            class="header-icon search-toggle"
+            id="searchToggle"
+            type="button"
+            aria-label="Recherche"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="5.5"></circle>
+              <path d="M16 16l4.5 4.5"></path>
+            </svg>
+          </button>
+          <button
+            class="header-icon cart-toggle"
+            id="cartToggle"
+            type="button"
+            aria-label="{% tr 'Panier' 'Cart' %}"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="9" cy="20" r="1.6"></circle>
+              <circle cx="18" cy="20" r="1.6"></circle>
+              <path
+                d="M3 4h2l2.3 10.2a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 7H7"
+              ></path>
+            </svg>
+            {% if header_cart_count %}
+            <span class="cart-count-badge">{{ header_cart_count }}</span>
+            {% endif %}
+          </button>
+
+          <div class="profile-menu" id="profileMenu">
+            <button
+              class="header-icon profile-toggle"
+              id="profileToggle"
+              type="button"
+              aria-label="Profil"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="3.5"></circle>
+                <path d="M5 20a7 7 0 0 1 14 0"></path>
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              {% if user.is_authenticated %}
+              <div class="profile-dropdown-header">
+                <p>{% tr "Mon compte" "My account" %}</p>
+                <strong>{{ user.username }}</strong>
+              </div>
+              <a
+                href="{% url 'accounts:profile' %}"
+                class="profile-highlight-link"
+                >{% tr "Informations personnelles" "Personal information" %}</a
+              >
+              <div class="profile-dropdown-links">
+                {% if user.is_staff %}
+                <a href="{% url 'admin_panel:home' %}">Admin Panel</a>
+                {% endif %}
+                <a href="{% url 'orders:order_history' %}">{% tr "Mes commandes" "My orders" %}</a>
+                <a href="{% url 'wishlist:wishlist_detail' %}">{% tr "Ma liste d'envies" "My wishlist" %}</a>
+                <a href="{% url 'accounts:profile_edit' %}"
+                  >{% tr "Informations personnelles" "Personal information" %}</a
+                >
+                <a href="{% url 'accounts:password_change' %}"
+                  >{% tr "Mot de passe" "Password" %}</a
+                >
+                <a
+                  href="{% url 'accounts:logout' %}"
+                  class="profile-logout-link"
+                  >{% tr "Deconnexion" "Logout" %}</a
+                >
+              </div>
+              {% else %}
+              <div class="profile-dropdown-header">
+                <p>{% tr "Connexion" "Sign in" %}</p>
+                <strong>{% tr "Accedez a votre compte" "Access your account" %}</strong>
+              </div>
+              <a
+                href="{% url 'accounts:register' %}"
+                class="profile-highlight-link"
+                >{% tr "Inscription et avantages" "Register & benefits" %}</a
+              >
+              <div class="profile-dropdown-links">
+                <a href="{% url 'accounts:login' %}">{% tr "Se connecter" "Sign in" %}</a>
+                <a href="{% url 'accounts:register' %}">{% tr "Creer un compte" "Create account" %}</a>
+                <span class="profile-dropdown-muted">{% tr "Mes commandes" "My orders" %}</span>
+                <span class="profile-dropdown-muted">{% tr "Informations personnelles" "Personal information" %}</span>
+                <span class="profile-dropdown-muted">{% tr "Ma liste d'envies" "My wishlist" %}</span>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <button class="mobile-menu-btn" id="mobileBtn" aria-label="Menu">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16"></path>
+              <path d="M4 12h16"></path>
+              <path d="M4 17h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div
+      class="search-dropdown-shell"
+      id="searchDropdownShell"
+      data-suggestions-url="{% url 'core:search_suggestions' %}"
+      data-view-all-label="{% tr 'Voir tous les resultats' 'View all results' %}"
+      data-no-results-label="{% tr 'Aucun produit trouve.' 'No products found.' %}"
+      data-search-results-label="{% tr 'Propositions' 'Suggestions' %}"
+      data-price-suffix="DH"
+    >
+      <div class="search-dropdown-panel" id="searchDropdownPanel">
+        <form method="get" action="{% url 'catalog:product_list' %}" class="search-dropdown-form">
+          <span class="search-dropdown-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="5.5"></circle>
+              <path d="M16 16l4.5 4.5"></path>
+            </svg>
+          </span>
+          <input
+            type="text"
+            name="q"
+            id="headerSearchInput"
+            placeholder="{% tr 'Que recherchez-vous ?' 'What are you looking for?' %}"
+          >
+        </form>
+
+        <div class="search-dropdown-section search-dropdown-results is-hidden" id="searchResultsSection">
+          <div class="search-dropdown-results-head">
+            <h3 id="searchResultsHeading">{% tr "Propositions" "Suggestions" %}</h3>
+            <a href="{% url 'catalog:product_list' %}" id="searchViewAllLink" class="search-view-all-link">
+              {% tr "Voir tous les resultats" "View all results" %}
+            </a>
+          </div>
+          <div class="search-dropdown-results-list" id="searchResultsList"></div>
+          <p class="search-dropdown-empty is-hidden" id="searchResultsEmpty">
+            {% tr "Aucun produit trouve." "No products found." %}
+          </p>
+        </div>
+
+        <div id="searchDiscoverySections">
+        <div class="search-dropdown-section">
+          <h3>{% tr "Les plus recherches" "Most searched" %}</h3>
+          <div class="search-dropdown-tags">
+            {% for term in header_search_terms %}
+            <a href="{% url 'catalog:product_list' %}?q={% if header_search_language == 'en' %}{{ term.label_en|urlencode }}{% else %}{{ term.label_fr|urlencode }}{% endif %}" class="search-dropdown-tag">
+              <span>+</span>
+              {% if header_search_language == "en" %}{{ term.label_en }}{% else %}{{ term.label_fr }}{% endif %}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="search-dropdown-section">
+          <h3>{% tr "Recommandations" "Recommendations" %}</h3>
+          <div class="search-dropdown-grid">
+            {% for product in header_search_recommendations %}
+            <article class="search-dropdown-card">
+              <a href="{% url 'catalog:product_detail' product.slug %}" class="search-dropdown-card-image">
+                {% if product.is_featured %}
+                <span class="search-dropdown-badge">{% tr "Nouveau" "New" %}</span>
+                {% endif %}
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{% if header_search_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}">
+                {% endif %}
+              </a>
+              <h4>
+                <a href="{% url 'catalog:product_detail' product.slug %}">
+                  {% if header_search_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}
+                </a>
+              </h4>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+    <aside
+      class="cart-drawer"
+      id="cartDrawer"
+      aria-hidden="true"
+      data-product-base-url="{% url 'catalog:product_list' %}"
+      data-cart-url="{% url 'cart:cart_detail' %}"
+      data-checkout-url="{% url 'orders:checkout' %}"
+      data-empty-title="{% tr 'Votre panier est vide' 'Your cart is empty' %}"
+      data-empty-text="{% tr 'Ajoutez des produits pour les retrouver ici rapidement.' 'Add products to find them here quickly.' %}"
+      data-subtotal-label="{% tr 'Sous-total' 'Subtotal' %}"
+      data-back-cart-label="{% tr 'Retour au panier' 'Back to cart' %}"
+      data-checkout-label="{% tr 'Verification' 'Checkout' %}"
+      data-remove-label="{% tr 'Supprimer du panier' 'Remove from cart' %}"
+      data-decrease-label="{% tr 'Reduire la quantite' 'Decrease quantity' %}"
+      data-increase-label="{% tr 'Augmenter la quantite' 'Increase quantity' %}"
+    >
+      <div class="cart-drawer-header">
+        <h2>{% tr "Panier" "Cart" %}</h2>
+        <button
+          type="button"
+          class="cart-drawer-close"
+          id="cartDrawerClose"
+          aria-label="{% tr 'Fermer' 'Close' %}"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6 6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="cart-drawer-body">
+        {% if header_cart_items %}
+        <div class="cart-drawer-list">
+          {% for item in header_cart_items %}
+          <article class="cart-drawer-item">
+            <span class="cart-drawer-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 12.5 10 16l8-9"></path>
+              </svg>
+            </span>
+            <a href="{% url 'catalog:product_detail' item.product.slug %}" class="cart-drawer-item-image">
+              {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name_fr }}">
+              {% else %}
+              <span>{{ item.product.name_fr|truncatechars:16 }}</span>
+              {% endif %}
+            </a>
+            <div class="cart-drawer-item-content">
+              <a href="{% url 'catalog:product_detail' item.product.slug %}" class="cart-drawer-item-title">{{ item.product.name_fr }}</a>
+              <div class="cart-drawer-price-row">
+                <strong>{{ item.product.price }} DH</strong>
+                {% if item.product.old_price %}
+                <del>{{ item.product.old_price }} DH</del>
+                {% endif %}
+              </div>
+              <div class="cart-drawer-actions-row">
+                <form method="post" action="{% url 'cart:update_cart_item' item.id %}" class="cart-drawer-qty-form">
+                  {% csrf_token %}
+                  <button type="submit" name="action" value="decrease" aria-label="{% tr 'Reduire la quantite' 'Decrease quantity' %}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6 12h12"></path>
+                    </svg>
+                  </button>
+                  <span>{{ item.quantity }}</span>
+                  <button type="submit" name="action" value="increase" aria-label="{% tr 'Augmenter la quantite' 'Increase quantity' %}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 6v12"></path>
+                      <path d="M6 12h12"></path>
+                    </svg>
+                  </button>
+                </form>
+                <a href="{% url 'cart:remove_from_cart' item.id %}" class="cart-drawer-remove" aria-label="{% tr 'Supprimer du panier' 'Remove from cart' %}">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16"></path>
+                    <path d="M9 7V5h6v2"></path>
+                    <path d="M8 7l1 12h6l1-12"></path>
+                    <path d="M10 11v5"></path>
+                    <path d="M14 11v5"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="cart-drawer-empty">
+          <span class="cart-drawer-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="9" cy="20" r="1.6"></circle>
+              <circle cx="18" cy="20" r="1.6"></circle>
+              <path
+                d="M3 4h2l2.3 10.2a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 7H7"
+              ></path>
+            </svg>
+          </span>
+          <strong>{% tr "Votre panier est vide" "Your cart is empty" %}</strong>
+          <p>{% tr "Ajoutez des produits pour les retrouver ici rapidement." "Add products to find them here quickly." %}</p>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="cart-drawer-footer">
+        {% if header_cart %}
+        <div class="cart-drawer-summary">
+          <span>{% tr "Sous-total" "Subtotal" %}</span>
+          <strong>{{ header_cart.get_total }} DH</strong>
+        </div>
+        {% endif %}
+        <a href="{% url 'cart:cart_detail' %}" class="cart-drawer-secondary"
+          >{% tr "Retour au panier" "Back to cart" %}</a
+        >
+        <a href="{% url 'orders:checkout' %}" class="cart-drawer-btn"
+          >{% tr "Verification" "Checkout" %}</a
+        >
+      </div>
+    </aside>
+
+    <footer class="site-footer">
+      <section class="footer-top-band">
+        <div class="footer-shell footer-top-inner">
+          <div class="footer-social-block">
+            <p>{% tr "SUIVEZ-NOUS" "FOLLOW US" %}</p>
+            <div class="footer-social-links">
+              <a href="https://www.instagram.com/me_.and_.youuuuu/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <circle cx="17.5" cy="6.5" r="1"></circle>
+                </svg>
+              </a>
+              <a href="#" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v4h4v-4h3.2l.8-4H13V9c0-.7.3-1 1-1Z"
+                  ></path>
+                </svg>
+              </a>
+              <a href="#" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M21 8.5a2.5 2.5 0 0 0-1.8-1.8C17.5 6.2 12 6.2 12 6.2s-5.5 0-7.2.5A2.5 2.5 0 0 0 3 8.5 26 26 0 0 0 2.5 12 26 26 0 0 0 3 15.5a2.5 2.5 0 0 0 1.8 1.8c1.7.5 7.2.5 7.2.5s5.5 0 7.2-.5a2.5 2.5 0 0 0 1.8-1.8 26 26 0 0 0 .5-3.5 26 26 0 0 0-.5-3.5Z"
+                  ></path>
+                  <path d="m10 9 5 3-5 3Z"></path>
+                </svg>
+              </a>
+              <a href="#" aria-label="TikTok">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M14 4c.4 1.7 1.4 3 3 3.8 1 .5 2 .7 3 .7v3a9.7 9.7 0 0 1-3.2-.5v5.4a5.8 5.8 0 1 1-5.8-5.8c.3 0 .6 0 1 .1v3.2a2.5 2.5 0 1 0 1.9 2.5V4h2.1Z"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-app-block">
+            <div class="footer-app-badge">
+              <img src="{% static 'img/MYdark.png' %}" alt="M&Y Shop" />
+            </div>
+
+          </div>
+      </section>
+
+      <section class="footer-main">
+        <div class="footer-shell">
+          <div class="footer-newsletter">
+            <h2>{% tr "Abonnez-vous maintenant et gagnez des avantages !" "Subscribe now and get benefits!" %}</h2>
+            <p>
+              {% tr "Recevez les dernieres nouvelles, promotions et selections de produits M&Y." "Get the latest M&Y news, promotions and product picks." %}
+            </p>
+            <form class="footer-newsletter-form">
+              <input
+                type="email"
+                placeholder="{% tr 'Entrez votre adresse e-mail' 'Enter your email address' %}"
+                aria-label="{% tr 'Adresse e-mail' 'Email address' %}"
+              />
+              <button type="button" aria-label="{% tr "S'abonner" "Subscribe" %}">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 19V5"></path>
+                  <path d="m5 12 7-7 7 7"></path>
+                </svg>
+              </button>
+            </form>
+            <label class="footer-consent">
+              <input type="checkbox" />
+              <span
+                >{% tr "J'ai lu et j'accepte les conditions d'utilisation et la politique de confidentialite." "I have read and accept the terms of use and privacy policy." %}</span
+              >
+            </label>
+          </div>
+
+          <div class="footer-links-grid">
+            <div class="footer-column">
+              <h3>{% tr "Service client" "Customer service" %}</h3>
+              <p>{% tr "Heures de service" "Service hours" %}</p>
+              <strong>{% tr "Du lundi au vendredi de 9h00 a 17h30" "Monday to Friday from 9:00 to 17:30" %}</strong>
+              <p>{% tr "Service client" "Customer service" %}</p>
+              <strong>WhatsApp : 0660000000</strong>
+              <strong>{% tr "Telephone : 0665003521" "Phone: 0665003521" %}</strong>
+              <strong>{% tr "Courriel : support@myshop.com" "Email: support@myshop.com" %}</strong>
+            </div>
+
+            <div class="footer-column">
+              <h3>{% tr "A propos de M&Y" "About M&Y" %}</h3>
+              <a href="{% url 'core:about_us' %}">{% tr "A propos de nous" "About us" %}</a>
+              <a href="{% url 'core:affiliate_program' %}">{% tr "Programme d'affiliation" "Affiliate program" %}</a>
+              <a href="{% url 'core:where_to_buy' %}">{% tr "Ou acheter" "Where to buy" %}</a>
+              <a href="{% url 'core:contact_us' %}">{% tr "Contactez-nous" "Contact us" %}</a>
+              <a href="{% url 'core:points_program' %}">{% tr "Programme de points" "Points program" %}</a>
+            </div>
+
+            <div class="footer-column">
+              <h3>{% tr "Termes" "Terms" %}</h3>
+              <a href="{% url 'core:warranty' %}">{% tr "Garantie" "Warranty" %}</a>
+              <a href="{% url 'core:shipping_delivery' %}">{% tr "Expedition & Livraison" "Shipping & Delivery" %}</a>
+              <a href="{% url 'core:return_policy' %}">{% tr "Politique de retour" "Return policy" %}</a>
+              <a href="{% url 'core:terms_conditions' %}">{% tr "Termes et conditions" "Terms and conditions" %}</a>
+              <a href="{% url 'core:privacy_policy' %}">{% tr "Politique de confidentialite" "Privacy policy" %}</a>
+            </div>
+
+            <div class="footer-column">
+              <h3>{% tr "Obtenir de l'aide" "Get help" %}</h3>
+              <a href="{% url 'orders:order_history' %}">{% tr "Suivi de commande" "Order tracking" %}</a>
+              <a href="{% url 'catalog:product_list' %}">{% tr "Comment commander" "How to order" %}</a>
+              <a href="{% url 'accounts:profile' %}">{% tr "Mon compte" "My account" %}</a>
+              <a href="{% url 'cart:cart_detail' %}">{% tr "Paiement et panier" "Checkout & cart" %}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="footer-bottom">
+        <div class="footer-shell footer-bottom-inner">
+          <img src="{% static 'img/MYblanc.png' %}" alt="M&Y Shop" />
+          <p>&copy; 2026 M&amp;Y Shop {% tr "Tous droits reserves." "All rights reserved." %}</p>
+        </div>
+      </section>
+    </footer>
+
+    <div
+      class="support-chat-shell"
+      id="supportChatShell"
+      data-status-url="{% url 'core:support_chat_status' %}"
+      data-history-url="{% url 'core:support_chat_history' %}"
+      data-send-url="{% url 'core:support_chat_send' %}"
+      data-login-url="{% url 'accounts:login' %}"
+      data-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+      data-title-fr="Support M&amp;Y"
+      data-title-en="M&amp;Y Support"
+      data-subtitle-fr="Discutez avec notre equipe support a propos de vos commandes, produits ou livraisons."
+      data-subtitle-en="Chat with our support team about orders, products, or deliveries."
+      data-placeholder-fr="Ecrivez votre message..."
+      data-placeholder-en="Write your message..."
+      data-send-fr="Envoyer"
+      data-send-en="Send"
+      data-status-sending-fr="Envoi..."
+      data-status-sending-en="Sending..."
+      data-status-sent-fr="Envoye"
+      data-status-sent-en="Sent"
+      data-status-delivered-fr="Recu"
+      data-status-delivered-en="Delivered"
+      data-status-read-fr="Lu"
+      data-status-read-en="Read"
+      data-status-failed-fr="Non envoye"
+      data-status-failed-en="Not sent"
+      data-welcome-fr="Bonjour, laissez votre message et notre equipe support vous repondra ici."
+      data-welcome-en="Hello, leave your message and our support team will reply here."
+      data-error-fr="Le support est temporairement indisponible."
+      data-error-en="Support is temporarily unavailable."
+      data-login-fr="Connectez-vous pour discuter avec le support."
+      data-login-en="Sign in to chat with support."
+      data-language="{{ site_language }}"
+    >
+      <div class="support-chat-panel" id="supportChatPanel" aria-hidden="true">
+        <div class="support-chat-header">
+          <div>
+            <strong>{% tr "Support M&Y" "M&Y Support" %}</strong>
+            <p>{% tr "Posez votre question sur vos commandes, vos produits ou la livraison." "Ask about orders, products, delivery, or returns." %}</p>
+          </div>
+          <button type="button" class="support-chat-close" id="supportChatClose" aria-label="{% tr 'Fermer le support' 'Close support' %}">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="support-chat-messages" id="supportChatMessages">
+          <article class="support-message support-message-bot">
+            <div class="support-message-bubble">
+              <p>{% tr "Bonjour, laissez votre message et notre equipe support vous repondra ici." "Hello, leave your message and our support team will reply here." %}</p>
+            </div>
+          </article>
+        </div>
+        <form class="support-chat-form" id="supportChatForm">
+          {% csrf_token %}
+          <textarea
+            id="supportChatInput"
+            rows="1"
+            placeholder="{% tr 'Ecrivez votre message...' 'Write your message...' %}"
+          ></textarea>
+          <button type="submit" class="support-chat-send">{% tr "Envoyer" "Send" %}</button>
+        </form>
+      </div>
+    </div>
+
+    <button class="floating-chat" id="supportChatToggle" aria-label="{% tr 'Assistance' 'Support' %}">
+      <span class="floating-chat-badge" id="supportChatBadge" hidden>0</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M4 12a8 8 0 0 1 8-8h.2A8 8 0 0 1 20 12v4a2 2 0 0 1-2 2h-2.2a2 2 0 0 1-2-2v-2.2a2 2 0 0 1 2-2H18"
+        ></path>
+        <path d="M4 12H6a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2H4"></path>
+        <path d="M12 20a3 3 0 0 0 3-3"></path>
+      </svg>
+    </button>
+    <button class="scroll-top" id="scrollTop" aria-label="{% tr 'Retour en haut' 'Back to top' %}">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 19V5"></path>
+        <path d="M6 11l6-6 6 6"></path>
+      </svg>
+    </button>
+
+    <script src="{% static 'js/base.js' %}?v=15"></script>
+    {% block page_js %}{% endblock %}
+  </body>
+</html>

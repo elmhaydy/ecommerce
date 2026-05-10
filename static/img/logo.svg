@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="ME&YOU logo">
+  <defs>
+    <linearGradient id="shell" x1="18" y1="16" x2="110" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="0.52" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="30" y1="24" x2="90" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="#0f172a"/>
+  <rect x="12" y="12" width="104" height="104" rx="24" fill="url(#shell)"/>
+  <path d="M25 27c24-11 54-8 78 7v21c-8-8-17-13-28-15L64 70 53 40c-11 2-20 7-28 15V34Z" fill="url(#shine)"/>
+  <path d="M35 37h13l16 27 16-27h13v54H82V60L68 83h-8L46 60v31H35Z" fill="#f8fafc"/>
+  <path d="M41 99h46" stroke="#f8fafc" stroke-width="6" stroke-linecap="round" opacity="0.88"/>
+</svg>

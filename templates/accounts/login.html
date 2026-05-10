@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static site_i18n %}
+
+{% block title %}Connexion | M&Y Shop{% endblock %}
+{% block body_class %}auth-page login-page{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}?v=3">
+{% endblock %}
+
+{% block content %}
+<section class="auth-layout auth-login-layout">
+  <div class="auth-background"></div>
+
+  <div class="auth-card login-card">
+    <h1>{% tr "Se connecter a votre compte" "Sign in to your account" %}</h1>
+
+    {% if form.non_field_errors %}
+    <div class="auth-alert error">
+      {{ form.non_field_errors.0 }}
+    </div>
+    {% endif %}
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+
+      {% for field in form %}
+      <div class="auth-group">
+        <label for="{{ field.id_for_label }}">
+          {% if field.name == "username" %}
+            {% tr "Nom d'utilisateur" "Username" %}
+          {% elif field.name == "password" %}
+            {% tr "Mot de passe" "Password" %}
+          {% else %}
+            {{ field.label }}
+          {% endif %}
+        </label>
+
+        <div class="auth-input-wrap {% if 'password' in field.name %}password-wrap{% endif %}">
+          {{ field }}
+
+          {% if 'password' in field.name %}
+          <button type="button" class="toggle-password">{% tr "Voir" "Show" %}</button>
+          {% endif %}
+        </div>
+
+        {% if field.errors %}
+        <small class="field-error">{{ field.errors.0 }}</small>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <div class="auth-links-row">
+        <span>{% tr "Mot de passe oublie ?" "Forgot password?" %}</span>
+        <a href="{% url 'accounts:password_change' %}">{% tr "Reinitialiser" "Reset" %}</a>
+      </div>
+
+      <button type="submit" class="auth-submit">{% tr "Se connecter" "Sign in" %}</button>
+    </form>
+
+    <div class="auth-bottom">
+      <p>{% tr "Vous n'avez pas de compte ?" "Don't have an account?" %}</p>
+      <a href="{% url 'accounts:register' %}">{% tr "Creer un compte" "Create account" %}</a>
+    </div>
+
+    <a href="{% url 'core:home' %}" class="back-home">{% tr "Retour a la boutique" "Back to the store" %}</a>
+  </div>
+</section>
+{% endblock %}
+
+{% block page_js %}
+<script src="{% static 'js/accounts/login.js' %}"></script>
+{% endblock %}

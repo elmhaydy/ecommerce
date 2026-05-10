@@ -1,0 +1,53 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mon Souhait" "My wishlist" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Mon Souhait" "My wishlist" %}{% endblock %}
+{% block nav_wishlist %}active{% endblock %}
+
+{% block portal_extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=2" />
+{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Favoris" "Wishlist" %}</p>
+    <h1>{% tr "Mon Souhait" "My wishlist" %}</h1>
+    <p>{% tr "Retrouvez ici les produits que vous avez gardes de cote." "Find here the products you have kept aside." %}</p>
+  </header>
+
+  <div class="hub-list">
+    {% for item in items %}
+    <article class="hub-list-card">
+      <div class="hub-list-main">
+        <a href="{% url 'catalog:product_detail' item.product.slug %}" class="hub-list-thumb">
+          {% if item.product.image %}
+          <img
+            src="{{ item.product.image.url }}"
+            alt="{% if site_language == 'en' and item.product.name_en %}{{ item.product.name_en }}{% else %}{{ item.product.name_fr }}{% endif %}"
+          />
+          {% else %}
+          <span>{% if site_language == "en" and item.product.name_en %}{{ item.product.name_en|slice:":1" }}{% else %}{{ item.product.name_fr|slice:":1" }}{% endif %}</span>
+          {% endif %}
+        </a>
+
+        <div>
+          <strong>{% if site_language == "en" and item.product.name_en %}{{ item.product.name_en }}{% else %}{{ item.product.name_fr }}{% endif %}</strong>
+          <p>{{ item.product.price }} DH</p>
+        </div>
+      </div>
+      <div class="hub-list-side">
+        <a href="{% url 'catalog:product_detail' item.product.slug %}">{% tr "Voir produit" "View product" %}</a>
+        <a href="{% url 'wishlist:remove_from_wishlist' item.id %}">{% tr "Retirer" "Remove" %}</a>
+      </div>
+    </article>
+    {% empty %}
+    <div class="hub-empty-card">
+      <h2>{% tr "Aucun produit dans vos favoris" "No products in your wishlist" %}</h2>
+      <p>{% tr "Ajoutez des produits a votre liste pour les retrouver ici rapidement." "Add products to your list to find them here quickly." %}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

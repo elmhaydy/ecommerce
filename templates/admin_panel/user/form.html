@@ -1,0 +1,70 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Ajouter utilisateur{% endblock %}
+{% block page_title %}Nouvel utilisateur{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/user/form.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/user/form.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page">
+    <div class="entity-form-layout">
+        <div class="entity-form-card">
+            <div class="entity-form-header">
+                <div class="entity-icon-box"><i class="fas fa-user-plus"></i></div>
+                <div>
+                    <h2>Ajouter un utilisateur</h2>
+                    <p>Creez un compte et attribuez-lui le role approprie.</p>
+                </div>
+            </div>
+            <form method="post" id="userForm" class="entity-form">
+                {% csrf_token %}
+                <div class="entity-form-grid">
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.field.widget.input_type == "checkbox" %}
+                        <div class="checkbox-row">{{ field }}<span>{{ field.help_text }}</span></div>
+                        {% else %}
+                        {{ field }}
+                        {% endif %}
+                        {% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select name="role" id="role">
+                            {% for role in roles %}
+                            <option value="{{ role.name }}">{{ role.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="entity-form-actions">
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i> Creer
+                    </button>
+                    <a href="{% url 'admin_panel:user_list' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Retour liste
+                    </a>
+                </div>
+            </form>
+        </div>
+        <aside class="entity-side-card">
+            <h3>Conseils de gestion</h3>
+            <ul class="side-list">
+                <li><i class="fas fa-check-circle"></i><span>Attribuez le minimum de droits necessaire.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Utilisez un email valide pour les notifications.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Reserve les roles sensibles aux comptes de confiance.</span></li>
+            </ul>
+        </aside>
+    </div>
+</div>
+{% endblock %}

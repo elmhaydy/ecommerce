@@ -1,0 +1,141 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Commandes | Admin Panel{% endblock %}
+{% block page_title %}Commandes{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/order/list.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/order/list.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page entity-stack">
+    <div class="entity-stats">
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini"><i class="fas fa-shopping-cart"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini">{{ orders|length }}</span>
+                <span class="stat-label-mini">Commandes</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini warning"><i class="fas fa-hourglass-half"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="pendingOrdersCount">0</span>
+                <span class="stat-label-mini">En attente</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini success"><i class="fas fa-circle-check"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="deliveredOrdersCount">0</span>
+                <span class="stat-label-mini">Livrees</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini primary"><i class="fas fa-wallet"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="ordersRevenueCount">0.00</span>
+                <span class="stat-label-mini">CA total</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="entity-toolbar">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher une commande, un client ou un email...">
+            <button type="button" id="clearSearch" class="search-clear" style="display:none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="filters-wrapper">
+            <select class="filter-select" data-filter-key="status">
+                <option value="all">Tous les statuts</option>
+                <option value="PENDING">En attente</option>
+                <option value="PAID">Payees</option>
+                <option value="SHIPPED">Expediees</option>
+                <option value="DELIVERED">Livrees</option>
+                <option value="CANCELLED">Annulees</option>
+            </select>
+            <button type="button" id="resetFilters" class="btn-reset">
+                <i class="fas fa-rotate-left"></i> Reinitialiser
+            </button>
+        </div>
+    </div>
+
+    <div class="entity-table-wrapper">
+        <table class="entity-table">
+            <thead>
+                <tr>
+                    <th>Commande</th>
+                    <th>Client</th>
+                    <th>Total</th>
+                    <th>Statut</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+                {% for order in orders %}
+                <tr
+                    data-search="#{{ order.id }} {{ order.user }} {{ order.email|default:'' }} {{ order.first_name|default:'' }} {{ order.last_name|default:'' }}"
+                    data-status="{{ order.status }}"
+                    data-total="{{ order.total_amount }}"
+                >
+                    <td>
+                        <div class="entity-title-cell">
+                            <div class="entity-icon-box"><i class="fas fa-receipt"></i></div>
+                            <div>
+                                <div class="entity-title">Commande #{{ order.id }}</div>
+                                <div class="entity-subtitle">{{ order.city|default:"Ville non renseignee" }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="entity-title">{{ order.user }}</div>
+                        <div class="entity-subtitle">{{ order.email|default:"-" }}</div>
+                    </td>
+                    <td><strong>{{ order.total_amount }} DH</strong></td>
+                    <td>
+                        <span class="entity-badge {% if order.status == 'DELIVERED' %}success{% elif order.status == 'CANCELLED' %}danger{% elif order.status == 'PENDING' %}warning{% else %}primary{% endif %}">
+                            <i class="fas {% if order.status == 'DELIVERED' %}fa-circle-check{% elif order.status == 'CANCELLED' %}fa-circle-xmark{% elif order.status == 'PENDING' %}fa-hourglass-half{% else %}fa-truck{% endif %}"></i>
+                            {{ order.get_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ order.created_at|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'admin_panel:order_detail' order.id %}" class="action-btn view-btn" title="Voir detail">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="emptyState" class="entity-empty" {% if orders %}style="display:none;"{% endif %}>
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Aucune commande</h3>
+        <p>Les nouvelles commandes apparaitront ici.</p>
+    </div>
+
+    <div class="pagination-container">
+        <button type="button" class="pagination-btn" id="prevPage" disabled>
+            <i class="fas fa-chevron-left"></i> Precedent
+        </button>
+        <div class="pagination-info">
+            Affichage de <span id="startIndex">0</span> a <span id="endIndex">0</span> sur <span id="totalCount">0</span> commandes
+        </div>
+        <button type="button" class="pagination-btn" id="nextPage">
+            Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}

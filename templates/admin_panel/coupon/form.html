@@ -1,0 +1,74 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}{% if coupon %}Modifier{% else %}Ajouter{% endif %} coupon{% endblock %}
+{% block page_title %}{% if coupon %}Modifier coupon{% else %}Nouveau coupon{% endif %}{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/coupon/form.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/coupon/form.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page">
+    <div class="entity-form-layout">
+        <div class="entity-form-card">
+            <div class="entity-form-header">
+                <div class="entity-icon-box"><i class="fas fa-ticket-alt"></i></div>
+                <div>
+                    <h2>{% if coupon %}Modifier le coupon{% else %}Creer un coupon{% endif %}</h2>
+                    <p>Configurez le code promo, sa valeur et ses conditions d'utilisation.</p>
+                </div>
+            </div>
+            <form method="post" id="couponForm" class="entity-form">
+                {% csrf_token %}
+                <div class="entity-form-grid">
+                    {% for field in form %}
+                    <div class="form-group {% if field.field.widget.input_type == 'textarea' %}full-span{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.field.widget.input_type == "checkbox" %}
+                        <div class="checkbox-row">
+                            {{ field }}
+                            <span>{{ field.help_text|default:"Activer ce coupon dans la boutique." }}</span>
+                        </div>
+                        {% else %}
+                        {{ field }}
+                        {% endif %}
+                        {% if field.errors %}
+                        <div class="field-errors">{{ field.errors }}</div>
+                        {% endif %}
+                        {% if field.help_text and field.field.widget.input_type != "checkbox" %}
+                        <small class="field-help">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.name == "description" %}
+                        <div class="meta-text"><span id="descriptionCount">0</span> caracteres</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="entity-form-actions">
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i>
+                        <span>{% if coupon %}Mettre a jour{% else %}Enregistrer{% endif %}</span>
+                    </button>
+                    <a href="{% url 'admin_panel:coupon_list' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Retour liste
+                    </a>
+                </div>
+            </form>
+        </div>
+        <aside class="entity-side-card">
+            <h3>Bonnes pratiques</h3>
+            <ul class="side-list">
+                <li><i class="fas fa-check-circle"></i><span>Utilisez des codes courts et memorisables.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Ajoutez un minimum de commande pour proteger la marge.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Fixez une limite d'utilisation pour les campagnes ponctuelles.</span></li>
+            </ul>
+        </aside>
+    </div>
+</div>
+{% endblock %}

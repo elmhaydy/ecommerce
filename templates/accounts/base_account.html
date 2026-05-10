@@ -1,0 +1,101 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Mon compte{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/accounts/account_shell.css' %}" />
+    {% block page_css %}{% endblock %}
+  </head>
+  <body class="account-shell {% block body_class %}{% endblock %}">
+    <div class="account-layout">
+      <aside class="account-sidebar">
+        <a href="{% url 'core:home' %}" class="account-brand">
+          <img src="{% static 'img/MYdark.png' %}" alt="ME&YOU" class="account-brand-logo" />
+          <div>
+            <strong>ME&YOU</strong>
+            <span>Espace compte</span>
+          </div>
+        </a>
+
+        <div class="account-user">
+          <div class="account-user-avatar">{{ request.user.username|slice:":1"|upper }}</div>
+          <div class="account-user-copy">
+            <strong>{{ request.user.username }}</strong>
+            <span>{{ request.user.email|default:"Compte client" }}</span>
+          </div>
+        </div>
+
+        <nav class="account-nav">
+          <a href="{% url 'accounts:profile' %}" class="account-nav-link {% block nav_profile %}{% endblock %}">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+          </a>
+          <a href="{% url 'accounts:profile_edit' %}" class="account-nav-link {% block nav_settings %}{% endblock %}">
+            <i class="fas fa-sliders-h"></i>
+            <span>Parametres</span>
+          </a>
+          <a href="{% url 'accounts:password_change' %}" class="account-nav-link {% block nav_password %}{% endblock %}">
+            <i class="fas fa-key"></i>
+            <span>Mot de passe</span>
+          </a>
+          <a href="{% url 'accounts:activity' %}" class="account-nav-link {% block nav_activity %}{% endblock %}">
+            <i class="fas fa-chart-line"></i>
+            <span>Mon activite</span>
+          </a>
+          <a href="{% url 'orders:order_history' %}" class="account-nav-link">
+            <i class="fas fa-box"></i>
+            <span>Mes commandes</span>
+          </a>
+          <a href="{% url 'wishlist:wishlist_detail' %}" class="account-nav-link">
+            <i class="fas fa-heart"></i>
+            <span>Favoris</span>
+          </a>
+          <a href="{% url 'accounts:coupons' %}" class="account-nav-link {% block nav_coupons %}{% endblock %}">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Coupons</span>
+          </a>
+          <a href="{% url 'accounts:addresses' %}" class="account-nav-link {% block nav_addresses %}{% endblock %}">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Adresses</span>
+          </a>
+          <a href="{% url 'accounts:reviews' %}" class="account-nav-link {% block nav_reviews %}{% endblock %}">
+            <i class="fas fa-comment-dots"></i>
+            <span>Avis produits</span>
+          </a>
+        </nav>
+
+        <div class="account-side-actions">
+          {% if request.user.is_staff %}
+          <a href="{% url 'admin_panel:home' %}" class="account-side-btn admin">
+            <i class="fas fa-shield-alt"></i>
+            <span>Admin Panel</span>
+          </a>
+          {% endif %}
+          <a href="{% url 'core:home' %}" class="account-side-btn">
+            <i class="fas fa-store"></i>
+            <span>Retour boutique</span>
+          </a>
+          <a href="{% url 'accounts:logout' %}" class="account-side-btn danger">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Deconnexion</span>
+          </a>
+        </div>
+      </aside>
+
+      <main class="account-content {% block main_class %}{% endblock %}">
+        {% if messages %}
+          <div class="account-messages">
+            {% for message in messages %}
+              <div class="account-message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    {% block page_js %}{% endblock %}
+  </body>
+</html>

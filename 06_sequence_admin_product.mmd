@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor Admin
+    participant AdminUI as Back-office Admin
+    participant Auth as Permissions
+    participant ProductModule as Module Catalogue
+    participant DB as Base PostgreSQL
+
+    Admin->>AdminUI: Accéder gestion produits
+    AdminUI->>Auth: Vérifier staff + groupe autorisé
+    Auth-->>AdminUI: Accès autorisé
+
+    Admin->>AdminUI: Créer / modifier produit
+    AdminUI->>ProductModule: Envoyer formulaire produit
+    ProductModule->>ProductModule: Valider champs, image, prix, stock
+    ProductModule->>DB: INSERT/UPDATE product
+    ProductModule->>DB: INSERT/UPDATE images, features, colors
+    DB-->>ProductModule: Produit sauvegardé
+    ProductModule-->>AdminUI: Message succès
+
+    Admin->>AdminUI: Modifier stock
+    AdminUI->>ProductModule: Mettre à jour stock
+    ProductModule->>DB: UPDATE product.stock
+    ProductModule->>DB: Vérifier seuil faible stock
+    ProductModule-->>AdminUI: Stock mis à jour + alerte si faible

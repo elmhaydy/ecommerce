@@ -1,0 +1,46 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mes avis produits" "My product reviews" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Commentaires sur les produits" "Product reviews" %}{% endblock %}
+{% block nav_reviews %}active{% endblock %}
+{% block portal_extra_css %}<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=2" />{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Communaute" "Community" %}</p>
+    <h1>{% tr "Commentaires sur les produits" "Product reviews" %}</h1>
+    <p>{{ approved_count }} {% tr "avis approuves sur" "approved reviews out of" %} {{ reviews|length }} {% tr "avis publies." "posted reviews." %}</p>
+  </header>
+
+  <div class="hub-list">
+    {% for review in reviews %}
+    <article class="hub-list-card review-card">
+      <div>
+        <strong>
+          {% if review.product %}
+          <a href="{% url 'catalog:product_detail' review.product.slug %}">{{ review.product.name_fr }}</a>
+          {% else %}
+          {% tr "Produit indisponible" "Unavailable product" %}
+          {% endif %}
+        </strong>
+        <p>{% if review.comment %}{{ review.comment }}{% else %}{% tr "Aucun commentaire." "No comment." %}{% endif %}</p>
+      </div>
+      <div class="hub-list-side">
+        <span class="hub-badge">{{ review.rating }}/5</span>
+        {% if review.is_verified_purchase %}
+        <span class="hub-badge success">{% tr "Achat verifie" "Verified purchase" %}</span>
+        {% endif %}
+        <small>{{ review.created_at|date:"d/m/Y" }}</small>
+      </div>
+    </article>
+    {% empty %}
+    <div class="hub-empty-card">
+      <h2>{% tr "Aucun avis pour le moment" "No reviews yet" %}</h2>
+      <p>{% tr "Vos futurs commentaires produits apparaitront ici." "Your future product reviews will appear here." %}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

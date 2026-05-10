@@ -1,0 +1,64 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Informations personnelles" "Personal information" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Informations personnelles" "Personal information" %}{% endblock %}
+{% block nav_profile %}active{% endblock %}
+
+{% block portal_extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=2" />
+{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Compte" "Account" %}</p>
+    <h1>{% tr "Informations personnelles" "Personal information" %}</h1>
+    <p>{% tr "Consultez vos informations principales et accedez rapidement a vos actions de compte." "View your main information and access your account actions quickly." %}</p>
+  </header>
+
+  <div class="hub-card-grid">
+    <article class="hub-address-card">
+      <span class="hub-badge">{% tr "Profil" "Profile" %}</span>
+      <h2>{{ user.first_name }} {{ user.last_name|default:user.username }}</h2>
+      <p><strong>{% tr "Nom d'utilisateur:" "Username:" %}</strong> {{ user.username }}</p>
+      <p><strong>{% tr "Email:" "Email:" %}</strong> {{ user.email|default:"Non renseigne" }}</p>
+      <p><strong>{% tr "Inscrit depuis:" "Joined on:" %}</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+    </article>
+
+    <article class="hub-panel">
+      <div class="hub-panel-head">
+        <h2>{% tr "Actions rapides" "Quick actions" %}</h2>
+      </div>
+      <div class="hub-actions">
+        <a href="{% url 'accounts:profile_edit' %}" class="hub-action-btn">{% tr "Modifier le profil" "Edit profile" %}</a>
+        <a href="{% url 'accounts:password_change' %}" class="hub-action-btn secondary">{% tr "Changer le mot de passe" "Change password" %}</a>
+      </div>
+    </article>
+  </div>
+
+  <section class="hub-panel">
+    <div class="hub-panel-head">
+      <h2>{% tr "Dernieres commandes" "Recent orders" %}</h2>
+      <a href="{% url 'orders:order_history' %}">{% tr "Voir tout" "View all" %}</a>
+    </div>
+
+    <div class="hub-list">
+      {% for order in orders %}
+      <article class="hub-list-card">
+        <div>
+          <strong>{% tr "Commande" "Order" %} #{{ order.id }}</strong>
+          <p>{{ order.created_at|date:"d/m/Y" }} • {{ order.get_status_display }}</p>
+        </div>
+        <div class="hub-list-side">
+          <span class="hub-badge">{{ order.total_amount }} DH</span>
+          <a href="{% url 'orders:order_detail' order.id %}">{% tr "Voir le detail" "View details" %}</a>
+        </div>
+      </article>
+      {% empty %}
+      <p class="hub-empty">{% tr "Aucune commande pour le moment." "No orders yet." %}</p>
+      {% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}

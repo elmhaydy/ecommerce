@@ -1,0 +1,185 @@
+{% load static site_i18n %}
+<!doctype html>
+<html lang="{{ site_language }}" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="{% static 'css/admin/admin.css' %}?v=1.1" />
+    {% block admin_css %}{% endblock %}
+</head>
+<body class="admin-body">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'admin_panel:home' %}" class="logo">
+                    <img
+                        src="{% static 'img/MYblanc.png' %}?v=1"
+                        alt="ME&YOU"
+                        class="logo-img"
+                        id="adminLogo"
+                        data-logo-dark="{% static 'img/MYblanc.png' %}?v=1"
+                        data-logo-light="{% static 'img/MYdark.png' %}?v=1"
+                    />
+                    <div class="logo-lockup">
+                        <span class="logo-text">ME&YOU</span>
+                    </div>
+                </a>
+                <button type="button" class="sidebar-pin-btn" id="sidebarPinBtn" title="{% tr 'Fixer la sidebar' 'Pin sidebar' %}" aria-label="{% tr 'Fixer la sidebar' 'Pin sidebar' %}">
+                    <i class="fas fa-thumbtack"></i>
+                </button>
+            </div>
+
+            {% block sidebar_content %}
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-label">{% tr "Principal" "Main" %}</span>
+                    <a href="{% url 'admin_panel:home' %}" class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                        <i class="fas fa-chart-line"></i>
+                        <span>{% tr "Dashboard" "Dashboard" %}</span>
+                    </a>
+                </div>
+
+                {% if request.user.is_superuser or perms.catalog.view_product or perms.catalog.view_category %}
+                <div class="nav-section">
+                    <span class="nav-label">{% tr "Catalogue" "Catalog" %}</span>
+                    <a href="{% url 'admin_panel:product_list' %}" class="nav-item {% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' or request.resolver_match.url_name == 'product_delete' %}active{% endif %}">
+                        <i class="fas fa-box"></i>
+                        <span>{% tr "Produits" "Products" %}</span>
+                    </a>
+                    <a href="{% url 'admin_panel:category_list' %}" class="nav-item {% if request.resolver_match.url_name == 'category_list' or request.resolver_match.url_name == 'category_create' or request.resolver_match.url_name == 'category_update' or request.resolver_match.url_name == 'category_delete' %}active{% endif %}">
+                        <i class="fas fa-tag"></i>
+                        <span>{% tr "Categories" "Categories" %}</span>
+                    </a>
+                </div>
+                {% endif %}
+
+                {% if request.user.is_superuser or perms.orders.view_order %}
+                <div class="nav-section">
+                    <span class="nav-label">{% tr "Ventes" "Sales" %}</span>
+                    <a href="{% url 'admin_panel:order_list' %}" class="nav-item {% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' or request.resolver_match.url_name == 'update_order_status' or request.resolver_match.url_name == 'order_invoice_pdf' %}active{% endif %}">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>{% tr "Commandes" "Orders" %}</span>
+                    </a>
+                </div>
+                {% endif %}
+
+                {% if request.user.is_superuser or perms.coupons.view_coupon or perms.shipping.view_shippingzone %}
+                <div class="nav-section">
+                    <span class="nav-label">{% tr "Marketing" "Marketing" %}</span>
+                    <a href="{% url 'admin_panel:coupon_list' %}" class="nav-item {% if request.resolver_match.url_name == 'coupon_list' or request.resolver_match.url_name == 'coupon_create' or request.resolver_match.url_name == 'coupon_update' or request.resolver_match.url_name == 'coupon_delete' %}active{% endif %}">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>{% tr "Coupons" "Coupons" %}</span>
+                    </a>
+                    <a href="{% url 'admin_panel:shipping_list' %}" class="nav-item {% if request.resolver_match.url_name == 'shipping_list' or request.resolver_match.url_name == 'shipping_create' or request.resolver_match.url_name == 'shipping_update' or request.resolver_match.url_name == 'shipping_delete' %}active{% endif %}">
+                        <i class="fas fa-truck"></i>
+                        <span>{% tr "Livraison" "Shipping" %}</span>
+                    </a>
+                </div>
+                {% endif %}
+
+                {% if request.user.is_superuser or perms.auth.view_user or perms.reviews.view_review %}
+                <div class="nav-section">
+                    <span class="nav-label">{% tr "Communaute" "Community" %}</span>
+                    <a href="{% url 'admin_panel:user_list' %}" class="nav-item {% if request.resolver_match.url_name == 'user_list' or request.resolver_match.url_name == 'user_detail' or request.resolver_match.url_name == 'user_create' or request.resolver_match.url_name == 'user_edit' or request.resolver_match.url_name == 'user_change_password' or request.resolver_match.url_name == 'user_toggle_active' or request.resolver_match.url_name == 'my_profile' or request.resolver_match.url_name == 'my_settings' or request.resolver_match.url_name == 'my_password' %}active{% endif %}">
+                        <i class="fas fa-users"></i>
+                        <span>{% tr "Utilisateurs" "Users" %}</span>
+                    </a>
+                    <a href="{% url 'admin_panel:review_list' %}" class="nav-item {% if request.resolver_match.url_name == 'review_list' or request.resolver_match.url_name == 'review_toggle_approval' or request.resolver_match.url_name == 'review_delete' %}active{% endif %}">
+                        <i class="fas fa-star"></i>
+                        <span>{% tr "Avis" "Reviews" %}</span>
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="nav-section">
+                    <span class="nav-label">{% tr "Support" "Support" %}</span>
+                    <a href="{% url 'admin_panel:support_conversation_list' %}" class="nav-item {% if request.resolver_match.url_name == 'support_conversation_list' or request.resolver_match.url_name == 'support_conversation_detail' or request.resolver_match.url_name == 'support_conversation_reply' or request.resolver_match.url_name == 'support_conversation_close' or request.resolver_match.url_name == 'support_conversation_messages' %}active{% endif %}">
+                        <i class="fas fa-headset"></i>
+                        <span>{% tr "Support chat" "Support chat" %}</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'core:home' %}" class="nav-item shop-link" target="_blank">
+                    <i class="fas fa-store"></i>
+                    <span>{% tr "Boutique" "Store" %}</span>
+                </a>
+            </div>
+            {% endblock %}
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="page-title">
+                    <h1>{% block page_title %}{% tr "Dashboard" "Dashboard" %}{% endblock %}</h1>
+                </div>
+
+                <div class="top-bar-actions">
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <div class="user-avatar">
+                                {{ request.user.username|slice:":1"|upper }}
+                            </div>
+                            <span class="user-name">{{ request.user.username }}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="dropdown-header">
+                                <div class="user-info">
+                                    <p class="user-email">{{ request.user.email|default:request.user.username }}</p>
+                                    <p class="user-role">{% block user_role_label %}{% tr "Administrateur" "Administrator" %}{% endblock %}</p>
+                                </div>
+                            </div>
+                            <div class="dropdown-items">
+                                <a href="{% url 'admin_panel:my_profile' %}" class="dropdown-link">
+                                    <i class="fas fa-user"></i> {% tr "Mon profil" "My profile" %}
+                                </a>
+                                <a href="{% url 'admin_panel:my_settings' %}" class="dropdown-link">
+                                    <i class="fas fa-cog"></i> {% tr "Parametres" "Settings" %}
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <button type="button" class="dropdown-link dropdown-theme-toggle" id="themeToggle">
+                                    <i class="fas fa-moon"></i>
+                                    <span>{% tr "Mode clair" "Light mode" %}</span>
+                                </button>
+                                <div class="dropdown-divider"></div>
+                                <a href="{% url 'accounts:logout' %}" class="dropdown-link logout">
+                                    <i class="fas fa-sign-out-alt"></i> {% tr "Deconnexion" "Logout" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {% if messages %}
+            <div class="notifications-container">
+                {% for message in messages %}
+                <div class="notification notification-{{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                    <span>{{ message }}</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="content-wrapper">
+                {% block admin_content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/admin/admin.js' %}?v=1.1"></script>
+    {% block admin_js %}{% endblock %}
+</body>
+</html>

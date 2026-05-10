@@ -1,0 +1,210 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Analytics Dashboard{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/dashboard.css' %}">
+{% endblock %}
+
+{% block admin_content %}
+
+{{ dashboard_chart_data|json_script:"dashboard-data" }}
+
+<div class="dashboard-wrapper">
+
+    <div class="dashboard-hero">
+        <div>
+            <h2>Bienvenue, {{ request.user.username }} 👋</h2>
+            <p>Voici les statistiques globales de votre boutique.</p>
+        </div>
+
+        <div class="hero-badge">
+            <i class="fas fa-chart-line"></i>
+            Données réelles
+        </div>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card revenue">
+            <div class="stat-top">
+                <div class="stat-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <span class="trend neutral">{{ paid_orders_count }} payée{{ paid_orders_count|pluralize }}</span>
+            </div>
+
+            <div class="stat-value">
+                {{ total_sales|floatformat:2 }} DH
+            </div>
+
+            <div class="stat-label">
+                Chiffre d'affaires total
+            </div>
+        </div>
+
+        <div class="stat-card today">
+            <div class="stat-top">
+                <div class="stat-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <span class="trend neutral">{{ today_orders_count }} commande{{ today_orders_count|pluralize }}</span>
+            </div>
+
+            <div class="stat-value">
+                {{ today_sales|floatformat:2 }} DH
+            </div>
+
+            <div class="stat-label">
+                Chiffre d'affaires aujourd'hui
+            </div>
+        </div>
+
+        <div class="stat-card orders">
+            <div class="stat-top">
+                <div class="stat-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+            </div>
+
+            <div class="stat-value">
+                {{ total_orders }}
+            </div>
+
+            <div class="stat-label">
+                Commandes
+            </div>
+        </div>
+
+        <div class="stat-card users">
+            <div class="stat-top">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+
+            <div class="stat-value">
+                {{ total_users }}
+            </div>
+
+            <div class="stat-label">
+                Utilisateurs
+            </div>
+        </div>
+
+    </div>
+
+    <div class="charts-grid">
+        <div class="card chart-card big-chart">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Analyse des ventes sur 7 jours
+                </h3>
+            </div>
+
+            <canvas id="salesChart"></canvas>
+        </div>
+
+        <div class="card chart-card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Statut des commandes
+                </h3>
+            </div>
+
+            <canvas id="ordersChart"></canvas>
+        </div>
+    </div>
+
+    <div class="tables-grid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Dernières commandes
+                </h3>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Total</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for order in latest_orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.first_name }} {{ order.last_name }}</td>
+                            <td>{{ order.total_amount|floatformat:2 }} DH</td>
+                            <td>
+                                <span class="status-badge status-{{ order.status|lower }}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">Aucune commande pour le moment.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Stock faible
+                </h3>
+            </div>
+
+            <div class="stock-list">
+                {% for product in low_stock_products %}
+                <div class="stock-item">
+                    <div class="stock-main">
+                        <div class="stock-thumb">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name_fr }}">
+                            {% else %}
+                            <span>{{ product.name_fr|slice:":1" }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="stock-info">
+                            <h4>{{ product.name_fr }}</h4>
+                            <p>{{ product.category.name_fr }}</p>
+                        </div>
+                    </div>
+
+                    <div class="stock-value danger">
+                        {{ product.stock }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="stock-item">
+                    <div class="stock-info">
+                        <h4>Aucun produit critique</h4>
+                        <p>Le stock est suffisant pour le moment.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Paiement" "Payment" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Paiement" "Payment" %}{% endblock %}
+{% block nav_orders %}active{% endblock %}
+
+{% block portal_extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=3" />
+{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Paiement" "Payment" %}</p>
+    <h1>{% tr "Paiement simule" "Simulated payment" %}</h1>
+    <p>{% tr "Finalisez votre commande avec ce formulaire de paiement de demonstration." "Complete your order with this demo payment form." %}</p>
+  </header>
+
+  <section class="hub-panel form-panel">
+    <div class="hub-list-card">
+      <div>
+        <strong>{% tr "Commande" "Order" %} #{{ order.id }}</strong>
+      </div>
+      <div class="hub-list-side">
+        <span class="hub-badge">{{ order.total_amount }} DH</span>
+      </div>
+    </div>
+
+    <form method="post" class="hub-form">
+      {% csrf_token %}
+      <p>
+        <label>{% tr "Nom sur la carte" "Name on card" %}</label>
+        <input type="text" placeholder="{% tr 'Nom sur la carte' 'Name on card' %}" required>
+      </p>
+      <p>
+        <label>{% tr "Numero carte simule" "Simulated card number" %}</label>
+        <input type="text" placeholder="{% tr 'Numero carte simule' 'Simulated card number' %}" required>
+      </p>
+      <p>
+        <label>MM/AA</label>
+        <input type="text" placeholder="MM/AA" required>
+      </p>
+      <p>
+        <label>CVV</label>
+        <input type="text" placeholder="CVV" required>
+      </p>
+      <button type="submit" class="hub-submit-btn">{% tr "Payer maintenant" "Pay now" %}</button>
+    </form>
+  </section>
+</section>
+{% endblock %}

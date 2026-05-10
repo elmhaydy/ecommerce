@@ -1,0 +1,105 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}{% if page_title_override %}{{ page_title_override }}{% else %}Profil utilisateur | Admin Panel{% endif %}{% endblock %}
+{% block page_title %}{% if page_title_override %}{{ page_title_override }}{% else %}Profil utilisateur{% endif %}{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/user/detail.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/user/detail.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page entity-stack">
+    <div class="entity-detail-grid">
+        <section class="entity-panel">
+            <h3>Informations compte</h3>
+            <div class="detail-list">
+                <div class="detail-item"><span class="detail-label">Username</span><span class="detail-value">{{ user_obj.username }}</span></div>
+                <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">{{ user_obj.email }}</span></div>
+                <div class="detail-item"><span class="detail-label">Nom</span><span class="detail-value">{{ user_obj.first_name }} {{ user_obj.last_name }}</span></div>
+                <div class="detail-item"><span class="detail-label">Actif</span><span class="detail-value">{{ user_obj.is_active|yesno:"Oui,Non" }}</span></div>
+                <div class="detail-item"><span class="detail-label">Staff</span><span class="detail-value">{{ user_obj.is_staff|yesno:"Oui,Non" }}</span></div>
+                <div class="detail-item"><span class="detail-label">Derniere connexion</span><span class="detail-value">{{ user_obj.last_login|default:"Jamais" }}</span></div>
+                <div class="detail-item"><span class="detail-label">Inscription</span><span class="detail-value">{{ user_obj.date_joined|date:"d/m/Y H:i" }}</span></div>
+            </div>
+        </section>
+        <section class="entity-panel">
+            <h3>Actions rapides</h3>
+            <div class="entity-actions">
+                {% if is_self_profile %}
+                <a href="{% url 'admin_panel:my_settings' %}" class="btn-primary"><i class="fas fa-pen"></i> Modifier</a>
+                <a href="{% url 'admin_panel:my_password' %}" class="btn-secondary"><i class="fas fa-key"></i> Mot de passe</a>
+                <a href="{% url 'admin_panel:home' %}" class="btn-outline"><i class="fas fa-arrow-left"></i> Dashboard</a>
+                {% else %}
+                <a href="{% url 'admin_panel:user_edit' user_obj.id %}" class="btn-primary"><i class="fas fa-pen"></i> Modifier</a>
+                <a href="{% url 'admin_panel:user_change_password' user_obj.id %}" class="btn-secondary"><i class="fas fa-key"></i> Mot de passe</a>
+                <a href="{% url 'admin_panel:user_list' %}" class="btn-outline"><i class="fas fa-arrow-left"></i> Retour</a>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <section class="entity-panel">
+        <h3>Commandes</h3>
+        <div class="order-snippets">
+            {% for order in orders %}
+            <div class="snippet-card">
+                <h4>Commande #{{ order.id }}</h4>
+                <p>Total: {{ order.total_amount }} DH</p>
+                <p>Statut: {{ order.get_status_display }}</p>
+                <a href="{% url 'admin_panel:order_detail' order.id %}" class="btn-outline" style="margin-top:12px;">Voir commande</a>
+            </div>
+            {% empty %}
+            <div class="entity-empty">
+                <i class="fas fa-box-open"></i>
+                <h3>Aucune commande</h3>
+                <p>Cet utilisateur n'a pas encore passe de commande.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="entity-detail-grid">
+        <div class="entity-panel">
+            <h3>Avis</h3>
+            <div class="review-snippets">
+                {% for review in reviews %}
+                <div class="snippet-card">
+                    <h4>{{ review.product.name_fr }}</h4>
+                    <p>Note: {{ review.rating }}/5</p>
+                    <p>{{ review.comment|truncatechars:120 }}</p>
+                </div>
+                {% empty %}
+                <div class="entity-empty">
+                    <i class="fas fa-star"></i>
+                    <h3>Aucun avis</h3>
+                    <p>Pas encore de retour client sur les produits.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="entity-panel">
+            <h3>Wishlist</h3>
+            <div class="review-snippets">
+                {% for item in wishlist_items %}
+                <div class="snippet-card">
+                    <h4>{{ item.product.name_fr }}</h4>
+                    <p>Ajoute le {{ item.added_at|date:"d/m/Y H:i" }}</p>
+                </div>
+                {% empty %}
+                <div class="entity-empty">
+                    <i class="fas fa-heart"></i>
+                    <h3>Aucun favori</h3>
+                    <p>La wishlist de cet utilisateur est vide.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

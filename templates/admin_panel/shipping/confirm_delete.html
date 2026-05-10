@@ -1,0 +1,16 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block title %}Supprimer zone{% endblock %}
+
+{% block admin_content %}
+<h1>Supprimer zone de livraison</h1>
+
+<p>Supprimer : <strong>{{ zone.city }}</strong> ?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmer suppression</button>
+</form>
+
+<a href="{% url 'admin_panel:shipping_list' %}">Annuler</a>
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Utilisateurs | Admin Panel{% endblock %}
+{% block page_title %}Utilisateurs{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/admin/user/list.css' %}?v=1.0">
+{% endblock %}
+
+{% block admin_js %}
+<script src="{% static 'js/admin/shared/entity.js' %}?v=1.0" defer></script>
+<script src="{% static 'js/admin/user/list.js' %}?v=1.0" defer></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="entity-page entity-stack">
+    <div class="entity-stats">
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini">{{ users|length }}</span>
+                <span class="stat-label-mini">Utilisateurs</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini success"><i class="fas fa-user-check"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="activeUsersCount">0</span>
+                <span class="stat-label-mini">Actifs</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini warning"><i class="fas fa-user-gear"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="staffUsersCount">0</span>
+                <span class="stat-label-mini">Staff</span>
+            </div>
+        </div>
+        <div class="stat-card-mini">
+            <div class="stat-icon-mini primary"><i class="fas fa-shield-halved"></i></div>
+            <div class="stat-info">
+                <span class="stat-value-mini" id="superUsersCount">0</span>
+                <span class="stat-label-mini">Superusers</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="entity-toolbar">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un utilisateur, email ou nom...">
+            <button type="button" id="clearSearch" class="search-clear" style="display:none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="filters-wrapper">
+            <select class="filter-select" data-filter-key="status">
+                <option value="all">Tous les statuts</option>
+                <option value="active">Actifs</option>
+                <option value="inactive">Inactifs</option>
+            </select>
+            <select class="filter-select" data-filter-key="staff">
+                <option value="all">Tous les roles staff</option>
+                <option value="yes">Staff</option>
+                <option value="no">Non staff</option>
+            </select>
+            <button type="button" id="resetFilters" class="btn-reset">
+                <i class="fas fa-rotate-left"></i> Reinitialiser
+            </button>
+        </div>
+        <a href="{% url 'admin_panel:user_create' %}" class="btn-primary">
+            <i class="fas fa-user-plus"></i> Ajouter utilisateur
+        </a>
+    </div>
+
+    <div class="entity-table-wrapper">
+        <table class="entity-table">
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Nom complet</th>
+                    <th>Acces</th>
+                    <th>Inscription</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                {% for user_obj in users %}
+                <tr
+                    data-search="{{ user_obj.username|lower }} {{ user_obj.email|lower }} {{ user_obj.first_name|lower }} {{ user_obj.last_name|lower }}"
+                    data-status="{% if user_obj.is_active %}active{% else %}inactive{% endif %}"
+                    data-staff="{% if user_obj.is_staff %}yes{% else %}no{% endif %}"
+                    data-superuser="{% if user_obj.is_superuser %}yes{% else %}no{% endif %}"
+                >
+                    <td>
+                        <div class="entity-title-cell">
+                            <div class="entity-avatar {% if user_obj.is_superuser %}warning{% elif user_obj.is_staff %}primary{% endif %}">
+                                {{ user_obj.username|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <div class="entity-title">{{ user_obj.username }}</div>
+                                <div class="entity-subtitle">{{ user_obj.email }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ user_obj.first_name }} {{ user_obj.last_name|default:"-" }}</td>
+                    <td>
+                        <div class="entity-actions">
+                            <span class="entity-badge {% if user_obj.is_active %}success{% else %}danger{% endif %}">
+                                {{ user_obj.is_active|yesno:"Actif,Inactif" }}
+                            </span>
+                            {% if user_obj.is_staff %}
+                            <span class="entity-badge primary">Staff</span>
+                            {% endif %}
+                            {% if user_obj.is_superuser %}
+                            <span class="entity-badge warning">Superuser</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>{{ user_obj.date_joined|date:"d/m/Y" }}</td>
+                    <td>
+                        <div class="entity-actions">
+                            {% if user_obj != user %}
+                            <form method="post" action="{% url 'admin_panel:user_toggle_active' user_obj.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-outline toggle-user-link" data-name="{{ user_obj.username }}" data-mode="{% if user_obj.is_active %}deactivate{% else %}activate{% endif %}">
+                                    <i class="fas {% if user_obj.is_active %}fa-user-slash{% else %}fa-user-check{% endif %}"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                            <a href="{% url 'admin_panel:user_detail' user_obj.id %}" class="action-btn view-btn" title="Profil">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'admin_panel:user_edit' user_obj.id %}" class="action-btn edit-btn" title="Modifier">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <a href="{% url 'admin_panel:user_change_password' user_obj.id %}" class="action-btn edit-btn" title="Mot de passe">
+                                <i class="fas fa-key"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="emptyState" class="entity-empty" {% if users %}style="display:none;"{% endif %}>
+        <i class="fas fa-users"></i>
+        <h3>Aucun utilisateur</h3>
+        <p>Les comptes admin et clients apparaitront ici.</p>
+    </div>
+
+    <div class="pagination-container">
+        <button type="button" class="pagination-btn" id="prevPage" disabled>
+            <i class="fas fa-chevron-left"></i> Precedent
+        </button>
+        <div class="pagination-info">
+            Affichage de <span id="startIndex">0</span> a <span id="endIndex">0</span> sur <span id="totalCount">0</span> utilisateurs
+        </div>
+        <button type="button" class="pagination-btn" id="nextPage">
+            Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}

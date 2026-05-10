@@ -1,0 +1,60 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mon activite" "My activity" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Mon point d'exploration" "My activity hub" %}{% endblock %}
+{% block nav_activity %}active{% endblock %}
+{% block portal_extra_css %}<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=2" />{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Tableau de bord" "Dashboard" %}</p>
+    <h1>{% tr "Mon point d'exploration" "My activity hub" %}</h1>
+    <p>{% tr "Un resume simple de votre activite recente sur la boutique." "A simple summary of your recent activity on the shop." %}</p>
+  </header>
+
+  <div class="hub-stats-grid">
+    <article class="hub-stat-card">
+      <span>{% tr "Commandes livrees" "Delivered orders" %}</span>
+      <strong>{{ delivered_count }}</strong>
+    </article>
+    <article class="hub-stat-card">
+      <span>{% tr "Favoris" "Wishlist" %}</span>
+      <strong>{{ wishlist_count }}</strong>
+    </article>
+    <article class="hub-stat-card">
+      <span>{% tr "Avis envoyes" "Reviews posted" %}</span>
+      <strong>{{ review_count }}</strong>
+    </article>
+    <article class="hub-stat-card">
+      <span>{% tr "Total depense" "Total spent" %}</span>
+      <strong>{{ total_spent }} DH</strong>
+    </article>
+  </div>
+
+  <section class="hub-panel">
+    <div class="hub-panel-head">
+      <h2>{% tr "Dernieres commandes" "Recent orders" %}</h2>
+      <a href="{% url 'orders:order_history' %}">{% tr "Voir tout" "View all" %}</a>
+    </div>
+
+    <div class="hub-list">
+      {% for order in recent_orders %}
+      <article class="hub-list-card">
+        <div>
+          <strong>{% tr "Commande" "Order" %} #{{ order.id }}</strong>
+          <p>{{ order.created_at|date:"d/m/Y" }} • {{ order.get_payment_method_display }}</p>
+        </div>
+        <div class="hub-list-side">
+          <span class="hub-badge status-{{ order.status|lower }}">{{ order.get_status_display }}</span>
+          <strong>{{ order.total_amount }} DH</strong>
+        </div>
+      </article>
+      {% empty %}
+      <p class="hub-empty">{% tr "Aucune commande recente." "No recent orders." %}</p>
+      {% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mon profil" "My profile" %}{% endblock %}
+{% block page_title %}{% tr "Mon profil" "My profile" %}{% endblock %}
+{% block user_role_label %}{% tr "Mon compte" "My account" %}{% endblock %}
+
+{% block admin_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/admin_account.css' %}?v=1.0" />
+{% endblock %}
+
+{% block sidebar_content %}
+<nav class="sidebar-nav">
+    <div class="nav-section">
+        <span class="nav-label">{% tr "Compte" "Account" %}</span>
+        <a href="{% url 'accounts:profile' %}" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>{% tr "Profil" "Profile" %}</span>
+        </a>
+        <a href="{% url 'accounts:profile_edit' %}" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>{% tr "Parametres" "Settings" %}</span>
+        </a>
+        <a href="{% url 'accounts:password_change' %}" class="nav-item">
+            <i class="fas fa-key"></i>
+            <span>{% tr "Mot de passe" "Password" %}</span>
+        </a>
+    </div>
+    <div class="nav-section">
+        <span class="nav-label">{% tr "Commandes" "Orders" %}</span>
+        <a href="{% url 'orders:order_history' %}" class="nav-item">
+            <i class="fas fa-box"></i>
+            <span>{% tr "Mes commandes" "My orders" %}</span>
+        </a>
+        <a href="{% url 'wishlist:wishlist_detail' %}" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>{% tr "Favoris" "Wishlist" %}</span>
+        </a>
+    </div>
+</nav>
+<div class="sidebar-footer">
+    <a href="{% url 'core:home' %}" class="nav-item shop-link" target="_blank">
+        <i class="fas fa-store"></i>
+        <span>{% tr "Boutique" "Store" %}</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block admin_content %}
+<div class="account-admin-shell">
+    <div class="account-admin-grid">
+        <article class="account-summary">
+            <div class="account-avatar">{{ user.username|slice:":1"|upper }}</div>
+            <div>
+                <h2>{% tr "Mon profil" "My profile" %}</h2>
+                <p class="account-subtitle">{% tr "Consultez vos informations principales et accedez rapidement aux actions de compte." "View your main information and quickly access account actions." %}</p>
+            </div>
+
+            <div class="account-meta">
+                <div class="account-meta-item">
+                    <span>{% tr "Nom d'utilisateur" "Username" %}</span>
+                    <strong>{{ user.username }}</strong>
+                </div>
+                <div class="account-meta-item">
+                    <span>{% tr "Nom complet" "Full name" %}</span>
+                    <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+                </div>
+                <div class="account-meta-item">
+                    <span>{% tr "Email" "Email" %}</span>
+                    <strong>{{ user.email }}</strong>
+                </div>
+                <div class="account-meta-item">
+                    <span>{% tr "Inscrit depuis" "Member since" %}</span>
+                    <strong>{{ user.date_joined }}</strong>
+                </div>
+            </div>
+
+            <div class="account-actions">
+                <a href="{% url 'accounts:profile_edit' %}" class="account-btn">
+                    <i class="fas fa-pen"></i> {% tr "Modifier profil" "Edit profile" %}
+                </a>
+                <a href="{% url 'accounts:password_change' %}" class="account-btn-secondary">
+                    <i class="fas fa-key"></i> {% tr "Changer mot de passe" "Change password" %}
+                </a>
+            </div>
+        </article>
+
+        <section class="account-panel">
+            <h2>{% tr "Mes dernieres commandes" "My latest orders" %}</h2>
+            <p class="account-subtitle">{% tr "Suivi rapide des commandes les plus recentes." "Quick tracking of your latest orders." %}</p>
+
+            <div class="account-orders-list">
+                {% for order in orders %}
+                <article class="account-order-card">
+                    <div class="account-order-top">
+                        <strong>{% tr "Commande" "Order" %} #{{ order.id }}</strong>
+                        <span class="account-status {% if order.status == 'PENDING' %}pending{% elif order.status == 'DELIVERED' %}done{% else %}other{% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="account-order-meta">
+                        <span>{% tr "Total :" "Total:" %} {{ order.total_amount }} DH</span>
+                        <span>{% tr "Date :" "Date:" %} {{ order.created_at }}</span>
+                    </div>
+                    <div class="account-actions" style="margin-top:14px;">
+                        <a href="{% url 'orders:order_detail' order.id %}" class="account-btn-secondary">
+                            <i class="fas fa-eye"></i> {% tr "Voir detail" "View details" %}
+                        </a>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="account-empty">
+                    <i class="fas fa-box-open"></i>
+                    <p>{% tr "Aucune commande pour le moment." "No orders yet." %}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

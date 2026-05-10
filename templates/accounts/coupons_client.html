@@ -1,0 +1,43 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mes coupons" "My coupons" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Centre de coupons" "Coupons center" %}{% endblock %}
+{% block nav_coupons %}active{% endblock %}
+{% block portal_extra_css %}<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=2" />{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Avantages" "Benefits" %}</p>
+    <h1>{% tr "Centre de coupons" "Coupons center" %}</h1>
+    <p>{% tr "Retrouvez les coupons actuellement actifs et leurs conditions d'utilisation." "Find the currently active coupons and their conditions of use." %}</p>
+  </header>
+
+  <div class="hub-list coupon-list">
+    {% for coupon in coupons %}
+    <article class="hub-list-card coupon-card">
+      <div>
+        <strong>{{ coupon.code }}</strong>
+        <p>
+          {% if coupon.discount_type == "PERCENT" %}
+          {% tr "Reduction de" "Discount of" %} {{ coupon.value }}%
+          {% else %}
+          {% tr "Reduction de" "Discount of" %} {{ coupon.value }} DH
+          {% endif %}
+        </p>
+      </div>
+      <div class="hub-list-side">
+        <span class="hub-badge">Min. {{ coupon.min_order_amount }} DH</span>
+        <p>{% tr "Expire le" "Expires on" %} {{ coupon.end_date|date:"d/m/Y" }}</p>
+      </div>
+    </article>
+    {% empty %}
+    <div class="hub-empty-card">
+      <h2>{% tr "Aucun coupon disponible" "No coupon available" %}</h2>
+      <p>{% tr "Les prochaines offres actives apparaitront ici." "The next active offers will appear here." %}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

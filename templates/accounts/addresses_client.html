@@ -1,0 +1,35 @@
+{% extends "accounts/portal_base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Mes adresses" "My addresses" %}{% endblock %}
+{% block portal_breadcrumb_title %}{% tr "Gestion des adresses" "Address management" %}{% endblock %}
+{% block nav_addresses %}active{% endblock %}
+{% block portal_extra_css %}<link rel="stylesheet" href="{% static 'css/accounts/hub.css' %}?v=2" />{% endblock %}
+
+{% block portal_content %}
+<section class="hub-page">
+  <header class="hub-header">
+    <p class="hub-kicker">{% tr "Livraison" "Delivery" %}</p>
+    <h1>{% tr "Gestion des adresses" "Address management" %}</h1>
+    <p>{% tr "Voici les adresses deja utilisees dans vos commandes recentes." "These are the addresses already used in your recent orders." %}</p>
+  </header>
+
+  <div class="hub-card-grid">
+    {% for address in addresses %}
+    <article class="hub-address-card">
+      <span class="hub-badge">{% tr "Adresse enregistree" "Saved address" %}</span>
+      <h2>{{ address.first_name }} {{ address.last_name }}</h2>
+      <p>{{ address.address }}</p>
+      <p>{{ address.city }}{% if address.postal_code %}, {{ address.postal_code }}{% endif %}</p>
+      <p>{{ address.phone }}</p>
+      <small>{% tr "Derniere utilisation:" "Last used:" %} {{ address.created_at|date:"d/m/Y" }}</small>
+    </article>
+    {% empty %}
+    <div class="hub-empty-card">
+      <h2>{% tr "Aucune adresse enregistree" "No saved address" %}</h2>
+      <p>{% tr "Vos adresses apparaitront ici apres votre premiere commande." "Your addresses will appear here after your first order." %}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

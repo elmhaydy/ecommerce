@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% load static site_i18n %}
+
+{% block title %}Accueil - M&Y Shop{% endblock %}
+{% block body_class %}home-page{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=3">
+{% endblock %}
+
+{% block content %}
+<section class="hero-slider" id="heroSlider">
+  <div class="hero-slide active">
+    <img src="{% static 'img/car1.png' %}" alt="Carrousel 1">
+  </div>
+
+  <div class="hero-slide">
+    <img src="{% static 'img/car2.png' %}" alt="Carrousel 2">
+  </div>
+
+  <div class="hero-slide">
+    <img src="{% static 'img/car3.png' %}" alt="Carrousel 3">
+  </div>
+
+  <div class="hero-slide">
+    <img src="{% static 'img/car4.png' %}" alt="Carrousel 4">
+  </div>
+
+  <button class="hero-arrow hero-prev" id="heroPrev" type="button" aria-label="Precedent">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15 6l-6 6 6 6"></path>
+    </svg>
+  </button>
+  <button class="hero-arrow hero-next" id="heroNext" type="button" aria-label="Suivant">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 6l6 6-6 6"></path>
+    </svg>
+  </button>
+
+  <div class="hero-dots" id="heroDots">
+    <button class="active" type="button"></button>
+    <button type="button"></button>
+    <button type="button"></button>
+    <button type="button"></button>
+  </div>
+</section>
+
+<section class="services-bar">
+  <div class="service-item">
+    <span class="service-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 7h11v8H3z"></path>
+        <path d="M14 10h3l2 2v3h-5z"></path>
+        <circle cx="7" cy="18" r="2"></circle>
+        <circle cx="17" cy="18" r="2"></circle>
+      </svg>
+    </span>
+    <strong>{% tr "Livraison gratuite des 100 DHS" "Free shipping over 100 DHS" %}</strong>
+  </div>
+  <div class="service-item">
+    <span class="service-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3l7 3v5c0 4.6-2.8 8-7 10-4.2-2-7-5.4-7-10V6z"></path>
+        <path d="M9.5 12l1.7 1.7 3.3-3.7"></path>
+      </svg>
+    </span>
+    <strong>{% tr "Garantie sans souci" "Hassle-free warranty" %}</strong>
+  </div>
+  <div class="service-item">
+    <span class="service-icon" aria-hidden="true">
+      $
+    </span>
+    <strong>{% tr "Paiement a la livraison" "Cash on delivery" %}</strong>
+  </div>
+</section>
+
+<section class="category-section">
+  <article class="category-card category-large">
+    <img src="{% static 'img/category-audio.png' %}" alt="Audio">
+    <h3>Audio</h3>
+  </article>
+
+  <article class="category-card">
+    <img src="{% static 'img/category-c.png' %}" alt="Power">
+    <h3>Power</h3>
+  </article>
+
+  <article class="category-card">
+    <img src="{% static 'img/category-smart.png' %}" alt="Smart">
+    <h3>{% tr "Smart & Bureau" "Smart & Office" %}</h3>
+  </article>
+
+  <article class="category-card">
+    <img src="{% static 'img/category-care.png' %}" alt="{% tr 'Soin personnel' 'Personal Care' %}">
+    <h3>{% tr "Soin personnel" "Personal Care" %}</h3>
+  </article>
+
+  <article class="category-card">
+    <img src="{% static 'img/category-home.png' %}" alt="{% tr 'Electromenager' 'Home Appliances' %}">
+    <h3>{% tr "Electromenager" "Home Appliances" %}</h3>
+  </article>
+</section>
+
+<section class="products-section">
+  <div class="products-header">
+    <h2>{% tr "MEILLEURES VENTES" "BEST SELLERS" %}</h2>
+    <div class="products-controls">
+      <button class="products-nav products-prev" id="productsPrev" type="button" aria-label="{% tr 'Produits precedents' 'Previous products' %}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 6l-6 6 6 6"></path>
+        </svg>
+      </button>
+      <button class="products-nav products-next" id="productsNext" type="button" aria-label="{% tr 'Produits suivants' 'Next products' %}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 6l6 6-6 6"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {% if products %}
+  <div class="products-carousel" id="productsCarousel">
+    <div class="products-viewport">
+      <div class="product-grid" id="productsTrack">
+        {% for product in products %}
+        <article class="product-card">
+          <div class="product-image">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name_fr }}">
+            {% else %}
+            <img src="{% static 'img/category-home.png' %}" alt="Produit">
+            {% endif %}
+
+            <span class="product-badge">{% tr "Exclusivite en ligne" "Online Exclusive" %}</span>
+          </div>
+
+          <div class="product-content">
+            <div class="rating">
+              {{ product.average_rating|default_if_none:0|floatformat:1 }}
+              <span>({{ product.review_count }})</span>
+            </div>
+
+            <h3>
+              <a href="{% url 'catalog:product_detail' product.slug %}">
+                {{ product.name_fr }}
+              </a>
+            </h3>
+
+            <p>{{ product.description_fr|truncatechars:70 }}</p>
+
+            <div class="product-price">
+              <strong>{{ product.price }} DH</strong>
+              {% if product.old_price %}
+              <del>{{ product.old_price }} DH</del>
+              {% endif %}
+            </div>
+
+            <a href="{% url 'catalog:product_detail' product.slug %}" class="product-btn">
+              {% tr "Voir detail" "View details" %}
+            </a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <p class="empty-text">{% tr "Aucun produit disponible pour le moment." "No products available at the moment." %}</p>
+  {% endif %}
+</section>
+
+<section class="awards-section">
+  <div>
+    <h2>M&amp;Y {% tr "Awards & Certifications" "Awards & Certifications" %}</h2>
+    <p>{% tr "Des produits selectionnes pour une experience moderne, fiable et performante." "Selected products for a modern, reliable and high-performing experience." %}</p>
+  </div>
+</section>
+
+<section class="why-section">
+  <div class="why-header">
+    <span class="why-kicker">{% tr "L'experience M&Y" "The M&Y experience" %}</span>
+    <h2>{% tr "POURQUOI ACHETER CHEZ M&Y" "WHY BUY FROM M&Y" %}</h2>
+    <p>{% tr "Une selection plus soignee, un service plus clair et une experience plus premium du premier clic jusqu'a la livraison." "A sharper selection, clearer service and a more premium experience from the first click to delivery." %}</p>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-card big">
+      <div class="why-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6h8a4 4 0 0 1 4 4v8H8a4 4 0 0 1-4-4z"></path>
+          <path d="M16 10h2.5L21 12.5V18h-5"></path>
+          <circle cx="9" cy="18" r="1.6"></circle>
+          <circle cx="18" cy="18" r="1.6"></circle>
+        </svg>
+      </div>
+      <span class="why-chip">{% tr "Support prioritaire" "Priority support" %}</span>
+      <h3>{% tr "SERVICE CLIENT ACCESSIBLE" "ACCESSIBLE CUSTOMER SERVICE" %}</h3>
+      <p>{% tr "Une assistance simple, rapide et disponible pour accompagner vos achats." "Simple, fast and available assistance to support your purchases." %}</p>
+      <div class="why-note">
+        <strong>24/7</strong>
+        <span>{% tr "Assistance et suivi simplifie" "Simplified support and follow-up" %}</span>
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3l7 3v5c0 4.6-2.8 8-7 10-4.2-2-7-5.4-7-10V6z"></path>
+          <path d="M9.5 12l1.7 1.7 3.3-3.7"></path>
+        </svg>
+      </div>
+      <h3>{% tr "GARANTIE 1 AN" "1 YEAR WARRANTY" %}</h3>
+      <strong>{% tr "1 AN" "1 YEAR" %}</strong>
+      <span class="why-subcopy">{% tr "Protection fiable sur vos achats essentiels." "Reliable protection on your essential purchases." %}</span>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 12l5 5L20 6"></path>
+        </svg>
+      </div>
+      <h3>{% tr "AUTHENTICITE & MEILLEUR PRIX" "AUTHENTICITY & BEST PRICE" %}</h3>
+      <strong>{% tr "MEILLEUR PRIX" "BEST PRICE" %}</strong>
+      <span class="why-subcopy">{% tr "Des references soigneusement choisies, sans compromis sur le style." "Carefully selected references with no compromise on style." %}</span>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 7h11v8H3z"></path>
+          <path d="M14 10h3l2 2v3h-5z"></path>
+          <circle cx="7" cy="18" r="2"></circle>
+          <circle cx="17" cy="18" r="2"></circle>
+        </svg>
+      </div>
+      <h3>{% tr "LIVRAISON GRATUITE DES 100 DHS" "FREE SHIPPING OVER 100 DHS" %}</h3>
+      <strong>{% tr "GRATUIT" "FREE" %}</strong>
+      <span class="why-subcopy">{% tr "Une offre claire pour accelerer la decision." "A clear offer that speeds up the buying decision." %}</span>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v18"></path>
+          <path d="M8 7.5c0-1.7 1.8-3 4-3s4 1.3 4 3-1.8 3-4 3-4 1.3-4 3 1.8 3 4 3 4-1.3 4-3"></path>
+        </svg>
+      </div>
+      <h3>{% tr "POINTS MEMBRES" "MEMBER POINTS" %}</h3>
+      <strong>POINTS</strong>
+      <span class="why-subcopy">{% tr "Des avantages qui donnent envie de revenir." "Benefits that make people want to come back." %}</span>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block page_js %}
+<script src="{% static 'js/home.js' %}?v=2"></script>
+{% endblock %}

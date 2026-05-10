@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static site_i18n %}
+
+{% block title %}{% tr "Recherche" "Search" %} | M&Y Shop{% endblock %}
+{% block body_class %}search-page{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'css/core/search.css' %}?v=1" />
+{% endblock %}
+
+{% block content %}
+<section class="search-shell">
+  <form method="get" action="{% url 'core:search' %}" class="search-hero-form">
+    <span class="search-hero-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="5.5"></circle>
+        <path d="M16 16l4.5 4.5"></path>
+      </svg>
+    </span>
+    <input
+      type="text"
+      name="q"
+      value="{{ query }}"
+      placeholder="{% tr 'Que recherchez-vous ?' 'What are you looking for?' %}"
+      autofocus
+    >
+  </form>
+
+  <section class="search-panel">
+    <h2>{% tr "Les plus recherches" "Most searched" %}</h2>
+    <div class="search-tags">
+      {% for term in trending_terms %}
+      <a href="{% url 'core:search' %}?q={% if site_language == 'en' %}{{ term.label_en|urlencode }}{% else %}{{ term.label_fr|urlencode }}{% endif %}" class="search-tag">
+        <span class="search-tag-flame">+</span>
+        {% if site_language == "en" %}{{ term.label_en }}{% else %}{{ term.label_fr }}{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if query %}
+  <section class="search-panel">
+    <div class="search-section-head">
+      <h2>{% tr "Resultats" "Results" %}</h2>
+      <p>{{ results_count }} {% tr "produits trouves" "products found" %}</p>
+    </div>
+
+    {% if results %}
+    <div class="search-grid">
+      {% for product in results %}
+      <article class="search-card">
+        <a href="{% url 'catalog:product_detail' product.slug %}" class="search-card-image">
+          {% if product.is_featured %}
+          <span class="search-card-badge">{% tr "Nouveau" "New" %}</span>
+          {% endif %}
+          {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{% if site_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}">
+          {% endif %}
+        </a>
+        <h3>
+          <a href="{% url 'catalog:product_detail' product.slug %}">
+            {% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}
+          </a>
+        </h3>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="search-empty">{% tr "Aucun produit ne correspond a votre recherche." "No products match your search." %}</p>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <section class="search-panel">
+    <h2>{% tr "Recommandations" "Recommendations" %}</h2>
+    <div class="search-grid">
+      {% for product in recommendations %}
+      <article class="search-card">
+        <a href="{% url 'catalog:product_detail' product.slug %}" class="search-card-image">
+          {% if product.is_featured %}
+          <span class="search-card-badge">{% tr "Nouveau" "New" %}</span>
+          {% endif %}
+          {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{% if site_language == 'en' and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}">
+          {% endif %}
+        </a>
+        <h3>
+          <a href="{% url 'catalog:product_detail' product.slug %}">
+            {% if site_language == "en" and product.name_en %}{{ product.name_en }}{% else %}{{ product.name_fr }}{% endif %}
+          </a>
+        </h3>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}

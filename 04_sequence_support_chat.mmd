@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    actor Client
+    participant Widget as Widget Chat
+    participant SupportModule as Module Support
+    participant DB as Base PostgreSQL
+    actor Agent as Agent Support
+    participant AdminUI as Interface Admin
+
+    Client->>Widget: Ouvrir le chat
+    Widget->>SupportModule: Charger conversation active
+    SupportModule->>DB: SELECT conversation + messages visibles
+    DB-->>SupportModule: Historique messages
+    SupportModule-->>Widget: Afficher conversation
+
+    Client->>Widget: Envoyer message
+    Widget->>SupportModule: POST message client
+    SupportModule->>DB: INSERT support_message(status=sent)
+    SupportModule-->>Widget: Message enregistré
+
+    AdminUI->>SupportModule: Consulter conversations
+    SupportModule->>DB: SELECT conversations non lues
+    DB-->>SupportModule: Liste conversations
+    SupportModule-->>AdminUI: Afficher inbox support
+
+    Agent->>AdminUI: Ouvrir conversation
+    AdminUI->>SupportModule: Marquer messages comme read
+    SupportModule->>DB: UPDATE messages status=read
+    SupportModule-->>AdminUI: Historique complet
+
+    Agent->>AdminUI: Répondre au client
+    AdminUI->>SupportModule: POST message support
+    SupportModule->>DB: INSERT support_message(sender=support)
+    SupportModule-->>AdminUI: Réponse enregistrée
+
+    Widget->>SupportModule: Polling toutes les 5 secondes
+    SupportModule->>DB: SELECT nouveaux messages
+    DB-->>SupportModule: Réponse support
+    SupportModule-->>Widget: Afficher nouveau message

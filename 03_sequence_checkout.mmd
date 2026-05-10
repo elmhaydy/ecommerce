@@ -1,0 +1,48 @@
+sequenceDiagram
+    autonumber
+    actor Client
+    participant UI as Interface Web
+    participant Cart as Module Panier
+    participant Coupon as Module Coupon
+    participant Shipping as Module Livraison
+    participant Order as Module Commande
+    participant Product as Module Produit/Stock
+    participant DB as Base PostgreSQL
+
+    Client->>UI: Valider le panier
+    UI->>Cart: Récupérer les articles du panier
+    Cart->>DB: SELECT cart_items + products
+    DB-->>Cart: Articles + prix + stock
+    Cart-->>UI: Sous-total
+
+    Client->>UI: Saisir adresse + zone livraison
+    UI->>Shipping: Calculer frais livraison
+    Shipping->>DB: SELECT shipping_zone
+    DB-->>Shipping: Frais / seuil gratuit
+    Shipping-->>UI: Frais livraison
+
+    opt Coupon saisi
+        Client->>UI: Entrer code promo
+        UI->>Coupon: Vérifier coupon
+        Coupon->>DB: SELECT coupon
+        DB-->>Coupon: Coupon valide/invalide
+        Coupon-->>UI: Remise calculée
+    end
+
+    UI->>Order: Créer commande
+    Order->>Product: Vérifier stock disponible
+    Product->>DB: SELECT stock produits
+    DB-->>Product: Stock disponible
+
+    alt Stock suffisant
+        Order->>DB: INSERT order
+        Order->>DB: INSERT order_items
+        Product->>DB: UPDATE product SET stock = stock - qty
+        Coupon->>DB: UPDATE coupon used_count
+        Cart->>DB: DELETE cart_items
+        Order-->>UI: Commande créée avec succès
+        UI-->>Client: Page confirmation commande
+    else Stock insuffisant
+        Order-->>UI: Erreur stock insuffisant
+        UI-->>Client: Afficher message d'erreur
+    end
