@@ -10,7 +10,7 @@ services:
     plan: free
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn config.wsgi:application"
+    startCommand: "bash start.sh"
     envVars:
       - key: DATABASE_URL
         fromDatabase:

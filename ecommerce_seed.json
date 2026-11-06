@@ -1,0 +1,2498 @@
+[
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "SUPER_ADMIN",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "MANAGER",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "PREPARATEUR",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "SUPPORT",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$K528tqMsk5BoSgbY6rIkop$G2deTe1/PATbGSe/bZBiT2sGmUgU9ru9Ls8OUrxlSbM=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Admin",
+    "last_name": "Principal",
+    "email": "admin@myshop.ma",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:38.869Z",
+    "groups": [
+      [
+        "SUPER_ADMIN"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$5gRdeK3ERox3nLY3pp1eC0$/IKW+1a2WwJ9D+4+9vy9zwZYnekDoSWHwEqVsk36di8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "manager",
+    "first_name": "Yassine",
+    "last_name": "El Fassi",
+    "email": "manager@myshop.ma",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:40.449Z",
+    "groups": [
+      [
+        "MANAGER"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$PDiZlaTjy9S6Ppd5bWhC8k$P+fQ5VhLvlD37AJrQVz+4DoSJrCjy5wkV4hT3nxZHPc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "preparateur",
+    "first_name": "Amine",
+    "last_name": "Naciri",
+    "email": "preparateur@myshop.ma",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:41.706Z",
+    "groups": [
+      [
+        "PREPARATEUR"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$dPGmE8nUNcuewzMC2zDGsf$MXUejWaA6HMUT6R8EquClHeQ6EPqE3BqexQt4WemGKo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "support",
+    "first_name": "Nour",
+    "last_name": "Benjelloun",
+    "email": "support@myshop.ma",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:43.263Z",
+    "groups": [
+      [
+        "SUPPORT"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$253a1pc7cWZjaiL17aWS7E$h+s6fvuuorozjMHSn6C1wDqeXnw3no6RmtvwCJggr18=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "youssef.alami",
+    "first_name": "Youssef",
+    "last_name": "Alami",
+    "email": "youssef.alami@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:44.583Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$gJ6Qs3qExYYIA95nDicXhH$+UMvVAp2uPAjR/g1KFn2ALzwuGTT1o2TwOvF2b9t4j4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "fatima.zahra",
+    "first_name": "Fatima-Zahra",
+    "last_name": "Mansouri",
+    "email": "fatima.zahra@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:45.817Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$WM5IZuRLZdU4ivL9ZrYfza$k2aUzqyCuRWm3quYpBlyswGapbg4KaR8qGh19ozwLFU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mehdi.bennani",
+    "first_name": "Mehdi",
+    "last_name": "Bennani",
+    "email": "mehdi.bennani@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:47.945Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$xsnQckRYwdaFFoSbYqmxJr$g/97TXvoHjF1Fz2kuclbgMW90SWgjgZAaYeToQ0Zoe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sarah.idrissi",
+    "first_name": "Sarah",
+    "last_name": "Idrissi",
+    "email": "sarah.idrissi@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:50.304Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$CpXuHXOG3BHbELnuEMnytN$sFMS5JOd7rkuW4joe2UNCBBwXFLdc3q4eiNM5Kw7HrE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "omar.tazi",
+    "first_name": "Omar",
+    "last_name": "Tazi",
+    "email": "omar.tazi@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:51.512Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$AyccND5KR1AMpgp937bzkU$E4YY6dLBEgVAuo1yK8dejyHH2TKeq9YIN+3SFlB0wZE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "amina.kabbaj",
+    "first_name": "Amina",
+    "last_name": "Kabbaj",
+    "email": "amina.kabbaj@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:52.756Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$vcds5dvSEBfyymLiBsnwgy$uOsHBtxWjwsXE7R5K7vy3FJuBpaF1PWhO2g9WXu7LI4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "karim.chraibi",
+    "first_name": "Karim",
+    "last_name": "Chraibi",
+    "email": "karim.chraibi@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-06T18:09:54.078Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 1,
+  "fields": {
+    "name_fr": "Audio",
+    "name_en": "Audio",
+    "slug": "audio",
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.409Z"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 2,
+  "fields": {
+    "name_fr": "Montre & Bureau",
+    "name_en": "Smart & Office",
+    "slug": "montre-bureau",
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.410Z"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 3,
+  "fields": {
+    "name_fr": "Electromenager",
+    "name_en": "Home Appliances",
+    "slug": "electromenager",
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.410Z"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 4,
+  "fields": {
+    "name_fr": "Soin personnel",
+    "name_en": "Personal Care",
+    "slug": "soin-personnel",
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.411Z"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 5,
+  "fields": {
+    "name_fr": "Power",
+    "name_en": "Power & Energy",
+    "slug": "power",
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.412Z"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 6,
+  "fields": {
+    "name_fr": "Smartphones & Accessoires",
+    "name_en": "Smartphones & Accessories",
+    "slug": "smartphones-accessoires",
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.413Z"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": 7,
+  "fields": {
+    "name_fr": "Gaming & Setup",
+    "name_en": "Gaming & Setup",
+    "slug": "gaming-setup",
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.413Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "name_fr": "Casque Bluetooth Sony WH-1000XM5 ANC",
+    "name_en": "Sony WH-1000XM5 Wireless Noise Canceling Headphones",
+    "slug": "sony-wh-1000xm5-anc",
+    "description_fr": "Le casque Sony WH-1000XM5 réinvente l'écoute sans distraction grâce à son double processeur de réduction de bruit et ses 8 micros haute sensibilité. Un son d'une clarté exceptionnelle.",
+    "description_en": "Industry-leading noise canceling headphones with dual processors and 8 microphones. Enjoy Hi-Res wireless audio and up to 30 hours of battery life.",
+    "price": "2890.00",
+    "old_price": "3490.00",
+    "stock": 18,
+    "low_stock_threshold": 5,
+    "image": "products/sony-wh-1000xm5-anc.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Réduction active de bruit leader",
+    "feature_2": "Autonomie jusqu'à 30h",
+    "feature_3": "Audio Hi-Res sans fil",
+    "feature_4": "Charge rapide USB-C",
+    "colors": "Noir, Argent Platine, Bleu Nuit",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.566Z",
+    "updated_at": "2026-11-06T18:09:55.566Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "name_fr": "Écouteurs Sans Fil Apple AirPods Pro 2 USB-C",
+    "name_en": "Apple AirPods Pro 2 Wireless Earbuds USB-C",
+    "slug": "apple-airpods-pro-2-usb-c",
+    "description_fr": "Les AirPods Pro 2 intègrent la puce H2 pour une réduction de bruit deux fois plus efficace et un rendu audio spatial bluffant.",
+    "description_en": "AirPods Pro 2 feature up to 2x more Active Noise Cancellation, Adaptive Audio, and USB-C charging case.",
+    "price": "2450.00",
+    "old_price": "2790.00",
+    "stock": 25,
+    "low_stock_threshold": 5,
+    "image": "products/apple-airpods-pro-2-usb-c.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Puce Apple H2 surpuissante",
+    "feature_2": "Réduction active 2x plus efficace",
+    "feature_3": "Boîtier MagSafe USB-C",
+    "feature_4": "Audio spatial personnalisé",
+    "colors": "Blanc",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.582Z",
+    "updated_at": "2026-11-06T18:09:55.582Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "name_fr": "Enceinte Portable JBL Charge 5 Étanche",
+    "name_en": "JBL Charge 5 Waterproof Portable Speaker",
+    "slug": "jbl-charge-5-etanche",
+    "description_fr": "Emportez la fête partout avec l'enceinte JBL Charge 5. Haut-parleur optimisé longue portée et double radiateur de basses passif.",
+    "description_en": "Take the party with you no matter what the weather with the bold JBL Charge 5 portable speaker.",
+    "price": "1390.00",
+    "old_price": "1650.00",
+    "stock": 14,
+    "low_stock_threshold": 5,
+    "image": "products/jbl-charge-5-etanche.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Son JBL Pro puissant",
+    "feature_2": "Autonomie de 20 heures",
+    "feature_3": "Étanche IP67 poussière et eau",
+    "feature_4": "Powerbank intégré",
+    "colors": "Noir, Bleu Océan, Rouge, Camouflage",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.599Z",
+    "updated_at": "2026-11-06T18:09:55.599Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "name_fr": "Écouteurs Sport Anker Soundcore Life P3",
+    "name_en": "Anker Soundcore Life P3 Noise Cancelling Earbuds",
+    "slug": "anker-soundcore-life-p3",
+    "description_fr": "Son dynamique haute définition avec technologie BassUp et trois modes de réduction de bruit ambiant.",
+    "description_en": "Life P3 noise cancelling earbuds feature custom 11mm composite drivers and 6 microphones with AI uplink noise reduction.",
+    "price": "590.00",
+    "old_price": "750.00",
+    "stock": 30,
+    "low_stock_threshold": 5,
+    "image": "products/anker-soundcore-life-p3.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Réduction de bruit multimode",
+    "feature_2": "Basses BassUp surpuissantes",
+    "feature_3": "6 micros avec IA",
+    "feature_4": "Autonomie jusqu'à 35h",
+    "colors": "Noir, Blanc, Bleu Ciel",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.612Z",
+    "updated_at": "2026-11-06T18:09:55.612Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 5,
+  "fields": {
+    "category": 2,
+    "name_fr": "Montre Connectée Apple Watch Series 9 GPS 45mm",
+    "name_en": "Apple Watch Series 9 GPS 45mm Smartwatch",
+    "slug": "apple-watch-series-9-45mm",
+    "description_fr": "Plus puissante, plus lumineuse, l'Apple Watch Series 9 révolutionne vos interactions au quotidien avec le geste double-tap.",
+    "description_en": "A magically new way to use your Apple Watch without touching the screen, powered by the S9 SiP chip.",
+    "price": "4190.00",
+    "old_price": "4690.00",
+    "stock": 12,
+    "low_stock_threshold": 5,
+    "image": "products/apple-watch-series-9-45mm.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Puce SiP S9 surpuissante",
+    "feature_2": "Geste Toucher deux fois magique",
+    "feature_3": "Écran éclatant 2000 nits",
+    "feature_4": "Suivi santé avancé ECG",
+    "colors": "Minuit, Lumière Stellaire, Argent",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.627Z",
+    "updated_at": "2026-11-06T18:09:55.627Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 6,
+  "fields": {
+    "category": 2,
+    "name_fr": "Montre Connectée Samsung Galaxy Watch 6 44mm",
+    "name_en": "Samsung Galaxy Watch 6 44mm Bluetooth",
+    "slug": "samsung-galaxy-watch-6-44mm",
+    "description_fr": "Prenez soin de votre bien-être jour et nuit avec la Galaxy Watch 6 et son grand écran haute définition.",
+    "description_en": "Start your everyday wellness journey with a larger display, customized workout routines, and sleep analysis.",
+    "price": "2290.00",
+    "old_price": "2690.00",
+    "stock": 9,
+    "low_stock_threshold": 5,
+    "image": "products/samsung-galaxy-watch-6-44mm.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Écran Sapphire Crystal 20% plus grand",
+    "feature_2": "Suivi avancé du sommeil",
+    "feature_3": "Capteur BioActive 3-en-1",
+    "feature_4": "Charge sans fil rapide",
+    "colors": "Graphite, Argent",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.640Z",
+    "updated_at": "2026-11-06T18:09:55.640Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 7,
+  "fields": {
+    "category": 2,
+    "name_fr": "Clavier Sans Fil Logitech MX Keys S Rétroéclairé",
+    "name_en": "Logitech MX Keys S Wireless Illuminated Keyboard",
+    "slug": "logitech-mx-keys-s",
+    "description_fr": "Clavier sans fil haut de gamme conçu pour une frappe fluide, rapide et silencieuse avec touches profilées.",
+    "description_en": "Master your workflow with precise, fast fluid typing and smart illumination with proximity sensors.",
+    "price": "1090.00",
+    "old_price": "1290.00",
+    "stock": 16,
+    "low_stock_threshold": 5,
+    "image": "products/logitech-mx-keys-s.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Frappe fluide Perfect Stroke",
+    "feature_2": "Rétroéclairage intelligent",
+    "feature_3": "Multi-dispositifs Easy-Switch",
+    "feature_4": "Connexion Bluetooth & Logi Bolt",
+    "colors": "Gris Graphite, Gris Pâle",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.653Z",
+    "updated_at": "2026-11-06T18:09:55.653Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 8,
+  "fields": {
+    "category": 2,
+    "name_fr": "Souris Ergonomique Logitech MX Master 3S",
+    "name_en": "Logitech MX Master 3S Performance Mouse",
+    "slug": "logitech-mx-master-3s",
+    "description_fr": "L'icône remasterisée pour les créateurs et développeurs avec clics silencieux et défilement ultra-rapide.",
+    "description_en": "An icon remastered with Quiet Clicks and 8,000 DPI track-on-glass sensor for ultimate precision.",
+    "price": "890.00",
+    "old_price": "1090.00",
+    "stock": 22,
+    "low_stock_threshold": 5,
+    "image": "products/logitech-mx-master-3s.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Capteur optique 8000 DPI sur verre",
+    "feature_2": "Clics silencieux Quiet Clicks",
+    "feature_3": "Molette MagSpeed électromagnétique",
+    "feature_4": "Autonomie 70 jours",
+    "colors": "Graphite, Gris Pâle",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.667Z",
+    "updated_at": "2026-11-06T18:09:55.667Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 9,
+  "fields": {
+    "category": 5,
+    "name_fr": "Batterie Externe Anker 737 Power Bank 24000mAh 140W",
+    "name_en": "Anker 737 Power Bank (PowerCore 24K) 140W",
+    "slug": "anker-737-power-bank-140w",
+    "description_fr": "Rechargez un MacBook Pro 16 pouces à 50% en seulement 40 minutes grâce à la puissance record de 140W.",
+    "description_en": "Equipped with the latest Power Delivery 3.1 and bi-directional technology to quickly recharge the portable charger or get a 140W ultra-powerful charge.",
+    "price": "1150.00",
+    "old_price": "1390.00",
+    "stock": 15,
+    "low_stock_threshold": 5,
+    "image": "products/anker-737-power-bank-140w.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Charge ultra-rapide bidirectionnelle 140W",
+    "feature_2": "Écran digital intelligent couleur",
+    "feature_3": "Capacité colossale 24000 mAh",
+    "feature_4": "Compatible MacBook Pro",
+    "colors": "Noir Titane",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.680Z",
+    "updated_at": "2026-11-06T18:09:55.680Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 10,
+  "fields": {
+    "category": 5,
+    "name_fr": "Chargeur Rapide GaN Baseus 65W 3 Ports USB-C",
+    "name_en": "Baseus GaN5 Pro 65W Fast Charger 3-Port",
+    "slug": "baseus-gan-65w-3ports",
+    "description_fr": "Un seul chargeur de poche pour votre PC portable, tablette et smartphone en même temps.",
+    "description_en": "Compact and powerful 65W wall charger featuring advanced GaN technology and multi-device support.",
+    "price": "299.00",
+    "old_price": "390.00",
+    "stock": 35,
+    "low_stock_threshold": 5,
+    "image": "products/baseus-gan-65w-3ports.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Technologie GaN 5e génération",
+    "feature_2": "2 ports USB-C + 1 USB-A",
+    "feature_3": "Protection intelligente contre surchauffe",
+    "feature_4": "Ultra compact et léger",
+    "colors": "Noir, Blanc",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.699Z",
+    "updated_at": "2026-11-06T18:09:55.699Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 11,
+  "fields": {
+    "category": 5,
+    "name_fr": "Station de Charge MagSafe 3-en-1 Belkin BoostCharge",
+    "name_en": "Belkin BoostCharge Pro 3-in-1 Wireless Charger",
+    "slug": "belkin-magsafe-3en1",
+    "description_fr": "Alimentez l'ensemble de votre écosystème Apple sur une seule station design et élégante.",
+    "description_en": "Charge your Apple devices faster with this beautifully designed charging stand featuring the new magnetic fast charging module.",
+    "price": "890.00",
+    "old_price": "1090.00",
+    "stock": 8,
+    "low_stock_threshold": 5,
+    "image": "products/belkin-magsafe-3en1.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Charge sans fil rapide 15W MagSafe",
+    "feature_2": "Recharge iPhone, Apple Watch et AirPods",
+    "feature_3": "Design architectural moderne",
+    "feature_4": "Certifié officiel Apple",
+    "colors": "Blanc, Noir",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.715Z",
+    "updated_at": "2026-11-06T18:09:55.715Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 12,
+  "fields": {
+    "category": 3,
+    "name_fr": "Aspirateur Robot Laveur Roborock S8 Pro Ultra",
+    "name_en": "Roborock S8 Pro Ultra Robot Vacuum and Mop",
+    "slug": "roborock-s8-pro-ultra",
+    "description_fr": "Le summum du nettoyage autonome avec station autonettoyante intelligente et brosses anti-emmêlement.",
+    "description_en": "Forget about cleaning with the all-in-one docking station and DuoRoller Riser brush system.",
+    "price": "4490.00",
+    "old_price": "5290.00",
+    "stock": 6,
+    "low_stock_threshold": 5,
+    "image": "products/roborock-s8-pro-ultra.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Station tout-en-un vidage & séchage",
+    "feature_2": "Aspiration surpuissante 6000 Pa",
+    "feature_3": "Double brosse DuoRoller",
+    "feature_4": "Navigation laser LiDAR précise",
+    "colors": "Blanc, Noir",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.729Z",
+    "updated_at": "2026-11-06T18:09:55.729Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 13,
+  "fields": {
+    "category": 3,
+    "name_fr": "Friteuse Sans Huile Airfryer Philips XXL 7.2L",
+    "name_en": "Philips Premium Airfryer XXL 7.2L Connected",
+    "slug": "philips-airfryer-xxl-7l",
+    "description_fr": "Cuisinez croustillant et sainement pour toute la famille avec un air chaud circulant à grande vitesse.",
+    "description_en": "Delicious fries with up to 90% less fat thanks to Rapid Air technology and smart sensing.",
+    "price": "1890.00",
+    "old_price": "2290.00",
+    "stock": 14,
+    "low_stock_threshold": 5,
+    "image": "products/philips-airfryer-xxl-7l.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Technologie Rapid Air 90% moins de gras",
+    "feature_2": "Capacité familiale 1.4 kg / 7.2 L",
+    "feature_3": "Application NutriU recettes guidées",
+    "feature_4": "16 fonctions de cuisson en 1",
+    "colors": "Noir & Cuivre",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.742Z",
+    "updated_at": "2026-11-06T18:09:55.742Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 14,
+  "fields": {
+    "category": 3,
+    "name_fr": "Purificateur d'Air Intelligent Xiaomi Smart Air Purifier 4",
+    "name_en": "Xiaomi Smart Air Purifier 4 High Efficiency",
+    "slug": "xiaomi-smart-air-purifier-4",
+    "description_fr": "Respirez un air pur et sain dans votre maison en temps réel avec capteurs laser haute précision.",
+    "description_en": "Breathe clean, healthy air. The 3-in-1 filtration system eliminates odors and fine particles.",
+    "price": "1290.00",
+    "old_price": "1490.00",
+    "stock": 11,
+    "low_stock_threshold": 5,
+    "image": "products/xiaomi-smart-air-purifier-4.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Filtre 3-en-1 élimine 99.97% des particules",
+    "feature_2": "Couvre une pièce jusqu'à 48m²",
+    "feature_3": "Écran tactile OLED intuitif",
+    "feature_4": "Contrôle vocal Google & Alexa",
+    "colors": "Blanc Minimaliste",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.761Z",
+    "updated_at": "2026-11-06T18:09:55.761Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 15,
+  "fields": {
+    "category": 3,
+    "name_fr": "Machine à Café Expresso Automatique De'Longhi Magnifica S",
+    "name_en": "De'Longhi Magnifica S Bean to Cup Coffee Maker",
+    "slug": "delonghi-magnifica-s",
+    "description_fr": "Du grain fraîchement moulu à la tasse d'un seul geste pour un expresso digne des plus grands cafés italiens.",
+    "description_en": "Enjoy delicious barista-quality espresso and creamy cappuccinos at the touch of a button.",
+    "price": "3990.00",
+    "old_price": "4690.00",
+    "stock": 7,
+    "low_stock_threshold": 5,
+    "image": "products/delonghi-magnifica-s.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Broyeur grains conique intégré acier",
+    "feature_2": "Buse vapeur manuelle cappuccino",
+    "feature_3": "Personnalisation arôme et mouture",
+    "feature_4": "Nettoyage automatique facile",
+    "colors": "Noir & Argent",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.777Z",
+    "updated_at": "2026-11-06T18:09:55.778Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 16,
+  "fields": {
+    "category": 4,
+    "name_fr": "Tondeuse Multifonction Philips Series 7000 14-en-1",
+    "name_en": "Philips Norelco Multigroom Series 7000 14-in-1",
+    "slug": "philips-multigroom-7000",
+    "description_fr": "Polyvalence ultime et précision professionnelle pour tondre et sculpter barbe, cheveux et corps.",
+    "description_en": "Craft your personal look with this versatile trimmer featuring tempered steel blades that will not break.",
+    "price": "490.00",
+    "old_price": "620.00",
+    "stock": 28,
+    "low_stock_threshold": 5,
+    "image": "products/philips-multigroom-7000.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "14 outils pour barbe, cheveux et corps",
+    "feature_2": "Lames DualCut auto-affûtées",
+    "feature_3": "Autonomie 5 heures sans fil",
+    "feature_4": "100% étanche sous la douche",
+    "colors": "Acier Brossé",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.791Z",
+    "updated_at": "2026-11-06T18:09:55.791Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 17,
+  "fields": {
+    "category": 4,
+    "name_fr": "Brosse à Dents Électrique Oral-B iO Series 9 Connectée",
+    "name_en": "Oral-B iO Series 9 Electric Toothbrush AI Tracking",
+    "slug": "oral-b-io-series-9",
+    "description_fr": "Une sensation de propreté purifiante professionnelle et un brossage guidé en direct par intelligence artificielle.",
+    "description_en": "Combines powerful micro-vibrations with Oral-B's unique dentist-inspired round brush head.",
+    "price": "1790.00",
+    "old_price": "2190.00",
+    "stock": 13,
+    "low_stock_threshold": 5,
+    "image": "products/oral-b-io-series-9.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Technologie magnétique révolutionnaire iO",
+    "feature_2": "Suivi 3D des dents avec IA",
+    "feature_3": "7 modes de brossage intelligents",
+    "feature_4": "Étui de voyage chargeur inclus",
+    "colors": "Noir Onyx, Blanc Quartz",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.804Z",
+    "updated_at": "2026-11-06T18:09:55.804Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 18,
+  "fields": {
+    "category": 7,
+    "name_fr": "Manette Sans Fil Sony PlayStation DualSense Edge",
+    "name_en": "Sony PlayStation DualSense Edge Wireless Controller",
+    "slug": "dualsense-edge-ps5",
+    "description_fr": "Obtenez un avantage compétitif avec la manette pro ultra-personnalisable pour PlayStation 5 et PC.",
+    "description_en": "Engineered for high performance and personalization with swappable stick caps and remappable back buttons.",
+    "price": "1890.00",
+    "old_price": "2250.00",
+    "stock": 10,
+    "low_stock_threshold": 5,
+    "image": "products/dualsense-edge-ps5.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Gâchettes adaptatives réglables",
+    "feature_2": "Palettes arrière configurables",
+    "feature_3": "Retour haptique immersif",
+    "feature_4": "Modules de joystick remplaçables",
+    "colors": "Blanc & Noir",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.817Z",
+    "updated_at": "2026-11-06T18:09:55.817Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 19,
+  "fields": {
+    "category": 7,
+    "name_fr": "Écran Gaming Incurvé Samsung Odyssey G5 27\" 144Hz 2K",
+    "name_en": "Samsung Odyssey G5 27\" WQHD 144Hz Curved Gaming Monitor",
+    "slug": "samsung-odyssey-g5-27",
+    "description_fr": "Plongez au cœur de l'action avec la courbure 1000R ultra-immersive et la fluidité extrême 144Hz.",
+    "description_en": "Curved gaming monitor designed to match the human eye contours for unbelievable realism.",
+    "price": "2590.00",
+    "old_price": "2990.00",
+    "stock": 8,
+    "low_stock_threshold": 5,
+    "image": "products/samsung-odyssey-g5-27.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Résolution WQHD 2560 x 1440",
+    "feature_2": "Courbure 1000R immersive",
+    "feature_3": "Taux de rafraîchissement 144 Hz",
+    "feature_4": "Temps de réponse 1 ms MPRT",
+    "colors": "Noir Mat",
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-06T18:09:55.831Z",
+    "updated_at": "2026-11-06T18:09:55.831Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 20,
+  "fields": {
+    "category": 6,
+    "name_fr": "Support Voiture Magnétique Magsafe avec Charge Rapide 15W",
+    "name_en": "Magnetic Wireless Car Mount Fast Charging 15W",
+    "slug": "support-voiture-magsafe-15w",
+    "description_fr": "Fixez et chargez votre smartphone instantanément d'une seule main sur la route.",
+    "description_en": "Strong magnetic hold with up to 15W wireless charging speed on all MagSafe compatible phones.",
+    "price": "249.00",
+    "old_price": "320.00",
+    "stock": 40,
+    "low_stock_threshold": 5,
+    "image": "products/support-voiture-magsafe-15w.png",
+    "gallery_image_1": "",
+    "gallery_image_2": "",
+    "gallery_image_3": "",
+    "gallery_image_4": "",
+    "feature_1": "Aimants N52 ultra puissants",
+    "feature_2": "Rotation 360 degrés réglable",
+    "feature_3": "Fixation solide sur grille d'aération",
+    "feature_4": "Câble USB-C inclus",
+    "colors": "Noir, Argent",
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-06T18:09:55.847Z",
+    "updated_at": "2026-11-06T18:09:55.847Z"
+  }
+},
+{
+  "model": "cart.cart",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "youssef.alami"
+    ],
+    "created_at": "2026-11-06T18:09:55.956Z",
+    "coupon": 1
+  }
+},
+{
+  "model": "cart.cart",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "fatima.zahra"
+    ],
+    "created_at": "2026-11-06T18:09:55.960Z",
+    "coupon": null
+  }
+},
+{
+  "model": "cart.cartitem",
+  "pk": 1,
+  "fields": {
+    "cart": 1,
+    "product": 1,
+    "quantity": 1,
+    "added_at": "2026-11-06T18:09:55.958Z"
+  }
+},
+{
+  "model": "cart.cartitem",
+  "pk": 2,
+  "fields": {
+    "cart": 1,
+    "product": 2,
+    "quantity": 2,
+    "added_at": "2026-11-06T18:09:55.959Z"
+  }
+},
+{
+  "model": "cart.cartitem",
+  "pk": 3,
+  "fields": {
+    "cart": 2,
+    "product": 5,
+    "quantity": 1,
+    "added_at": "2026-11-06T18:09:55.961Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "youssef.alami"
+    ],
+    "payment_method": "COD",
+    "is_paid": false,
+    "paid_at": null,
+    "first_name": "Youssef",
+    "last_name": "Alami",
+    "email": "youssef.alami@gmail.com",
+    "phone": "0612345678",
+    "shipping_city": "Casablanca",
+    "shipping_fee": "20.00",
+    "address": "Boulevard d'Anfa, Résidence Al Manar",
+    "city": "Casablanca",
+    "postal_code": "20000",
+    "total_amount": "6250.00",
+    "status": "PENDING",
+    "created_at": "2026-11-06T09:48:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "fatima.zahra"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-11-06T09:07:55.914Z",
+    "first_name": "Fatima-Zahra",
+    "last_name": "Mansouri",
+    "email": "fatima.zahra@gmail.com",
+    "phone": "0623456789",
+    "shipping_city": "Rabat",
+    "shipping_fee": "25.00",
+    "address": "Avenue Mohammed VI, Souissi",
+    "city": "Rabat",
+    "postal_code": "10000",
+    "total_amount": "3630.00",
+    "status": "PAID",
+    "created_at": "2026-11-06T08:52:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "mehdi.bennani"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-11-06T15:48:55.914Z",
+    "first_name": "Mehdi",
+    "last_name": "Bennani",
+    "email": "mehdi.bennani@gmail.com",
+    "phone": "0634567890",
+    "shipping_city": "Marrakech",
+    "shipping_fee": "35.00",
+    "address": "Boulevard Mohamed V, Guéliz",
+    "city": "Marrakech",
+    "postal_code": "40000",
+    "total_amount": "7070.00",
+    "status": "DELIVERED",
+    "created_at": "2026-11-06T15:33:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "sarah.idrissi"
+    ],
+    "payment_method": "COD",
+    "is_paid": true,
+    "paid_at": "2026-11-05T16:45:55.914Z",
+    "first_name": "Sarah",
+    "last_name": "Idrissi",
+    "email": "sarah.idrissi@gmail.com",
+    "phone": "0645678901",
+    "shipping_city": "Tanger",
+    "shipping_fee": "35.00",
+    "address": "Avenue des Forces Armées Royales, Malabata",
+    "city": "Tanger",
+    "postal_code": "90000",
+    "total_amount": "10060.00",
+    "status": "SHIPPED",
+    "created_at": "2026-11-05T16:30:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "omar.tazi"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-11-05T10:35:55.914Z",
+    "first_name": "Omar",
+    "last_name": "Tazi",
+    "email": "omar.tazi@gmail.com",
+    "phone": "0656789012",
+    "shipping_city": "Fès",
+    "shipping_fee": "30.00",
+    "address": "Avenue Hassan II, Ville Nouvelle",
+    "city": "Fès",
+    "postal_code": "30000",
+    "total_amount": "1890.00",
+    "status": "PAID",
+    "created_at": "2026-11-05T10:20:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "amina.kabbaj"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-11-04T14:30:55.914Z",
+    "first_name": "Amina",
+    "last_name": "Kabbaj",
+    "email": "amina.kabbaj@gmail.com",
+    "phone": "0667890123",
+    "shipping_city": "Agadir",
+    "shipping_fee": "40.00",
+    "address": "Boulevard du 20 Août, Secteur Touristique",
+    "city": "Agadir",
+    "postal_code": "80000",
+    "total_amount": "7380.00",
+    "status": "DELIVERED",
+    "created_at": "2026-11-04T14:15:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "karim.chraibi"
+    ],
+    "payment_method": "COD",
+    "is_paid": true,
+    "paid_at": "2026-11-04T16:33:55.914Z",
+    "first_name": "Karim",
+    "last_name": "Chraibi",
+    "email": "karim.chraibi@gmail.com",
+    "phone": "0678901234",
+    "shipping_city": "Casablanca",
+    "shipping_fee": "20.00",
+    "address": "Boulevard d'Anfa, Résidence Al Manar",
+    "city": "Casablanca",
+    "postal_code": "20000",
+    "total_amount": "1090.00",
+    "status": "DELIVERED",
+    "created_at": "2026-11-04T16:18:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "youssef.alami"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-11-03T16:34:55.914Z",
+    "first_name": "Youssef",
+    "last_name": "Alami",
+    "email": "youssef.alami@gmail.com",
+    "phone": "0612345678",
+    "shipping_city": "Casablanca",
+    "shipping_fee": "20.00",
+    "address": "Boulevard d'Anfa, Résidence Al Manar",
+    "city": "Casablanca",
+    "postal_code": "20000",
+    "total_amount": "1790.00",
+    "status": "SHIPPED",
+    "created_at": "2026-11-03T16:19:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "fatima.zahra"
+    ],
+    "payment_method": "COD",
+    "is_paid": false,
+    "paid_at": null,
+    "first_name": "Fatima-Zahra",
+    "last_name": "Mansouri",
+    "email": "fatima.zahra@gmail.com",
+    "phone": "0623456789",
+    "shipping_city": "Rabat",
+    "shipping_fee": "25.00",
+    "address": "Avenue Mohammed VI, Souissi",
+    "city": "Rabat",
+    "postal_code": "10000",
+    "total_amount": "1290.00",
+    "status": "CANCELLED",
+    "created_at": "2026-11-03T14:19:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "mehdi.bennani"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-11-02T12:33:55.914Z",
+    "first_name": "Mehdi",
+    "last_name": "Bennani",
+    "email": "mehdi.bennani@gmail.com",
+    "phone": "0634567890",
+    "shipping_city": "Marrakech",
+    "shipping_fee": "35.00",
+    "address": "Boulevard Mohamed V, Guéliz",
+    "city": "Marrakech",
+    "postal_code": "40000",
+    "total_amount": "4580.00",
+    "status": "DELIVERED",
+    "created_at": "2026-11-02T12:18:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "sarah.idrissi"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-11-02T15:29:55.914Z",
+    "first_name": "Sarah",
+    "last_name": "Idrissi",
+    "email": "sarah.idrissi@gmail.com",
+    "phone": "0645678901",
+    "shipping_city": "Tanger",
+    "shipping_fee": "35.00",
+    "address": "Avenue des Forces Armées Royales, Malabata",
+    "city": "Tanger",
+    "postal_code": "90000",
+    "total_amount": "7920.00",
+    "status": "PAID",
+    "created_at": "2026-11-02T15:14:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "omar.tazi"
+    ],
+    "payment_method": "COD",
+    "is_paid": true,
+    "paid_at": "2026-11-01T08:46:55.914Z",
+    "first_name": "Omar",
+    "last_name": "Tazi",
+    "email": "omar.tazi@gmail.com",
+    "phone": "0656789012",
+    "shipping_city": "Fès",
+    "shipping_fee": "30.00",
+    "address": "Avenue Hassan II, Ville Nouvelle",
+    "city": "Fès",
+    "postal_code": "30000",
+    "total_amount": "3690.00",
+    "status": "DELIVERED",
+    "created_at": "2026-11-01T08:31:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "amina.kabbaj"
+    ],
+    "payment_method": "CARD",
+    "is_paid": true,
+    "paid_at": "2026-10-31T10:23:55.914Z",
+    "first_name": "Amina",
+    "last_name": "Kabbaj",
+    "email": "amina.kabbaj@gmail.com",
+    "phone": "0667890123",
+    "shipping_city": "Agadir",
+    "shipping_fee": "40.00",
+    "address": "Boulevard du 20 Août, Secteur Touristique",
+    "city": "Agadir",
+    "postal_code": "80000",
+    "total_amount": "8480.00",
+    "status": "DELIVERED",
+    "created_at": "2026-10-31T10:08:55.914Z"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "karim.chraibi"
+    ],
+    "payment_method": "COD",
+    "is_paid": true,
+    "paid_at": "2026-10-31T14:54:55.914Z",
+    "first_name": "Karim",
+    "last_name": "Chraibi",
+    "email": "karim.chraibi@gmail.com",
+    "phone": "0678901234",
+    "shipping_city": "Casablanca",
+    "shipping_fee": "20.00",
+    "address": "Boulevard d'Anfa, Résidence Al Manar",
+    "city": "Casablanca",
+    "postal_code": "20000",
+    "total_amount": "8870.00",
+    "status": "SHIPPED",
+    "created_at": "2026-10-31T14:39:55.914Z"
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "product": 14,
+    "price": "1290.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 2,
+  "fields": {
+    "order": 1,
+    "product": 8,
+    "price": "890.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 3,
+  "fields": {
+    "order": 1,
+    "product": 3,
+    "price": "1390.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 4,
+  "fields": {
+    "order": 2,
+    "product": 2,
+    "price": "2450.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 5,
+  "fields": {
+    "order": 2,
+    "product": 4,
+    "price": "590.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 6,
+  "fields": {
+    "order": 3,
+    "product": 19,
+    "price": "2590.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 7,
+  "fields": {
+    "order": 3,
+    "product": 13,
+    "price": "1890.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 8,
+  "fields": {
+    "order": 4,
+    "product": 11,
+    "price": "890.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 9,
+  "fields": {
+    "order": 4,
+    "product": 15,
+    "price": "3990.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 10,
+  "fields": {
+    "order": 4,
+    "product": 19,
+    "price": "2590.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 11,
+  "fields": {
+    "order": 5,
+    "product": 13,
+    "price": "1890.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 12,
+  "fields": {
+    "order": 6,
+    "product": 12,
+    "price": "4490.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 13,
+  "fields": {
+    "order": 6,
+    "product": 9,
+    "price": "1150.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 14,
+  "fields": {
+    "order": 6,
+    "product": 4,
+    "price": "590.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 15,
+  "fields": {
+    "order": 7,
+    "product": 7,
+    "price": "1090.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 16,
+  "fields": {
+    "order": 8,
+    "product": 17,
+    "price": "1790.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 17,
+  "fields": {
+    "order": 9,
+    "product": 14,
+    "price": "1290.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 18,
+  "fields": {
+    "order": 10,
+    "product": 6,
+    "price": "2290.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 19,
+  "fields": {
+    "order": 11,
+    "product": 2,
+    "price": "2450.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 20,
+  "fields": {
+    "order": 11,
+    "product": 6,
+    "price": "2290.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 21,
+  "fields": {
+    "order": 11,
+    "product": 11,
+    "price": "890.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 22,
+  "fields": {
+    "order": 12,
+    "product": 9,
+    "price": "1150.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 23,
+  "fields": {
+    "order": 12,
+    "product": 3,
+    "price": "1390.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 24,
+  "fields": {
+    "order": 13,
+    "product": 17,
+    "price": "1790.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 25,
+  "fields": {
+    "order": 13,
+    "product": 2,
+    "price": "2450.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 26,
+  "fields": {
+    "order": 14,
+    "product": 15,
+    "price": "3990.00",
+    "quantity": 2
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 27,
+  "fields": {
+    "order": 14,
+    "product": 8,
+    "price": "890.00",
+    "quantity": 1
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 1,
+  "fields": {
+    "product": 1,
+    "user": [
+      "sarah.idrissi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Super rapport qualité prix, rien à redire ! Conforme à la description sur le site.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.849Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 2,
+  "fields": {
+    "product": 1,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Très bonne qualité globale. Facile à configurer et design très élégant. Seul bémol le prix un peu élevé mais justifié.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.851Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 3,
+  "fields": {
+    "product": 1,
+    "user": [
+      "youssef.alami"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.853Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 4,
+  "fields": {
+    "product": 2,
+    "user": [
+      "amina.kabbaj"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Très bonne qualité globale. Facile à configurer et design très élégant. Seul bémol le prix un peu élevé mais justifié.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.854Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 5,
+  "fields": {
+    "product": 2,
+    "user": [
+      "karim.chraibi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Fonctionne parfaitement. L'autonomie est au rendez-vous et la finition est premium.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.856Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 6,
+  "fields": {
+    "product": 2,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.858Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 7,
+  "fields": {
+    "product": 3,
+    "user": [
+      "sarah.idrissi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.860Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 8,
+  "fields": {
+    "product": 3,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Très bonne qualité globale. Facile à configurer et design très élégant. Seul bémol le prix un peu élevé mais justifié.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.862Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 9,
+  "fields": {
+    "product": 3,
+    "user": [
+      "omar.tazi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.864Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 10,
+  "fields": {
+    "product": 4,
+    "user": [
+      "youssef.alami"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.866Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 11,
+  "fields": {
+    "product": 4,
+    "user": [
+      "sarah.idrissi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 3,
+    "comment": "Bon produit mais j'aurais aimé une couleur plus claire. Fait bien son travail.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.868Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 12,
+  "fields": {
+    "product": 4,
+    "user": [
+      "amina.kabbaj"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.869Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 13,
+  "fields": {
+    "product": 5,
+    "user": [
+      "sarah.idrissi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Fonctionne parfaitement. L'autonomie est au rendez-vous et la finition est premium.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.870Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 14,
+  "fields": {
+    "product": 5,
+    "user": [
+      "amina.kabbaj"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Très bonne qualité globale. Facile à configurer et design très élégant. Seul bémol le prix un peu élevé mais justifié.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.873Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 15,
+  "fields": {
+    "product": 5,
+    "user": [
+      "omar.tazi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Très bonne qualité globale. Facile à configurer et design très élégant. Seul bémol le prix un peu élevé mais justifié.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.874Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 16,
+  "fields": {
+    "product": 6,
+    "user": [
+      "youssef.alami"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Produit exceptionnel ! La réduction de bruit est bluffante et la batterie tient largement mes journées de travail. Recommandé les yeux fermés.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.876Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 17,
+  "fields": {
+    "product": 6,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Incroyable expérience d'achat. C'est déjà ma 3ème commande sur cette boutique et toujours le même sérieux.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.877Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 18,
+  "fields": {
+    "product": 6,
+    "user": [
+      "amina.kabbaj"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Super rapport qualité prix, rien à redire ! Conforme à la description sur le site.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.879Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 19,
+  "fields": {
+    "product": 7,
+    "user": [
+      "karim.chraibi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Service client au top qui m'a bien conseillé sur WhatsApp avant ma commande. Très satisfait !",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.882Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 20,
+  "fields": {
+    "product": 7,
+    "user": [
+      "fatima.zahra"
+    ],
+    "is_verified_purchase": true,
+    "rating": 3,
+    "comment": "Bon produit mais j'aurais aimé une couleur plus claire. Fait bien son travail.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.884Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 21,
+  "fields": {
+    "product": 7,
+    "user": [
+      "amina.kabbaj"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Incroyable expérience d'achat. C'est déjà ma 3ème commande sur cette boutique et toujours le même sérieux.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.886Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 22,
+  "fields": {
+    "product": 8,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Super rapport qualité prix, rien à redire ! Conforme à la description sur le site.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.888Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 23,
+  "fields": {
+    "product": 8,
+    "user": [
+      "youssef.alami"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Service client au top qui m'a bien conseillé sur WhatsApp avant ma commande. Très satisfait !",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.890Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 24,
+  "fields": {
+    "product": 8,
+    "user": [
+      "fatima.zahra"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Service client au top qui m'a bien conseillé sur WhatsApp avant ma commande. Très satisfait !",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.892Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 25,
+  "fields": {
+    "product": 9,
+    "user": [
+      "karim.chraibi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Produit exceptionnel ! La réduction de bruit est bluffante et la batterie tient largement mes journées de travail. Recommandé les yeux fermés.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.893Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 26,
+  "fields": {
+    "product": 9,
+    "user": [
+      "amina.kabbaj"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.894Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 27,
+  "fields": {
+    "product": 9,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Fonctionne parfaitement. L'autonomie est au rendez-vous et la finition est premium.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.896Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 28,
+  "fields": {
+    "product": 10,
+    "user": [
+      "fatima.zahra"
+    ],
+    "is_verified_purchase": true,
+    "rating": 3,
+    "comment": "Bon produit mais j'aurais aimé une couleur plus claire. Fait bien son travail.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.899Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 29,
+  "fields": {
+    "product": 10,
+    "user": [
+      "sarah.idrissi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Incroyable expérience d'achat. C'est déjà ma 3ème commande sur cette boutique et toujours le même sérieux.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.901Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 30,
+  "fields": {
+    "product": 10,
+    "user": [
+      "youssef.alami"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Livraison très rapide à Casablanca en moins de 24h. Emballage soigné, produit 100% authentique. Bravo à l'équipe M&Y.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.903Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 31,
+  "fields": {
+    "product": 11,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 3,
+    "comment": "Bon produit mais j'aurais aimé une couleur plus claire. Fait bien son travail.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.905Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 32,
+  "fields": {
+    "product": 11,
+    "user": [
+      "fatima.zahra"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Fonctionne parfaitement. L'autonomie est au rendez-vous et la finition est premium.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.907Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 33,
+  "fields": {
+    "product": 11,
+    "user": [
+      "omar.tazi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Super rapport qualité prix, rien à redire ! Conforme à la description sur le site.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.908Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 34,
+  "fields": {
+    "product": 12,
+    "user": [
+      "karim.chraibi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 5,
+    "comment": "Incroyable expérience d'achat. C'est déjà ma 3ème commande sur cette boutique et toujours le même sérieux.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.910Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 35,
+  "fields": {
+    "product": 12,
+    "user": [
+      "omar.tazi"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Fonctionne parfaitement. L'autonomie est au rendez-vous et la finition est premium.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.911Z"
+  }
+},
+{
+  "model": "reviews.review",
+  "pk": 36,
+  "fields": {
+    "product": 12,
+    "user": [
+      "mehdi.bennani"
+    ],
+    "is_verified_purchase": true,
+    "rating": 4,
+    "comment": "Très bonne qualité globale. Facile à configurer et design très élégant. Seul bémol le prix un peu élevé mais justifié.",
+    "is_approved": true,
+    "created_at": "2026-11-06T18:09:55.913Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "youssef.alami"
+    ],
+    "product": 14,
+    "added_at": "2026-11-06T18:09:55.964Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "youssef.alami"
+    ],
+    "product": 12,
+    "added_at": "2026-11-06T18:09:55.966Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "youssef.alami"
+    ],
+    "product": 13,
+    "added_at": "2026-11-06T18:09:55.967Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "fatima.zahra"
+    ],
+    "product": 11,
+    "added_at": "2026-11-06T18:09:55.968Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "fatima.zahra"
+    ],
+    "product": 14,
+    "added_at": "2026-11-06T18:09:55.970Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "fatima.zahra"
+    ],
+    "product": 3,
+    "added_at": "2026-11-06T18:09:55.971Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "mehdi.bennani"
+    ],
+    "product": 19,
+    "added_at": "2026-11-06T18:09:55.974Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "mehdi.bennani"
+    ],
+    "product": 5,
+    "added_at": "2026-11-06T18:09:55.975Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "mehdi.bennani"
+    ],
+    "product": 1,
+    "added_at": "2026-11-06T18:09:55.977Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "sarah.idrissi"
+    ],
+    "product": 12,
+    "added_at": "2026-11-06T18:09:55.978Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "sarah.idrissi"
+    ],
+    "product": 4,
+    "added_at": "2026-11-06T18:09:55.980Z"
+  }
+},
+{
+  "model": "wishlist.wishlistitem",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "sarah.idrissi"
+    ],
+    "product": 1,
+    "added_at": "2026-11-06T18:09:55.982Z"
+  }
+},
+{
+  "model": "core.supportconversation",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "youssef.alami"
+    ],
+    "is_closed": false,
+    "client_visible_from": "2026-11-06T18:09:55.982Z",
+    "created_at": "2026-11-06T18:09:55.984Z",
+    "updated_at": "2026-11-06T18:09:55.984Z",
+    "last_message_at": "2026-11-06T18:09:55.984Z"
+  }
+},
+{
+  "model": "core.supportmessage",
+  "pk": 1,
+  "fields": {
+    "conversation": 1,
+    "sender": [
+      "youssef.alami"
+    ],
+    "body": "Bonjour, est-ce que le casque Sony WH-1000XM5 bénéficie d'une garantie constructeur officielle ?",
+    "is_staff": false,
+    "is_read": true,
+    "delivered_at": null,
+    "read_at": null,
+    "created_at": "2026-11-06T18:09:55.986Z"
+  }
+},
+{
+  "model": "core.supportmessage",
+  "pk": 2,
+  "fields": {
+    "conversation": 1,
+    "sender": [
+      "support"
+    ],
+    "body": "Bonjour Youssef, oui absolument ! Tous nos articles Sony disposent d'une garantie constructeur de 1 an avec facture officielle.",
+    "is_staff": true,
+    "is_read": true,
+    "delivered_at": null,
+    "read_at": null,
+    "created_at": "2026-11-06T18:09:55.986Z"
+  }
+},
+{
+  "model": "core.supportmessage",
+  "pk": 3,
+  "fields": {
+    "conversation": 1,
+    "sender": [
+      "youssef.alami"
+    ],
+    "body": "Parfait, merci beaucoup pour votre réactivité !",
+    "is_staff": false,
+    "is_read": true,
+    "delivered_at": null,
+    "read_at": null,
+    "created_at": "2026-11-06T18:09:55.987Z"
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 1,
+  "fields": {
+    "code": "BIENVENUE10",
+    "discount_type": "PERCENT",
+    "value": "10.00",
+    "min_order_amount": "100.00",
+    "start_date": "2026-10-27T18:09:55.402Z",
+    "end_date": "2027-02-04T18:09:55.402Z",
+    "usage_limit": 500,
+    "used_count": 13,
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.403Z"
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 2,
+  "fields": {
+    "code": "PROMO20",
+    "discount_type": "PERCENT",
+    "value": "20.00",
+    "min_order_amount": "300.00",
+    "start_date": "2026-10-27T18:09:55.402Z",
+    "end_date": "2027-02-04T18:09:55.402Z",
+    "usage_limit": 200,
+    "used_count": 15,
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.404Z"
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 3,
+  "fields": {
+    "code": "SOLDE50",
+    "discount_type": "FIXED",
+    "value": "50.00",
+    "min_order_amount": "250.00",
+    "start_date": "2026-10-27T18:09:55.402Z",
+    "end_date": "2027-02-04T18:09:55.402Z",
+    "usage_limit": 150,
+    "used_count": 19,
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.405Z"
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 4,
+  "fields": {
+    "code": "VIP100",
+    "discount_type": "FIXED",
+    "value": "100.00",
+    "min_order_amount": "600.00",
+    "start_date": "2026-10-27T18:09:55.402Z",
+    "end_date": "2027-02-04T18:09:55.402Z",
+    "usage_limit": 100,
+    "used_count": 20,
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.406Z"
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 5,
+  "fields": {
+    "code": "FLASH15",
+    "discount_type": "PERCENT",
+    "value": "15.00",
+    "min_order_amount": "200.00",
+    "start_date": "2026-10-27T18:09:55.402Z",
+    "end_date": "2027-02-04T18:09:55.402Z",
+    "usage_limit": 300,
+    "used_count": 22,
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.407Z"
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 6,
+  "fields": {
+    "code": "FREESHIP25",
+    "discount_type": "FIXED",
+    "value": "25.00",
+    "min_order_amount": "150.00",
+    "start_date": "2026-10-27T18:09:55.402Z",
+    "end_date": "2027-02-04T18:09:55.402Z",
+    "usage_limit": 500,
+    "used_count": 17,
+    "is_active": true,
+    "created_at": "2026-11-06T18:09:55.408Z"
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 1,
+  "fields": {
+    "city": "Casablanca",
+    "fee": "20.00",
+    "free_shipping_threshold": "300.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 2,
+  "fields": {
+    "city": "Rabat",
+    "fee": "25.00",
+    "free_shipping_threshold": "350.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 3,
+  "fields": {
+    "city": "Marrakech",
+    "fee": "35.00",
+    "free_shipping_threshold": "400.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 4,
+  "fields": {
+    "city": "Tanger",
+    "fee": "35.00",
+    "free_shipping_threshold": "400.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 5,
+  "fields": {
+    "city": "Fès",
+    "fee": "30.00",
+    "free_shipping_threshold": "350.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 6,
+  "fields": {
+    "city": "Agadir",
+    "fee": "40.00",
+    "free_shipping_threshold": "500.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 7,
+  "fields": {
+    "city": "Oujda",
+    "fee": "45.00",
+    "free_shipping_threshold": "500.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 8,
+  "fields": {
+    "city": "Meknès",
+    "fee": "30.00",
+    "free_shipping_threshold": "350.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 9,
+  "fields": {
+    "city": "Kénitra",
+    "fee": "25.00",
+    "free_shipping_threshold": "350.00",
+    "is_active": true
+  }
+},
+{
+  "model": "shipping.shippingzone",
+  "pk": 10,
+  "fields": {
+    "city": "Mohammedia",
+    "fee": "20.00",
+    "free_shipping_threshold": "300.00",
+    "is_active": true
+  }
+}
+]
