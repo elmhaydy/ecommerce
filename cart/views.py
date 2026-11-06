@@ -45,7 +45,10 @@ from catalog.models import Product
 
 
 def cart_detail(request):
-    cart = request.user.cart
+    if request.user.is_authenticated:
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+    else:
+        cart = None
 
     related_products = Product.objects.filter(
         is_active=True
