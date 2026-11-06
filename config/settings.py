@@ -25,7 +25,8 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-9i51ka^x4kv+7%^xs=i(3
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+_ALLOWED_HOSTS_RAW = config('ALLOWED_HOSTS', default='.onrender.com,localhost,127.0.0.1,testserver')
+ALLOWED_HOSTS = [h.strip() for h in _ALLOWED_HOSTS_RAW.split(',') if h.strip()]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
