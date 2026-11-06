@@ -1,5 +1,6 @@
 databases:
   - name: ecommerce-db
+    region: oregon
     plan: free
     databaseName: ecommerce
     user: ecommerce
@@ -7,6 +8,7 @@ databases:
 services:
   - type: web
     name: ecommerce
+    region: oregon
     plan: free
     runtime: python
     buildCommand: "./build.sh"

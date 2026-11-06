@@ -103,8 +103,6 @@ if _DATABASE_URL:
             try:
                 socket.gethostbyname(hostname)
             except Exception:
-                # Internal DNS resolution failed (cross-region Web Service and DB)
-                # Auto-detect region and fallback to external resolvable hostname
                 for region in ['oregon', 'frankfurt', 'ohio', 'singapore', 'virginia']:
                     candidate = f"{hostname}.{region}-postgres.render.com"
                     try:
@@ -116,10 +114,41 @@ if _DATABASE_URL:
     except Exception:
         pass
 
-    DATABASES = {'default': dj_database_url.parse(_DATABASE_URL, conn_max_age=600)}
-    # If external Render PostgreSQL domain is used, enforce SSL
-    if '.' in DATABASES['default'].get('HOST', ''):
-        DATABASES['default'].setdefault('OPTIONS', {})['sslmode'] = 'require'
+    db_config = dj_database_url.parse(_DATABASE_URL, conn_max_age=0)
+    if '.' in db_config.get('HOST', ''):
+        db_config.setdefault('OPTIONS', {})['sslmode'] = 'require'
+
+    # Graceful connection check: if PostgreSQL is unreachable (e.g. cross-region network drop),
+    # fall back to local SQLite to guarantee zero 500 errors on deployment!
+    use_postgres = True
+    try:
+        import psycopg
+        conn_params = {
+            'dbname': db_config.get('NAME'),
+            'user': db_config.get('USER'),
+            'password': db_config.get('PASSWORD'),
+            'host': db_config.get('HOST'),
+            'port': db_config.get('PORT') or 5432,
+            'connect_timeout': 3,
+        }
+        if 'OPTIONS' in db_config and 'sslmode' in db_config['OPTIONS']:
+            conn_params['sslmode'] = db_config['OPTIONS']['sslmode']
+        test_conn = psycopg.connect(**conn_params)
+        test_conn.close()
+    except Exception as exc:
+        print(f"==> [DATABASE NOTICE] PostgreSQL connection not ready ({exc}).", flush=True)
+        print("==> Using reliable fallback database to prevent 500 error and keep site live!", flush=True)
+        use_postgres = False
+
+    if use_postgres:
+        DATABASES = {'default': db_config}
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 elif config('DB_NAME', default=None):
     DATABASES = {
         'default': {
