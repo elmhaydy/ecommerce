@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView
@@ -9,6 +9,34 @@ from django.utils import timezone
 
 from .forms import ProfileUpdateForm
 from coupons.models import Coupon
+
+User = get_user_model()
+
+
+def quick_login_view(request, role):
+    """Direct 1-click access for admin, client, and manager demo accounts."""
+    if role == "admin":
+        user = User.objects.filter(is_superuser=True).first()
+        if not user:
+            user = User.objects.create_superuser("admin", "admin@myshop.ma", "Admin123!")
+        target_url = "admin_panel:home"
+        role_label = "Administrateur"
+    elif role == "client":
+        user = User.objects.filter(is_staff=False, is_superuser=False).first()
+        if not user:
+            user = User.objects.create_user("client_demo", "client@myshop.ma", "Client123!")
+        target_url = "core:home"
+        role_label = "Client Démo"
+    elif role == "manager":
+        user = User.objects.filter(groups__name="MANAGER").first() or User.objects.filter(is_staff=True).first()
+        target_url = "admin_panel:home"
+        role_label = "Manager"
+    else:
+        return redirect("accounts:login")
+
+    login(request, user)
+    messages.success(request, f"Connecté avec succès en tant que {role_label} ({user.username}).")
+    return redirect(target_url)
 
 
 def register_view(request):

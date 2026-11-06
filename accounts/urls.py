@@ -7,6 +7,7 @@ app_name = "accounts"
 urlpatterns = [
     path("register/", views.register_view, name="register"),
     path("login/", LoginView.as_view(template_name="accounts/login.html"), name="login"),
+    path("quick-login/<str:role>/", views.quick_login_view, name="quick_login"),
     path("logout/", views.logout_view, name="logout"),
     path("profile/", views.profile_view, name="profile"),
     path("activity/", views.account_activity, name="activity"),

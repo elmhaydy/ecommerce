@@ -15,6 +15,58 @@
   <div class="auth-card login-card">
     <h1>{% tr "Se connecter a votre compte" "Sign in to your account" %}</h1>
 
+    <!-- Accès Direct Rapide Admin / Client -->
+    <div class="quick-access-section" style="margin-bottom: 25px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px; padding: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <span style="font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #475569;">
+          ⚡ {% tr "Accès Rapide (1-Clic)" "Quick Direct Access (1-Click)" %}
+        </span>
+        <span style="font-size: 11px; font-weight: 700; color: #1e293b; background: #e2e8f0; padding: 3px 9px; border-radius: 99px;">Mode Démo</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <!-- Bouton Admin -->
+        <a href="{% url 'accounts:quick_login' 'admin' %}" 
+           style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 10px; background: #0f172a; color: #ffffff !important; text-decoration: none; border-radius: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(15,23,42,0.15); transition: all 0.2s;"
+           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(15,23,42,0.25)';"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(15,23,42,0.15)';"
+           title="Connexion immédiate en Super Admin">
+          <span style="font-size: 15px; display: flex; align-items: center; gap: 6px; color: #fff;">
+            🛡️ {% tr "Accès Admin" "Admin Access" %}
+          </span>
+          <span style="font-size: 11px; opacity: 0.8; margin-top: 4px; font-weight: 500; color: #94a3b8;">admin / Admin123!</span>
+        </a>
+
+        <!-- Bouton Client -->
+        <a href="{% url 'accounts:quick_login' 'client' %}" 
+           style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 10px; background: #2563eb; color: #ffffff !important; text-decoration: none; border-radius: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(37,99,235,0.2); transition: all 0.2s;"
+           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(37,99,235,0.3)';"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(37,99,235,0.2)';"
+           title="Connexion immédiate en Client Démo">
+          <span style="font-size: 15px; display: flex; align-items: center; gap: 6px; color: #fff;">
+            👤 {% tr "Accès Client" "Client Access" %}
+          </span>
+          <span style="font-size: 11px; opacity: 0.8; margin-top: 4px; font-weight: 500; color: #bfdbfe;">youssef.alami (Client)</span>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin-top: 14px; justify-content: center; flex-wrap: wrap;">
+        <button type="button" onclick="fillCredentials('admin', 'Admin123!')" style="background: none; border: none; font-size: 12px; color: #0f172a; cursor: pointer; text-decoration: underline; font-weight: 700;">
+          {% tr "Pré-remplir Admin" "Auto-fill Admin" %}
+        </button>
+        <span style="color: #cbd5e1;">&bull;</span>
+        <button type="button" onclick="fillCredentials('youssef.alami', 'Client123!')" style="background: none; border: none; font-size: 12px; color: #2563eb; cursor: pointer; text-decoration: underline; font-weight: 700;">
+          {% tr "Pré-remplir Client" "Auto-fill Client" %}
+        </button>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; text-align: center; margin: 25px 0 20px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
+      <span style="flex: 1; border-bottom: 1px solid #e2e8f0;"></span>
+      <span style="padding: 0 14px;">{% tr "ou formulaire classique" "or standard form" %}</span>
+      <span style="flex: 1; border-bottom: 1px solid #e2e8f0;"></span>
+    </div>
+
     {% if form.non_field_errors %}
     <div class="auth-alert error">
       {{ form.non_field_errors.0 }}
@@ -70,4 +122,15 @@
 
 {% block page_js %}
 <script src="{% static 'js/accounts/login.js' %}"></script>
+<script>
+function fillCredentials(username, password) {
+  const userInput = document.querySelector('input[name="username"]');
+  const passInput = document.querySelector('input[name="password"]');
+  if (userInput && passInput) {
+    userInput.value = username;
+    passInput.value = password;
+    passInput.focus();
+  }
+}
+</script>
 {% endblock %}

@@ -122,7 +122,13 @@
                     <h1>{% block page_title %}{% tr "Dashboard" "Dashboard" %}{% endblock %}</h1>
                 </div>
 
-                <div class="top-bar-actions">
+                <div class="top-bar-actions" style="display: flex; align-items: center; gap: 10px;">
+                    <a href="{% url 'core:home' %}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 600;" title="Voir la boutique en ligne">
+                        <i class="fas fa-store"></i> {% tr "Boutique" "Store" %}
+                    </a>
+                    <a href="{% url 'accounts:quick_login' 'client' %}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: #2563eb; color: #fff; text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 600;" title="Basculer instantanément en Client démo">
+                        <i class="fas fa-user"></i> {% tr "Mode Client" "Client Mode" %}
+                    </a>
                     <div class="user-menu">
                         <button class="user-btn" id="userMenuBtn">
                             <div class="user-avatar">
