@@ -936,3 +936,17 @@ if (topStripMessage) {
   topStripMessage.textContent = "";
   window.setTimeout(tick, 500);
 }
+
+// Auto-dismiss floating toast notifications
+document.addEventListener("DOMContentLoaded", () => {
+  const toasts = document.querySelectorAll(".toast-message");
+  if (toasts.length > 0) {
+    window.setTimeout(() => {
+      toasts.forEach((toast) => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-12px)";
+        window.setTimeout(() => toast.remove(), 350);
+      });
+    }, 4000);
+  }
+});

@@ -300,9 +300,15 @@
     </div>
 
     {% if messages %}
-    <div class="messages">
+    <div class="toast-container" id="toastContainer" aria-live="polite">
       {% for message in messages %}
-      <div class="message {{ message.tags }}">{{ message }}</div>
+      <div class="toast-message toast-{{ message.tags|default:'info' }}">
+        <span class="toast-icon">
+          {% if message.tags == 'error' %}✕{% elif message.tags == 'success' %}✓{% else %}ℹ{% endif %}
+        </span>
+        <span class="toast-body">{{ message }}</span>
+        <button type="button" class="toast-close" onclick="this.closest('.toast-message').remove()" aria-label="Fermer">&times;</button>
+      </div>
       {% endfor %}
     </div>
     {% endif %}
