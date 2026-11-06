@@ -93,7 +93,33 @@ WSGI_APPLICATION = 'config.wsgi.application'
 _DATABASE_URL = config('DATABASE_URL', default=None)
 
 if _DATABASE_URL:
+    # Auto-resolve Render cross-region hostnames (e.g. dpg-xxxxxx-a)
+    try:
+        import socket
+        import urllib.parse
+        parsed = urllib.parse.urlparse(_DATABASE_URL)
+        hostname = parsed.hostname
+        if hostname and hostname.startswith('dpg-') and '.' not in hostname:
+            try:
+                socket.gethostbyname(hostname)
+            except Exception:
+                # Internal DNS resolution failed (cross-region Web Service and DB)
+                # Auto-detect region and fallback to external resolvable hostname
+                for region in ['oregon', 'frankfurt', 'ohio', 'singapore', 'virginia']:
+                    candidate = f"{hostname}.{region}-postgres.render.com"
+                    try:
+                        socket.gethostbyname(candidate)
+                        _DATABASE_URL = _DATABASE_URL.replace(hostname, candidate)
+                        break
+                    except Exception:
+                        pass
+    except Exception:
+        pass
+
     DATABASES = {'default': dj_database_url.parse(_DATABASE_URL, conn_max_age=600)}
+    # If external Render PostgreSQL domain is used, enforce SSL
+    if '.' in DATABASES['default'].get('HOST', ''):
+        DATABASES['default'].setdefault('OPTIONS', {})['sslmode'] = 'require'
 elif config('DB_NAME', default=None):
     DATABASES = {
         'default': {
@@ -170,3 +196,36 @@ LOGIN_URL = "accounts:login"
 
 OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
 OPENAI_SUPPORT_MODEL = config("OPENAI_SUPPORT_MODEL", default="gpt-5.2")
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
